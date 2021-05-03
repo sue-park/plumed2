@@ -279,8 +279,6 @@ SAXS::SAXS(const ActionOptions&ao):
   }
   double scale_int = Iq0*Iq0;
 
-  cout << "after getting MartiniSFParam" << endl;
-
   vector<double> expint;
   expint.resize( numq );
   ntarget=0;

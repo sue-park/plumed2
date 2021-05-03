@@ -6,3 +6,4 @@ module load anaconda3
 conda activate openmmplumed3
 
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu3/ArrayFire/arrayfire/lib"
+
