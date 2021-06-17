@@ -279,6 +279,8 @@ SAXS::SAXS(const ActionOptions&ao):
   }
   double scale_int = Iq0*Iq0;
 
+  cout << "after getting MartiniSFParam" << endl;
+
   vector<double> expint;
   expint.resize( numq );
   ntarget=0;
@@ -389,7 +391,7 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
 {
 #ifdef __PLUMED_HAS_ARRAYFIRE
   unsigned size = getNumberOfAtoms();
-  const unsigned numq = 3;
+  const unsigned numq = 2;
   //const unsigned numq = q_list.size();
 
   bool interface=1;
@@ -397,12 +399,12 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
 
   vector<Vector> q_vec(numq);
   //q_vec[0] = Vector(1,1,0);
-  q_vec[0] = Vector(1,1,1);
-  q_vec[1] = Vector(2,0,0);
+  //q_vec[0] = Vector(1,1,1);
+  //q_vec[1] = Vector(2,0,0);
   //q_vec[3] = Vector(2,0,1);
   //q_vec[4] = Vector(2,2,1);
   //q_vec[5] = Vector(3,1,0);
-  q_vec[2] = Vector(3,1,1);
+  //q_vec[2] = Vector(3,1,1);
   //q_vec[7] = Vector(3,2,1);
   //q_vec[8] = Vector(4,1,1);
   //q_vec[9] = Vector(4,2,1);
@@ -410,15 +412,17 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
 
   //q_vec[0] = Vector(0.8665,-0.2885,0);
   //q_vec[1] = Vector(-0.2885,0.8665,0);
+  q_vec[0] = Vector(0.7251,-2.1779,0);
+  q_vec[1] = Vector(-2.1779,0.7251,0);
 
-  getqvector2(q_vec);
+  //getqvector2(q_vec);
 
   q_list.resize(numq);
 
   for (unsigned k=0; k<numq; k++) {
-    //q_list[k] = q_vec[k].modulo();
-    q_list[k] = q_vec[k].modulo()/10;
-    //cout << "qi: " << q_list[k] << endl;
+    q_list[k] = q_vec[k].modulo();
+    //q_list[k] = q_vec[k].modulo()/10;
+    cout << "qi: " << q_list[k] << endl;
   }
 
   vector<float> sum;
@@ -605,8 +609,8 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
 
     if(comm.Get_rank()==0) {
 
-      double z0 = 0.5;
-      double BF = 0.01;
+      double z0 = 0.8;
+      double BF = 0.05;
       double const SF = 0.001;
       double zmax = BF*std::log(1/SF-1)+z0;
       cout << "zmax: " << zmax << endl;
@@ -879,7 +883,7 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
 {
   unsigned size = getNumberOfAtoms();
   //const unsigned numq = q_list.size();
-  const unsigned numq = 3;
+  const unsigned numq = 2;
 
   unsigned stride = comm.Get_size();
   unsigned rank   = comm.Get_rank();
@@ -899,22 +903,25 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
   unsigned p2=0;
   bool direct = true;
 
-  bool interface=1;
+  bool interface=0;
   const double lc = 0.526;
 
   vector<Vector> q_vec(numq);
   //q_vec[0] = Vector(1,1,0);
-  q_vec[0] = Vector(1,1,1);
-  q_vec[1] = Vector(2,0,0);
+  //q_vec[0] = Vector(1,1,1);
+  //q_vec[1] = Vector(2,0,0);
   //q_vec[3] = Vector(2,0,1);
   //q_vec[4] = Vector(2,2,1);
   //q_vec[5] = Vector(3,1,0);
-  q_vec[2] = Vector(3,1,1);
+  //q_vec[2] = Vector(3,1,1);
   //q_vec[7] = Vector(3,2,1);
   //q_vec[8] = Vector(4,1,1);
   //q_vec[9] = Vector(4,2,1);
   //q_vec[10] = Vector(4,3,1);
-  getqvector2(q_vec);
+  //getqvector2(q_vec);
+
+  q_vec[0] = Vector(0.7251,-2.1779,0);
+  q_vec[1] = Vector(-2.1779,0.7251,0);
 
   q_list.resize(numq);
 
@@ -988,7 +995,7 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
       vector<int> sorted_atom;
 
       unsigned natom = getNumberOfAtoms();
-      double z0 = 0.5;
+      double z0 = 0.8;
       double BF = 0.05;
       double const SF = 0.001;
       double zmax = BF*std::log(1/SF-1)+z0;
@@ -997,6 +1004,7 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
 
       sort_coordinates(sorted_posi,FF_value_sorted,sorted_atom,zmax);
       size=sorted_atom.size();
+      cout << "size: " << size << endl;
       //vector<Vector> posi(size);
       #pragma omp parallel for num_threads(OpenMP::getNumThreads())
       for (unsigned i=rank; i<size; i+=stride) {
@@ -1027,16 +1035,14 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
             const double qdist    = dotProduct(q_vec[k],c_distances);
             const double FFF = FF*FF_value_sorted[k][j];
             const double tsq = FFF*sin(qdist);
-            const double fdtsq = tsq/(fdfactori+1)/(fdfactorj+1);
+            const double fdtsq = tsq/(fdfactori+1.0)/(fdfactorj+1.0);
             const double tcq = FFF*cos(qdist);
-            const double fdtcq = tcq/(fdfactori+1)/(fdfactorj+1);
-            const Vector tmp = -1*q_vec[k]*fdtsq;     
-            const Vector tmp_z = Vector(0,0, -1*fdtcq/BF); 
+            const double fdtcq = tcq/(fdfactori+1.0)/(fdfactorj+1.0);
+            const Vector tmp = -1.*q_vec[k]*fdtsq;     
+            const Vector tmp_z = Vector(0,0, -1.*fdtcq/BF); 
             //const Vector tmp_z = Vector(0,0, -1*fdtcq*fdfactorj/BF/(fdfactorj+1)); 
             const Vector dd  = tmp;
             const Vector fd_dd  = tmp_z;
-            //cout << "k: " << k << " i: " << i << " j: " << j;
-            //cout << " fdfactorj: " << fdfactorj/(fdfactorj+1) << endl;;
             dsum         += dd;
             dfdsum += fd_dd;
             deriv[kdx+jatom] += dd;
@@ -1044,7 +1050,7 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
             sum[k]       += fdtcq;
           }
           deriv[kdx+iatom] -= dsum;
-          deriv[kdx+iatom] += 2*dfdsum*fdfactori/(fdfactori+1);
+          deriv[kdx+iatom] += 2.*dfdsum*fdfactori/(fdfactori+1.0);
         }
       }
     }
