@@ -391,7 +391,7 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
 {
 #ifdef __PLUMED_HAS_ARRAYFIRE
   unsigned size = getNumberOfAtoms();
-  const unsigned numq = 3;
+  const unsigned numq = 2;
   //const unsigned numq = q_list.size();
 
   bool interface=1;
@@ -399,28 +399,43 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
 
   vector<Vector> q_vec(numq);
   //q_vec[0] = Vector(1,1,0);
-  q_vec[0] = Vector(1,1,1);
-  q_vec[1] = Vector(2,0,0);
+  //q_vec[1] = Vector(1,1,1);
+  //q_vec[2] = Vector(2,0,0);
   //q_vec[3] = Vector(2,0,1);
   //q_vec[4] = Vector(2,2,1);
   //q_vec[5] = Vector(3,1,0);
-  q_vec[2] = Vector(3,1,1);
+  //q_vec[6] = Vector(3,1,1);
   //q_vec[7] = Vector(3,2,1);
   //q_vec[8] = Vector(4,1,1);
   //q_vec[9] = Vector(4,2,1);
   //q_vec[10] = Vector(4,3,1);
 
-  //q_vec[0] = Vector(0.8665,-0.2885,0);
-  //q_vec[1] = Vector(-0.2885,0.8665,0);
+  //q_vec[0] = Vector(12.2862,12.2862,0);
+  //q_vec[0] = Vector(12.2862,12.2862,12.2862);
+  //q_vec[0] = Vector(17.3754,0,0);
+  //q_vec[1] = Vector(24.5725,0,0);
+  //q_vec[2] = Vector(24.5725,0,12.2862);
+  //q_vec[3] = Vector(24.5725,12.2862,12.2862);
+  //q_vec[4] = Vector(24.5725,24.5725,0);
+  //q_vec[5] = Vector(24.5725,24.5725,12.2862);
+  //q_vec[6] = Vector(36.8587,12.2862,0);
+  //q_vec[1] = Vector(36.8587,12.2862,24.5725);
+  //q_vec[10] = Vector(49.1450,12.2862,12.2862);
+  //q_vec[11] = Vector(49.1450,24.5725,12.2862);
 
-  getqvector2(q_vec);
+  //q_vec[0] = Vector(7.2512,-21.7788,0); // BMIM/BF4 peaks
+  //q_vec[1] = Vector(-21.7788,7.2512,0);
+  q_vec[0] = Vector(8.5617,0,0); //(100)(010)(110) peaks for PF6
+  q_vec[1] = Vector(5.1333,0,0); //(120) peaks
+
+  //getqvector2(q_vec);
 
   q_list.resize(numq);
 
   for (unsigned k=0; k<numq; k++) {
-    //q_list[k] = q_vec[k].modulo();
-    q_list[k] = q_vec[k].modulo()/10;
-    //cout << "qi: " << q_list[k] << endl;
+    q_list[k] = q_vec[k].modulo();
+    //q_list[k] = q_vec[k].modulo()/10;
+    cout << "qi: " << q_list[k] << endl;
   }
 
   vector<float> sum;
@@ -607,8 +622,8 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
 
     if(comm.Get_rank()==0) {
 
-      double z0 = 0.5;
-      double BF = 0.01;
+      double z0 = 1.5;
+      double BF = 0.1;
       double const SF = 0.001;
       double zmax = BF*std::log(1/SF-1)+z0;
       cout << "zmax: " << zmax << endl;
@@ -618,6 +633,40 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
       sort_coordinates(sorted_posi,FF_value_sorted,sorted_atom,zmax);
       size=sorted_atom.size();
       cout << "size: " << size << endl;  
+
+      if(size<40){
+        cout << "coord: " << endl;
+        unsigned natoms = getNumberOfAtoms();
+        for (unsigned i=0; i<natoms; i++) {
+        const Vector tmp = getPosition(i);
+        cout << "size is smaller than 40" << endl;
+        cout << "ATOM   ";
+        cout << i << "  " << tmp[0] << " " << tmp[1] << " " << tmp[2] << endl;
+        }
+      }
+
+      if(size>60){
+        cout << "coord: " << endl;
+        unsigned natoms = getNumberOfAtoms();
+        for (unsigned i=0; i<natoms; i++) {
+        const Vector tmp = getPosition(i);
+        cout << "size is bigger than 60" << endl;
+        cout << "ATOM   ";
+        cout << i << "  " << tmp[0] << " " << tmp[1] << " " << tmp[2] << endl;
+        }
+      }
+
+      if(size==0){
+        cout << "coord: " << endl;
+        unsigned natoms = getNumberOfAtoms();
+        for (unsigned i=0; i<natoms; i++) {
+        const Vector tmp = getPosition(i);
+        cout << "size is 0" << endl;
+        cout << "ATOM   ";
+        cout << i << "  " << tmp[0] << " " << tmp[1] << " " << tmp[2] << endl;
+        }
+      }
+
  
       vector<float> posi;
       vector<float> zposi;
@@ -632,7 +681,8 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
         const Vector tmp = sorted_posi[i];
         posi[3*i]   = static_cast<float>(tmp[0]);
         posi[3*i+1] = static_cast<float>(tmp[1]);
-        posi[3*i+2] = static_cast<float>(tmp[2]);
+        //posi[3*i+2] = static_cast<float>(tmp[2]);
+        posi[3*i+2] = static_cast<float>(0.);
         zposi[i] = static_cast<float>(tmp[2]);
         for (unsigned k=0; k<numq; ++k) {
           FFf_value_sorted[k][i] = static_cast<float>(FF_value_sorted[k][i]);
@@ -653,6 +703,27 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
       zvec = zvec.T();
       // 1,size,3,1
       zvec = af::moddims(zvec, 1, size, 3);
+
+      //cout << "zvec is created" << endl;
+
+      // xy unit vector
+      //vector<float> xyveck;
+      //xyveck.push_back(1);
+      //xyveck.push_back(1);
+      //xyveck.push_back(0);
+
+      // 3,1,1,1
+      //af::array xyvec = af::array(3, &xyveck.front());
+      // 3,size,1,1
+      //xyvec = af::tile(xyvec,1,size,1);
+      // size,3,1,1
+      //xyvec = xyvec.T();
+      // size,1,3,1
+      //xyvec = af::moddims(xyvec,size,1,3);
+      // size,size,3,1
+      //xyvec = af::tile(xyvec,1,size,1);
+
+      //cout << "xyvec is created" << endl;
 
       dd.resize(size*3*numq);
 
@@ -675,7 +746,6 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
       //size,size,1,1
       fdfactor_b = af::exp(fdfactor_b);
 
-
       // create array a and b containing atomic coordinates
       af::setDevice(deviceid);
       // 3,size,1,1
@@ -691,7 +761,7 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
       // size,size,3,1
       af::array xyz_dist = af::tile(pos_b, size, 1, 1) - af::tile(pos_a, 1, size, 1);
       //af::array xyz_dist = af::tile(pos_a, 1, size, 1) - af::tile(pos_b, size, 1, 1);
-   
+ 
       // set Box vectors
       Tensor Box = getPbc().getBox();
       vector<float> Box0;
@@ -744,9 +814,7 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
       // size,size,1,1
       af::array dist_sqrt = af::sqrt(square);
       // replace the zero of square with one to avoid nan in the derivatives (the number does not matter becasue this are multiplied by zero)
-      //cout << "af replace square" << endl;
       af::replace(square,!(af::iszero(square)),1.);
-      //cout << "after replacing" << endl;
       // numq,1,1,1
       af::array sum_device   = af::constant(0, numq, f32);
       // numq,size,3,1
@@ -762,64 +830,72 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
         //af::array FFz_mod = AFF_value.T()*AFF_value.T();  
  
         // get q
-        vector<float> qveck;
-        qveck.push_back(q_vec[k][0]);
-        qveck.push_back(q_vec[k][1]);
-        qveck.push_back(q_vec[k][2]);
-   
-        // 3,1,1,1
-        af::array qvec = af::array(3, &qveck.front());
-        // 3,size,1,1
-        qvec = af::tile(qvec,1,size,1);
-        // size,3,1,1
-        qvec = qvec.T();
-        // size,1,3,1
-        qvec = af::moddims(qvec, size, 1, 3);
-        // size,size,3,1
-        qvec = af::tile(qvec, 1, size, 1);
-        // size,size,1,1
-        af::array dist_q = af::sum(qvec*xyz_dist,2);
-        // size,size,1,1
-        af::array dist_cos = af::cos(dist_q); 
-        af::replace(dist_cos,!(af::isNaN(dist_cos)),1.);
-        // size,size,1,1
-        af::array fd_cos = dist_cos/(fdfactor_a+1)/(fdfactor_b+1);
-        // 1,1,1,1
-        sum_device(k) = af::sum(af::flat(fd_cos)*af::flat(FFdist_mod));
-        //sum_device(k) = af::sum(af::flat(dist_cos)*af::flat(FFdist_mod));
-   
-        //size,size,1,1
-        af::array dist_sin = af::sin(dist_q);
-        //size,size,1,1
-        af::array fd_sin = dist_sin/(fdfactor_a+1)/(fdfactor_b+1);
-        //size,size,3,1
-        fd_sin = af::tile(fd_sin,1,1,3);
-        //size,size,3,1
-        fd_sin = -1*qvec*fd_sin;
+        const float qvalue = static_cast<float>(q_list[k]);
+        const float qcutoff = qvalue*1.6;
 
         //size,size,1,1
-        af::array fdz_cos = FFdist_mod*fd_cos/BF;
+        af::array dist_q = qvalue*dist_sqrt;
+        af::array dist_q_deriv = qvalue*dist_sqrt;
+        //size,size,1,1
+        af::replace(dist_q,dist_q>0.25,0.51258242);
+
+        cout << "dist_q is calculated" << endl;
+        //af::replace(dist_q,dist_q<qcutoff,2.40800);
+
+        //size,size,1,1
+        af::array sqrt_dist = sqrt(2/M_PI)/af::sqrt(dist_q);
+        af::array sqrt_dist_deriv = sqrt(2/M_PI)/af::sqrt(dist_q_deriv);
+        //size,size,1,1
+        af::array cos_term = sqrt_dist*af::cos(dist_q-M_PI/4);
+        af::array cos_term_deriv = sqrt_dist_deriv*af::cos(dist_q_deriv-M_PI/4);
+        //size,size,1,1
+        af::array sin_term = sqrt_dist*af::sin(dist_q-M_PI/4);
+        af::array sin_term_deriv = sqrt_dist_deriv*af::sin(dist_q_deriv-M_PI/4);
+        //size,size,1,1
+        af::array bessel_0 = cos_term+sin_term/8/dist_q;
+        //size,size,1,1
+        af::array fd_bessel = bessel_0/(fdfactor_a+1.)/(fdfactor_b+1.);
+        cout << "fd_bessel is calculated" << endl;
+
+        // 1,1,1,1
+        sum_device(k) = af::sum(af::flat(fd_bessel)*af::flat(FFdist_mod));
+  
+        //size,size,1,1
+        af::array deriv_sin = sin_term_deriv*3/16/dist_q_deriv/dist_q_deriv+sin_term_deriv;
+        //size,size,1,1
+        af::array deriv_cos = cos_term_deriv*3/8/dist_q_deriv;
+        //size,size,1,1
+        af::array bessel_deriv = -deriv_cos-deriv_sin;
+        //size,size,1,1
+        //af::array bessel_deriv = deriv_cos-deriv_sin;
+        //size,size,1,1
+        af::replace(bessel_deriv,bessel_deriv<1.1978,0);
+        cout << "after replacing" << endl;
+        //size,size,1,1
+        af::array fd_xy = FFdist_mod*bessel_deriv/(fdfactor_a+1.)/(fdfactor_b+1.);
+        //size,size,3,1
+        af::array dist_sqrt_3 = af::tile(dist_sqrt,1,1,3);
+        af::replace(dist_sqrt_3,!(af::iszero(dist_sqrt_3)),1.);
+        //size,size,3,1
+        af::array tmp_xy = qvalue*af::tile(fd_xy,1,1,3)*xyz_dist/dist_sqrt_3;
+            
+
+        //size,size,1,1
+        af::array fd_z = FFdist_mod*fd_bessel/BF;
         //1,size,1,1
-        fdz_cos = af::sum(fdz_cos,0);
+        fd_z = af::sum(fd_z,0);
         //1,size,1,1
         af::array fdz_b = af::exp((zpos_b-z0)/BF);
         //1,size,1,1
-        af::array tmp_z = fdz_cos*fdz_b/(fdz_b+1);
+        af::array tmp_z = fd_z*fdz_b/(fdz_b+1);
         //af::array tmp_z = FFz_mod*fdz_cos*fdz_b/(fdz_b+1);
         //1,size,3,1
         tmp_z = af::tile(tmp_z,1,1,3);
         //1,size,3,1
         tmp_z = -1*tmp_z*zvec;
    
-        // size,size,3,1
-        af::array tmp = af::tile(FFdist_mod,1,1,3)*fd_sin;
-        // size,size,3,1
-        af::array dd_all = tmp;
-
         // it should become 1,size,3,1
-        deriv_device(k, af::span, af::span) = af::sum(dd_all,0) + tmp_z;
-	//cout << "k: " << k << endl;
-	//af_print(af::sum(dd_all,0)+tmp_z);
+        deriv_device(k, af::span, af::span) = af::sum(tmp_xy,0) + tmp_z;
       }
       
       // read out results
@@ -881,7 +957,7 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
 {
   unsigned size = getNumberOfAtoms();
   //const unsigned numq = q_list.size();
-  const unsigned numq = 3;
+  const unsigned numq = 2;
 
   unsigned stride = comm.Get_size();
   unsigned rank   = comm.Get_rank();
@@ -906,22 +982,29 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
 
   vector<Vector> q_vec(numq);
   //q_vec[0] = Vector(1,1,0);
-  q_vec[0] = Vector(1,1,1);
-  q_vec[1] = Vector(2,0,0);
+  //q_vec[0] = Vector(1,1,1);
+  //q_vec[1] = Vector(2,0,0);
   //q_vec[3] = Vector(2,0,1);
   //q_vec[4] = Vector(2,2,1);
   //q_vec[5] = Vector(3,1,0);
-  q_vec[2] = Vector(3,1,1);
+  //q_vec[2] = Vector(3,1,1);
   //q_vec[7] = Vector(3,2,1);
   //q_vec[8] = Vector(4,1,1);
   //q_vec[9] = Vector(4,2,1);
   //q_vec[10] = Vector(4,3,1);
-  getqvector2(q_vec);
+  //getqvector2(q_vec);
+
+  q_vec[0] = Vector(24.5725,0,0);
+  q_vec[1] = Vector(24.5725,24.5725,0);
+  
+  //q_vec[0] = Vector(0.7251,-2.1779,0);
+  //q_vec[1] = Vector(-2.1779,0.7251,0);
 
   q_list.resize(numq);
 
   for (unsigned k=0; k<numq; k++) {
-    q_list[k] = q_vec[k].modulo()/10;
+    q_list[k] = q_vec[k].modulo();
+    //q_list[k] = q_vec[k].modulo()/10;
     cout << "qi: " << q_list[k] << endl;
   }
 
@@ -960,9 +1043,7 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
             const Vector c_distances = c_dist[i*size+j];
             const double m_distances = m_dist[i*size+j];
             const double qdist       = dotProduct(q_vec[k],c_distances);
-            //cout << "k: " << k << " i: " << i << " j: " << j;
-            //cout << " c_dist: " << c_distances << " qdist: " << qdist << endl;
-            //const double qdist       = q_list[k]*m_distances;
+            //cout << "k: " << k << " i: " << i << " j: " << j << endl;
             //const double FFF = 1.0;
             const double FFF = FF*FF_value[k][j];
             //const double tsq = FFF*sin(qdist)/qdist;
@@ -990,7 +1071,7 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
       vector<int> sorted_atom;
 
       unsigned natom = getNumberOfAtoms();
-      double z0 = 0.5;
+      double z0 = 0.8;
       double BF = 0.05;
       double const SF = 0.001;
       double zmax = BF*std::log(1/SF-1)+z0;
@@ -999,12 +1080,14 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
 
       sort_coordinates(sorted_posi,FF_value_sorted,sorted_atom,zmax);
       size=sorted_atom.size();
+      cout << "size: " << size << endl;
       //vector<Vector> posi(size);
       #pragma omp parallel for num_threads(OpenMP::getNumThreads())
       for (unsigned i=rank; i<size; i+=stride) {
         const Vector posi=sorted_posi[i];
         for (unsigned j=rank; j<size ; j++) {
           c_dist[i*size+j] = getDeltaPeriodic(posi,sorted_posi[j]);
+          //m_dist[i*size+j] = sqrt(c_dist[i*size+j][0]*c_dist[i*size+j][0] + c_dist[i*size+j][1]*c_dist[i*size+j][1]);
           m_dist[i*size+j] = c_dist[i*size+j].modulo();
         }
       }
@@ -1027,18 +1110,20 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
             const double zj_coord = sorted_posi[j][2];
             const double fdfactorj = exp((zj_coord-z0)/BF);
             const double qdist    = dotProduct(q_vec[k],c_distances);
+            //cout << "k: " << k << " i: " << i << " j: " << j << endl;
+            //const double qdist2 = q_list[k]*m_distances;
+            //cout << "mdist: " << m_distances << " qdist: " << qdist2 << endl;
             const double FFF = FF*FF_value_sorted[k][j];
+            cout << "FFF: " << FFF << endl;
             const double tsq = FFF*sin(qdist);
-            const double fdtsq = tsq/(fdfactori+1)/(fdfactorj+1);
+            const double fdtsq = tsq/(fdfactori+1.0)/(fdfactorj+1.0);
             const double tcq = FFF*cos(qdist);
-            const double fdtcq = tcq/(fdfactori+1)/(fdfactorj+1);
-            const Vector tmp = -1*q_vec[k]*fdtsq;     
-            const Vector tmp_z = Vector(0,0, -1*fdtcq/BF); 
+            const double fdtcq = tcq/(fdfactori+1.0)/(fdfactorj+1.0);
+            const Vector tmp = -1.*q_vec[k]*fdtsq;     
+            const Vector tmp_z = Vector(0,0, -1.*fdtcq/BF); 
             //const Vector tmp_z = Vector(0,0, -1*fdtcq*fdfactorj/BF/(fdfactorj+1)); 
             const Vector dd  = tmp;
             const Vector fd_dd  = tmp_z;
-            //cout << "k: " << k << " i: " << i << " j: " << j;
-            //cout << " fdfactorj: " << fdfactorj/(fdfactorj+1) << endl;;
             dsum         += dd;
             dfdsum += fd_dd;
             deriv[kdx+jatom] += dd;
@@ -1046,7 +1131,7 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
             sum[k]       += fdtcq;
           }
           deriv[kdx+iatom] -= dsum;
-          deriv[kdx+iatom] += 2*dfdsum*fdfactori/(fdfactori+1);
+          deriv[kdx+iatom] += 2.*dfdsum*fdfactori/(fdfactori+1.0);
         }
       }
     }
@@ -2546,10 +2631,10 @@ double SAXS::calculateASF(const vector<AtomNumber> &atoms, vector<vector<long do
     log<<"  MOLINFO DATA found, using proper atom names\n";
     for(unsigned i=0; i<atoms.size(); ++i) {
       // get atom name
-      cout << "getting Atom Name: " << i << endl;
+      //cout << "getting Atom Name: " << i << endl;
       string name = moldat[0]->getAtomName(atoms[i]);
       name.resize(1);
-      cout << "name: " << name << endl;
+      //cout << "name: " << name << endl;
       char type;
       // get atom type
       char first = name.at(0);
