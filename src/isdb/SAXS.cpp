@@ -125,6 +125,7 @@ private:
   bool                       pbc;
   bool                       serial;
   bool                       gpu;
+  bool                       bessel;
   int                        deviceid;
   vector<unsigned>           atoi;
   vector<double>             q_list;
@@ -136,9 +137,6 @@ private:
   void calculate_cpu(vector<Vector> &deriv);
   void getMartiniSFparam(const vector<AtomNumber> &atoms, vector<vector<long double> > &parameter);
   double calculateASF(const vector<AtomNumber> &atoms, vector<vector<long double> > &FF_tmp, const double rho);
-  void bessel_calculate(vector<Vector> &deriv, vector<double> &sum, vector<Vector2d> &qRnm, const vector<double> &r_polar,
-                        const vector<unsigned> &trunc, const int algorithm, const unsigned p2);
-  void setup_midl(vector<double> &r_polar, vector<Vector2d> &qRnm, int &algorithm, unsigned &p2, vector<unsigned> &trunc);
   Vector2d dXHarmonics(const unsigned p2, const unsigned k, const unsigned i, const int n, const int m, const vector<Vector2d> &decRnm);
   Vector2d dYHarmonics(const unsigned p2, const unsigned k, const unsigned i, const int n, const int m, const vector<Vector2d> &decRnm);
   Vector2d dZHarmonics(const unsigned p2, const unsigned k, const unsigned i, const int n, const int m, const vector<Vector2d> &decRnm);
@@ -180,6 +178,7 @@ SAXS::SAXS(const ActionOptions&ao):
   PLUMED_METAINF_INIT(ao),
   pbc(true),
   serial(false),
+  bessel(false),
   gpu(false),
   deviceid(0)
 {
@@ -982,15 +981,6 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
     q_list[k] = q_vec[k].modulo();
     //q_list[k] = q_vec[k].modulo()/10;
     cout << "qi: " << q_list[k] << endl;
-  }
-
-  if(bessel) {
-    r_polar.resize(size);
-    trunc.resize(numq);
-    setup_midl(r_polar, qRnm, algorithm, p2, trunc);
-    if(algorithm>=0) bessel_calculate(deriv, sum, qRnm, r_polar, trunc, algorithm, p2);
-    if(algorithm+1>=numq) direct=false;
-    if(algorithm==-1) bessel=false;
   }
 
   if(direct) {
