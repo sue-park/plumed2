@@ -26,12 +26,14 @@
 */
 
 #include "MetainferenceBase.h"
+#include "core/ActionAtomistic.h"
 #include "core/ActionRegister.h"
 #include "core/ActionSet.h"
 #include "core/SetupMolInfo.h"
 #include "tools/Communicator.h"
 #include "tools/Pbc.h"
 
+#include <iostream>
 #include <string>
 #include <cmath>
 #include <map>
@@ -137,6 +139,10 @@ private:
   Vector2d dYHarmonics(const unsigned p2, const unsigned k, const unsigned i, const int n, const int m, const vector<Vector2d> &decRnm);
   Vector2d dZHarmonics(const unsigned p2, const unsigned k, const unsigned i, const int n, const int m, const vector<Vector2d> &decRnm);
   void cal_coeff();
+  Vector getDeltaPeriodic(const Vector &atom_coord1,const Vector &atom_coord2);
+  void getqvector1(vector<Vector> &q_vec);
+  void getqvector2(vector<Vector> &q_vec);
+  void sort_coordinates(vector<Vector> &sorted_posi, vector<vector<double> > &FF_value_sorted, vector<int> &sorted_atom, double z_max);
 
 public:
   static void registerKeywords( Keywords& keys );
@@ -253,6 +259,7 @@ SAXS::SAXS(const ActionOptions&ao):
     }
     for(unsigned i=0; i<size; ++i) Iq0+=parameter[i][0];
   } else if(martini) {
+    cout << "martini loop" << endl;
     //read in parameter vector
     vector<vector<long double> > parameter;
     parameter.resize(size);
@@ -266,9 +273,13 @@ SAXS::SAXS(const ActionOptions&ao):
     }
     for(unsigned i=0; i<size; ++i) Iq0+=parameter[i][0];
   } else if(atomistic) {
+    cout << "atomistic loop" << endl;
     Iq0=calculateASF(atoms, FF_tmp, rho);
+    cout << "Iq0: " << Iq0 << endl;
   }
   double scale_int = Iq0*Iq0;
+
+  cout << "after getting MartiniSFParam" << endl;
 
   vector<double> expint;
   expint.resize( numq );
@@ -285,6 +296,7 @@ SAXS::SAXS(const ActionOptions&ao):
   double tmp_scale_int=1.;
   parse("SCALEINT",tmp_scale_int);
 
+  cout << "checking pbc" << endl;
 
   if(pbc)      log.printf("  using periodic boundary conditions\n");
   else         log.printf("  without periodic boundary conditions\n");
@@ -378,108 +390,574 @@ SAXS::SAXS(const ActionOptions&ao):
 void SAXS::calculate_gpu(vector<Vector> &deriv)
 {
 #ifdef __PLUMED_HAS_ARRAYFIRE
-  const unsigned size = getNumberOfAtoms();
-  const unsigned numq = q_list.size();
+  unsigned size = getNumberOfAtoms();
+  const unsigned numq = 2;
+  //const unsigned numq = q_list.size();
 
-  std::vector<float> sum;
+  bool interface=1;
+  const double lc = 0.526;
+
+  vector<Vector> q_vec(numq);
+  //q_vec[0] = Vector(1,1,0);
+  //q_vec[1] = Vector(1,1,1);
+  //q_vec[2] = Vector(2,0,0);
+  //q_vec[3] = Vector(2,0,1);
+  //q_vec[4] = Vector(2,2,1);
+  //q_vec[5] = Vector(3,1,0);
+  //q_vec[6] = Vector(3,1,1);
+  //q_vec[7] = Vector(3,2,1);
+  //q_vec[8] = Vector(4,1,1);
+  //q_vec[9] = Vector(4,2,1);
+  //q_vec[10] = Vector(4,3,1);
+
+  //q_vec[0] = Vector(12.2862,12.2862,0);
+  //q_vec[0] = Vector(12.2862,12.2862,12.2862);
+  //q_vec[0] = Vector(17.3754,0,0);
+  //q_vec[1] = Vector(24.5725,0,0);
+  //q_vec[2] = Vector(24.5725,0,12.2862);
+  //q_vec[3] = Vector(24.5725,12.2862,12.2862);
+  //q_vec[4] = Vector(24.5725,24.5725,0);
+  //q_vec[5] = Vector(24.5725,24.5725,12.2862);
+  //q_vec[6] = Vector(36.8587,12.2862,0);
+  //q_vec[1] = Vector(36.8587,12.2862,24.5725);
+  //q_vec[10] = Vector(49.1450,12.2862,12.2862);
+  //q_vec[11] = Vector(49.1450,24.5725,12.2862);
+
+  //q_vec[0] = Vector(7.2512,-21.7788,0); // BMIM/BF4 peaks
+  //q_vec[1] = Vector(-21.7788,7.2512,0);
+  q_vec[0] = Vector(8.5617,0,0); //(100)(010)(110) peaks for PF6
+  q_vec[1] = Vector(5.1333,0,0); //(120) peaks
+
+  //getqvector2(q_vec);
+
+  q_list.resize(numq);
+
+  for (unsigned k=0; k<numq; k++) {
+    q_list[k] = q_vec[k].modulo();
+    //q_list[k] = q_vec[k].modulo()/10;
+    cout << "qi: " << q_list[k] << endl;
+  }
+
+  vector<float> sum;
   sum.resize(numq);
 
-  std::vector<float> dd;
+  vector<float> dd;
   dd.resize(size*3*numq);
 
+  vector<float> qveci;
+  qveci.resize(3);
+
   // on gpu only the master rank run the calculation
-  if(comm.Get_rank()==0) {
-    vector<float> posi;
-    posi.resize(3*size);
-    #pragma omp parallel for num_threads(OpenMP::getNumThreads())
-    for (unsigned i=0; i<size; i++) {
-      const Vector tmp = getPosition(i);
-      posi[3*i]   = static_cast<float>(tmp[0]);
-      posi[3*i+1] = static_cast<float>(tmp[1]);
-      posi[3*i+2] = static_cast<float>(tmp[2]);
-    }
-
-    // create array a and b containing atomic coordinates
-    af::setDevice(deviceid);
-    // 3,size,1,1
-    af::array pos_a = af::array(3, size, &posi.front());
-    // size,3,1,1
-    pos_a = af::moddims(pos_a.T(), size, 1, 3);
-    // size,3,1,1
-    af::array pos_b = pos_a(af::span, af::span);
-    // size,1,3,1
-    pos_a = af::moddims(pos_a, size, 1, 3);
-    // 1,size,3,1
-    pos_b = af::moddims(pos_b, 1, size, 3);
-
-    // size,size,3,1
-    af::array xyz_dist = af::tile(pos_a, 1, size, 1) - af::tile(pos_b, size, 1, 1);
-    // size,size,1,1
-    af::array square = af::sum(xyz_dist*xyz_dist,2);
-    // size,size,1,1
-    af::array dist_sqrt = af::sqrt(square);
-    // replace the zero of square with one to avoid nan in the derivatives (the number does not matter becasue this are multiplied by zero)
-    af::replace(square,!(af::iszero(square)),1.);
-    // size,size,3,1
-    xyz_dist = xyz_dist / af::tile(square, 1, 1, 3);
-    // numq,1,1,1
-    af::array sum_device   = af::constant(0, numq, f32);
-    // numq,size,3,1
-    af::array deriv_device = af::constant(0, numq, size, 3, f32);
-
-    for (unsigned k=0; k<numq; k++) {
-      // calculate FF matrix
-      // size,1,1,1
-      af::array AFF_value(size, &FFf_value[k].front());
-      // size,size,1,1
-      af::array FFdist_mod = af::tile(AFF_value(af::span), 1, size)*af::transpose(af::tile(AFF_value(af::span), 1, size));
-
-      // get q
-      const float qvalue = static_cast<float>(q_list[k]);
-      // size,size,1,1
-      af::array dist_q = qvalue*dist_sqrt;
-      // size,size,1
-      af::array dist_sin = af::sin(dist_q)/dist_q;
-      af::replace(dist_sin,!(af::isNaN(dist_sin)),1.);
-      // 1,1,1,1
-      sum_device(k) = af::sum(af::flat(dist_sin)*af::flat(FFdist_mod));
-
-      // size,size,1,1
-      af::array tmp = FFdist_mod*(dist_sin - af::cos(dist_q));
+  if(!interface){
+    if(comm.Get_rank()==0) {
+    //if(!interface){
+      vector<float> posi;
+      posi.resize(3*size);
+      #pragma omp parallel for num_threads(OpenMP::getNumThreads())
+      for (unsigned i=0; i<size; i++) {
+        const Vector tmp = getPosition(i);
+        posi[3*i]   = static_cast<float>(tmp[0]);
+        posi[3*i+1] = static_cast<float>(tmp[1]);
+        posi[3*i+2] = static_cast<float>(tmp[2]);
+      }
+   
+      // create array a and b containing atomic coordinates
+      af::setDevice(deviceid);
+      // 3,size,1,1
+      af::array pos_a = af::array(3, size, &posi.front());
+      // size,3,1,1
+      pos_a = af::moddims(pos_a.T(), size, 1, 3);
+      // size,3,1,1
+      af::array pos_b = pos_a(af::span, af::span);
+      // size,1,3,1
+      pos_a = af::moddims(pos_a, size, 1, 3);
+      // 1,size,3,1
+      pos_b = af::moddims(pos_b, 1, size, 3);
       // size,size,3,1
-      af::array dd_all = af::tile(tmp, 1, 1, 3)*xyz_dist;
-      // it should become 1,size,3
-      deriv_device(k, af::span, af::span) = af::sum(dd_all,0);
+      af::array xyz_dist = af::tile(pos_b, size, 1, 1) - af::tile(pos_a, 1, size, 1);
+      //af::array xyz_dist = af::tile(pos_a, 1, size, 1) - af::tile(pos_b, size, 1, 1);
+   
+   
+      // set Box vectors
+      Tensor Box = getPbc().getBox();
+      vector<float> Box0;
+      vector<float> Box1;
+      vector<float> Box2;
+      vector<float> Box_cb;
+   
+      for (unsigned i=0; i<3; i++) {
+        Box0.push_back(Box[0][i]);
+        Box1.push_back(Box[1][i]);
+        Box2.push_back(Box[2][i]);
+        Box_cb.push_back(Box[i][i]);
+      }
+   
+      // 3,1,1,1
+      af::array box0 = af::array(3, &Box0.front());
+      af::array box1 = af::array(3, &Box1.front());
+      af::array box2 = af::array(3, &Box2.front());
+      af::array boxcb = af::array(3, &Box_cb.front());
+      // 3,size,1,1
+      box0 = af::tile(box0,1,size,1);
+      box1 = af::tile(box1,1,size,1);
+      box2 = af::tile(box2,1,size,1);
+      boxcb = af::tile(boxcb,1,size,1);
+      //size,3,1,1
+      box0 = box0.T();
+      box1 = box1.T();
+      box2 = box2.T();
+      boxcb = boxcb.T();
+      //size,1,3,1
+      box0 = af::moddims(box0, size, 1, 3);
+      box1 = af::moddims(box1, size, 1, 3);
+      box2 = af::moddims(box2, size, 1, 3);
+      boxcb = af::moddims(boxcb, size, 1, 3);
+      //size,size,3,1
+      box0 = af::tile(box0,1,size,1);
+      box1 = af::tile(box1,1,size,1);
+      box2 = af::tile(box2,1,size,1);
+      boxcb = af::tile(boxcb,1,size,1);
+   
+   
+      //size,size,3,1
+      af::array dist_pbc = af::floor(xyz_dist/boxcb+0.5);
+      //size,size,3,1
+      xyz_dist = xyz_dist - box2*dist_pbc;
+      xyz_dist = xyz_dist - box1*dist_pbc;
+      xyz_dist = xyz_dist - box0*dist_pbc;
+      // size,size,1,1
+      af::array square = af::sum(xyz_dist*xyz_dist,2);
+      // size,size,1,1
+      af::array dist_sqrt = af::sqrt(square);
+      // replace the zero of square with one to avoid nan in the derivatives (the number does not matter becasue this are multiplied by zero)
+      af::replace(square,!(af::iszero(square)),1.);
+      // size,size,3,1
+      //xyz_dist = xyz_dist / af::tile(square, 1, 1, 3);
+      // numq,1,1,1
+      af::array sum_device   = af::constant(0, numq, f32);
+      // numq,size,3,1
+      af::array deriv_device = af::constant(0, numq, size, 3, f32);
+   
+      for (unsigned k=0; k<numq; k++) {
+        // calculate FF matrix
+        // size,1,1,1
+        af::array AFF_value(size, &FFf_value[k].front());
+        // size,size,1,1
+        af::array FFdist_mod = af::tile(AFF_value(af::span), 1, size)*af::transpose(af::tile(AFF_value(af::span), 1, size));
+   
+        // get q
+        //const float qvalue = static_cast<float>(q_list[k]);
+        vector<float> qveck;
+        qveck.push_back(q_vec[k][0]);
+        qveck.push_back(q_vec[k][1]);
+        qveck.push_back(q_vec[k][2]);
+   
+        // 3,1,1,1
+        af::array qvec = af::array(3, &qveck.front());
+        // 3,size,1,1
+        qvec = af::tile(qvec,1,size,1);
+        // size,3,1,1
+        qvec = qvec.T();
+        // size,1,3,1
+        qvec = af::moddims(qvec, size, 1, 3);
+        // size,size,3,1
+        qvec = af::tile(qvec, 1, size, 1);
+        // size,size,1,1
+        af::array dist_q = af::sum(qvec*xyz_dist,2);
+        //af_print(dist_q);
+        //af::array dist_q = qvalue*dist_sqrt;
+        // size,size,1,1
+        //af::array dist_sin = af::sin(dist_q)/dist_q;
+        af::array dist_cos = af::cos(dist_q);
+        af::replace(dist_cos,!(af::isNaN(dist_cos)),1.);
+        //af::replace(dist_sin,!(af::isNaN(dist_sin)),1.);
+        // 1,1,1,1
+        sum_device(k) = af::sum(af::flat(dist_cos)*af::flat(FFdist_mod));
+        //sum_device(k) = af::sum(af::flat(dist_sin)*af::flat(FFdist_mod));
+   
+        //size,size,1,1
+        af::array dist_sin = af::sin(dist_q);
+        //size,size,3,1
+        dist_sin = af::tile(dist_sin,1,1,3);
+        //size,size,3,1
+        dist_sin = -1*qvec*dist_sin;
+   
+        // size,size,3,1
+        af::array tmp = af::tile(FFdist_mod,1,1,3)*dist_sin;
+        // size,size,1,1
+        //af::array tmp = FFdist_mod*(dist_sin - af::cos(dist_q));
+        // size,size,3,1
+	af::array dd_all = tmp;
+        //af::array dd_all = af::tile(tmp, 1, 1, 3)*xyz_dist;
+        // it should become 1,size,3
+        deriv_device(k, af::span, af::span) = af::sum(dd_all,0);
+      }
+   
+      // read out results
+      sum_device.host(&sum.front());
+   
+      deriv_device = af::reorder(deriv_device, 2, 1, 0);
+      deriv_device = af::flat(deriv_device);
+      deriv_device.host(&dd.front());
     }
 
-    // read out results
-    sum_device.host(&sum.front());
-
-    deriv_device = af::reorder(deriv_device, 2, 1, 0);
-    deriv_device = af::flat(deriv_device);
-    deriv_device.host(&dd.front());
-  }
-
-  comm.Bcast(dd, 0);
-  comm.Bcast(sum, 0);
-
-  for(unsigned k=0; k<numq; k++) {
-    string num; Tools::convert(k,num);
-    Value* val=getPntrToComponent("q_"+num);
-    val->set(sum[k]);
-    if(getDoScore()) setCalcData(k, sum[k]);
-    for(unsigned i=0; i<size; i++) {
-      const unsigned di = k*size*3+i*3;
-      deriv[k*size+i] = Vector(2.*dd[di+0],2.*dd[di+1],2.*dd[di+2]);
+    comm.Bcast(dd, 0);
+    comm.Bcast(sum, 0);
+   
+    for(unsigned k=0; k<numq; k++) {
+      string num; Tools::convert(k,num);
+      Value* val=getPntrToComponent("q_"+num);
+      val->set(sum[k]);
+      if(getDoScore()) setCalcData(k, sum[k]);
+      for(unsigned i=0; i<size; i++) {
+        const unsigned di = k*size*3+i*3;
+        deriv[k*size+i] = Vector(2.*dd[di+0],2.*dd[di+1],2.*dd[di+2]);
+      }
     }
+
+  } else {
+    vector<Vector> sorted_posi;
+    vector<vector<double> > FF_value_sorted;
+    vector<int> sorted_atom;
+
+    if(comm.Get_rank()==0) {
+
+      double z0 = 1.5;
+      double BF = 0.1;
+      double const SF = 0.001;
+      double zmax = BF*std::log(1/SF-1)+z0;
+      cout << "zmax: " << zmax << endl;
+
+      FF_value_sorted.resize(numq);
+
+      sort_coordinates(sorted_posi,FF_value_sorted,sorted_atom,zmax);
+      size=sorted_atom.size();
+      cout << "size: " << size << endl;  
+
+      if(size<40){
+        cout << "coord: " << endl;
+        unsigned natoms = getNumberOfAtoms();
+        for (unsigned i=0; i<natoms; i++) {
+        const Vector tmp = getPosition(i);
+        cout << "size is smaller than 40" << endl;
+        cout << "ATOM   ";
+        cout << i << "  " << tmp[0] << " " << tmp[1] << " " << tmp[2] << endl;
+        }
+      }
+
+      if(size>60){
+        cout << "coord: " << endl;
+        unsigned natoms = getNumberOfAtoms();
+        for (unsigned i=0; i<natoms; i++) {
+        const Vector tmp = getPosition(i);
+        cout << "size is bigger than 60" << endl;
+        cout << "ATOM   ";
+        cout << i << "  " << tmp[0] << " " << tmp[1] << " " << tmp[2] << endl;
+        }
+      }
+
+      if(size==0){
+        cout << "coord: " << endl;
+        unsigned natoms = getNumberOfAtoms();
+        for (unsigned i=0; i<natoms; i++) {
+        const Vector tmp = getPosition(i);
+        cout << "size is 0" << endl;
+        cout << "ATOM   ";
+        cout << i << "  " << tmp[0] << " " << tmp[1] << " " << tmp[2] << endl;
+        }
+      }
+
+ 
+      vector<float> posi;
+      vector<float> zposi;
+      posi.resize(3*size);
+      zposi.resize(size);
+
+      vector<vector<float> > FFf_value_sorted;
+      FFf_value_sorted.resize(numq,vector<float>(size));
+
+      FFf_value.resize(numq,vector<float>(size));
+      for (unsigned i=0; i<size; i++) {
+        const Vector tmp = sorted_posi[i];
+        posi[3*i]   = static_cast<float>(tmp[0]);
+        posi[3*i+1] = static_cast<float>(tmp[1]);
+        //posi[3*i+2] = static_cast<float>(tmp[2]);
+        posi[3*i+2] = static_cast<float>(0.);
+        zposi[i] = static_cast<float>(tmp[2]);
+        for (unsigned k=0; k<numq; ++k) {
+          FFf_value_sorted[k][i] = static_cast<float>(FF_value_sorted[k][i]);
+        }
+      }   
+
+      // z unit vector
+      vector<float> zveck;
+      zveck.push_back(0);
+      zveck.push_back(0);
+      zveck.push_back(1);
+
+      // 3,1,1,1
+      af::array zvec = af::array(3, &zveck.front());
+      // 3,size,1,1
+      zvec = af::tile(zvec,1,size,1);
+      // size,3,1,1
+      zvec = zvec.T();
+      // 1,size,3,1
+      zvec = af::moddims(zvec, 1, size, 3);
+
+      //cout << "zvec is created" << endl;
+
+      // xy unit vector
+      //vector<float> xyveck;
+      //xyveck.push_back(1);
+      //xyveck.push_back(1);
+      //xyveck.push_back(0);
+
+      // 3,1,1,1
+      //af::array xyvec = af::array(3, &xyveck.front());
+      // 3,size,1,1
+      //xyvec = af::tile(xyvec,1,size,1);
+      // size,3,1,1
+      //xyvec = xyvec.T();
+      // size,1,3,1
+      //xyvec = af::moddims(xyvec,size,1,3);
+      // size,size,3,1
+      //xyvec = af::tile(xyvec,1,size,1);
+
+      //cout << "xyvec is created" << endl;
+
+      dd.resize(size*3*numq);
+
+      // create array of z coordinates
+      // 1,size,1,1
+      af::array zpos_b = af::array(1, size, &zposi.front());
+      // size,1,1,1
+      af::array zpos_a = af::moddims(zpos_b.T(),size,1,1);
+      // size,size,1,1
+      af::array zpos2_a = af::tile(zpos_a,1,size,1);
+      // size,size,1,1
+      af::array zpos2_b = af::tile(zpos_b,size,1,1);
+
+      // size,size,1,1
+      af::array fdfactor_a = (zpos2_a-z0)/BF;
+      // size,size,1,1
+      af::array fdfactor_b = (zpos2_b-z0)/BF;
+      //size,size,1,1
+      fdfactor_a = af::exp(fdfactor_a);
+      //size,size,1,1
+      fdfactor_b = af::exp(fdfactor_b);
+
+      // create array a and b containing atomic coordinates
+      af::setDevice(deviceid);
+      // 3,size,1,1
+      af::array pos_a = af::array(3, size, &posi.front());
+      // size,3,1,1
+      pos_a = af::moddims(pos_a.T(), size, 1, 3);
+      // size,3,1,1
+      af::array pos_b = pos_a(af::span, af::span);
+      // size,1,3,1
+      pos_a = af::moddims(pos_a, size, 1, 3);
+      // 1,size,3,1
+      pos_b = af::moddims(pos_b, 1, size, 3);
+      // size,size,3,1
+      af::array xyz_dist = af::tile(pos_b, size, 1, 1) - af::tile(pos_a, 1, size, 1);
+      //af::array xyz_dist = af::tile(pos_a, 1, size, 1) - af::tile(pos_b, size, 1, 1);
+ 
+      // set Box vectors
+      Tensor Box = getPbc().getBox();
+      vector<float> Box0;
+      vector<float> Box1;
+      vector<float> Box2;
+      vector<float> Box_cb;
+   
+      for (unsigned i=0; i<3; i++) {
+        Box0.push_back(Box[0][i]);
+        Box1.push_back(Box[1][i]);
+        Box2.push_back(Box[2][i]);
+        Box_cb.push_back(Box[i][i]);
+      }
+   
+      // 3,1,1,1                      
+      af::array box0 = af::array(3, &Box0.front());
+      af::array box1 = af::array(3, &Box1.front());
+      af::array box2 = af::array(3, &Box2.front());
+      af::array boxcb = af::array(3, &Box_cb.front());
+      // 3,size,1,1                                  
+      box0 = af::tile(box0,1,size,1);
+      box1 = af::tile(box1,1,size,1);
+      box2 = af::tile(box2,1,size,1);
+      boxcb = af::tile(boxcb,1,size,1);
+      //size,3,1,1
+      box0 = box0.T();
+      box1 = box1.T();
+      box2 = box2.T();
+      boxcb = boxcb.T();
+      //size,1,3,1
+      box0 = af::moddims(box0, size, 1, 3);
+      box1 = af::moddims(box1, size, 1, 3);
+      box2 = af::moddims(box2, size, 1, 3);
+      boxcb = af::moddims(boxcb, size, 1, 3);
+      //size,size,3,1
+      box0 = af::tile(box0,1,size,1);
+      box1 = af::tile(box1,1,size,1);
+      box2 = af::tile(box2,1,size,1);
+      boxcb = af::tile(boxcb,1,size,1);
+   
+   
+      //size,size,3,1
+      af::array dist_pbc = af::floor(xyz_dist/boxcb+0.5);
+      //size,size,3,1
+      xyz_dist = xyz_dist - box2*dist_pbc;
+      xyz_dist = xyz_dist - box1*dist_pbc;
+      xyz_dist = xyz_dist - box0*dist_pbc;
+      // size,size,1,1
+      af::array square = af::sum(xyz_dist*xyz_dist,2);
+      // size,size,1,1
+      af::array dist_sqrt = af::sqrt(square);
+      // replace the zero of square with one to avoid nan in the derivatives (the number does not matter becasue this are multiplied by zero)
+      af::replace(square,!(af::iszero(square)),1.);
+      // numq,1,1,1
+      af::array sum_device   = af::constant(0, numq, f32);
+      // numq,size,3,1
+      af::array deriv_device = af::constant(0, numq, size, 3, f32);
+   
+      for (unsigned k=0; k<numq; k++) {
+        // calculate FF matrix
+        // size,1,1,1
+        af::array AFF_value(size, &FFf_value_sorted[k].front());
+        // size,size,1,1
+        af::array FFdist_mod = af::tile(AFF_value(af::span), 1, size)*af::transpose(af::tile(AFF_value(af::span), 1, size));
+        // 1,size,1,1
+        //af::array FFz_mod = AFF_value.T()*AFF_value.T();  
+ 
+        // get q
+        const float qvalue = static_cast<float>(q_list[k]);
+        const float qcutoff = qvalue*1.6;
+
+        //size,size,1,1
+        af::array dist_q = qvalue*dist_sqrt;
+        af::array dist_q_deriv = qvalue*dist_sqrt;
+        //size,size,1,1
+        af::replace(dist_q,dist_q>0.25,0.51258242);
+
+        cout << "dist_q is calculated" << endl;
+        //af::replace(dist_q,dist_q<qcutoff,2.40800);
+
+        //size,size,1,1
+        af::array sqrt_dist = sqrt(2/M_PI)/af::sqrt(dist_q);
+        af::array sqrt_dist_deriv = sqrt(2/M_PI)/af::sqrt(dist_q_deriv);
+        //size,size,1,1
+        af::array cos_term = sqrt_dist*af::cos(dist_q-M_PI/4);
+        af::array cos_term_deriv = sqrt_dist_deriv*af::cos(dist_q_deriv-M_PI/4);
+        //size,size,1,1
+        af::array sin_term = sqrt_dist*af::sin(dist_q-M_PI/4);
+        af::array sin_term_deriv = sqrt_dist_deriv*af::sin(dist_q_deriv-M_PI/4);
+        //size,size,1,1
+        af::array bessel_0 = cos_term+sin_term/8/dist_q;
+        //size,size,1,1
+        af::array fd_bessel = bessel_0/(fdfactor_a+1.)/(fdfactor_b+1.);
+        cout << "fd_bessel is calculated" << endl;
+
+        // 1,1,1,1
+        sum_device(k) = af::sum(af::flat(fd_bessel)*af::flat(FFdist_mod));
+  
+        //size,size,1,1
+        af::array deriv_sin = sin_term_deriv*3/16/dist_q_deriv/dist_q_deriv+sin_term_deriv;
+        //size,size,1,1
+        af::array deriv_cos = cos_term_deriv*3/8/dist_q_deriv;
+        //size,size,1,1
+        af::array bessel_deriv = -deriv_cos-deriv_sin;
+        //size,size,1,1
+        //af::array bessel_deriv = deriv_cos-deriv_sin;
+        //size,size,1,1
+        af::replace(bessel_deriv,bessel_deriv<1.1978,0);
+        cout << "after replacing" << endl;
+        //size,size,1,1
+        af::array fd_xy = FFdist_mod*bessel_deriv/(fdfactor_a+1.)/(fdfactor_b+1.);
+        //size,size,3,1
+        af::array dist_sqrt_3 = af::tile(dist_sqrt,1,1,3);
+        af::replace(dist_sqrt_3,!(af::iszero(dist_sqrt_3)),1.);
+        //size,size,3,1
+        af::array tmp_xy = qvalue*af::tile(fd_xy,1,1,3)*xyz_dist/dist_sqrt_3;
+            
+
+        //size,size,1,1
+        af::array fd_z = FFdist_mod*fd_bessel/BF;
+        //1,size,1,1
+        fd_z = af::sum(fd_z,0);
+        //1,size,1,1
+        af::array fdz_b = af::exp((zpos_b-z0)/BF);
+        //1,size,1,1
+        af::array tmp_z = fd_z*fdz_b/(fdz_b+1);
+        //af::array tmp_z = FFz_mod*fdz_cos*fdz_b/(fdz_b+1);
+        //1,size,3,1
+        tmp_z = af::tile(tmp_z,1,1,3);
+        //1,size,3,1
+        tmp_z = -1*tmp_z*zvec;
+   
+        // it should become 1,size,3,1
+        deriv_device(k, af::span, af::span) = af::sum(tmp_xy,0) + tmp_z;
+      }
+      
+      // read out results
+      sum_device.host(&sum.front());
+   
+      deriv_device = af::reorder(deriv_device, 2, 1, 0);
+      deriv_device = af::flat(deriv_device);
+      deriv_device.host(&dd.front());
+
+    }
+
+    comm.Bcast(dd, 0);
+    comm.Bcast(sum, 0);
+   
+    for(unsigned k=0; k<numq; k++) {
+      string num; Tools::convert(k,num);
+      Value* val=getPntrToComponent("q_"+num);
+      val->set(sum[k]);
+      cout << "k: " << k << " sum[k]: " << sum[k] << endl;
+      unsigned natom = getNumberOfAtoms();
+      if(getDoScore()) setCalcData(k, sum[k]);
+      for(unsigned i=0; i<size; i++) {
+        int iatom=sorted_atom[i];
+        const unsigned di = k*size*3+i*3;
+        deriv[k*natom+iatom] = Vector(2.*dd[di+0],2.*dd[di+1],2.*dd[di+2]);
+      }
+    }
+
   }
+
+//  comm.Bcast(dd, 0);
+//  comm.Bcast(sum, 0);
+// 
+//  for(unsigned k=0; k<numq; k++) {
+//    string num; Tools::convert(k,num);
+//    Value* val=getPntrToComponent("q_"+num);
+//    val->set(sum[k]);
+//    cout << "k: " << k << " sum[k]: " << sum[k] << endl;
+//    if(getDoScore()) setCalcData(k, sum[k]);
+//    if(!interface) {
+//      for(unsigned i=0; i<size; i++) {
+//        const unsigned di = k*size*3+i*3;
+//        deriv[k*size+i] = Vector(2.*dd[di+0],2.*dd[di+1],2.*dd[di+2]);
+//        cout << "k: " << k << " i: " << i << " deriv: " << deriv[k*size+i] << endl;
+//      } 
+//    } else {
+//      for(unsigned i=0; i<size; i++) {
+//        int iatom = sorted_atom[i];
+//        const unsigned di = k*size*3+i*3;
+//        deriv[k*size+iatom] = Vector(2.*dd[di+0],2.*dd[di+1],2.*dd[di+2]);
+//        cout << "k: " << k << " i: " << i << " deriv: " << deriv[k*size+iatom] << endl; 
+//      }
+//    }
+//  }
 #endif
 }
 
 void SAXS::calculate_cpu(vector<Vector> &deriv)
 {
-  const unsigned size = getNumberOfAtoms();
-  const unsigned numq = q_list.size();
+  unsigned size = getNumberOfAtoms();
+  //const unsigned numq = q_list.size();
+  const unsigned numq = 2;
 
   unsigned stride = comm.Get_size();
   unsigned rank   = comm.Get_rank();
@@ -499,6 +977,37 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
   unsigned p2=0;
   bool direct = true;
 
+  bool interface=1;
+  const double lc = 0.526;
+
+  vector<Vector> q_vec(numq);
+  //q_vec[0] = Vector(1,1,0);
+  //q_vec[0] = Vector(1,1,1);
+  //q_vec[1] = Vector(2,0,0);
+  //q_vec[3] = Vector(2,0,1);
+  //q_vec[4] = Vector(2,2,1);
+  //q_vec[5] = Vector(3,1,0);
+  //q_vec[2] = Vector(3,1,1);
+  //q_vec[7] = Vector(3,2,1);
+  //q_vec[8] = Vector(4,1,1);
+  //q_vec[9] = Vector(4,2,1);
+  //q_vec[10] = Vector(4,3,1);
+  //getqvector2(q_vec);
+
+  q_vec[0] = Vector(24.5725,0,0);
+  q_vec[1] = Vector(24.5725,24.5725,0);
+  
+  //q_vec[0] = Vector(0.7251,-2.1779,0);
+  //q_vec[1] = Vector(-2.1779,0.7251,0);
+
+  q_list.resize(numq);
+
+  for (unsigned k=0; k<numq; k++) {
+    q_list[k] = q_vec[k].modulo();
+    //q_list[k] = q_vec[k].modulo()/10;
+    cout << "qi: " << q_list[k] << endl;
+  }
+
   if(bessel) {
     r_polar.resize(size);
     trunc.resize(numq);
@@ -509,38 +1018,125 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
   }
 
   if(direct) {
-    #pragma omp parallel for num_threads(OpenMP::getNumThreads())
-    for (unsigned i=rank; i<size-1; i+=stride) {
-      const Vector posi=getPosition(i);
-      for (unsigned j=i+1; j<size ; j++) {
-        c_dist[i*size+j] = delta(posi,getPosition(j));
-        m_dist[i*size+j] = c_dist[i*size+j].modulo();
-      }
-    }
-
-    #pragma omp parallel for num_threads(OpenMP::getNumThreads())
-    for (unsigned k=(algorithm+1); k<numq; k++) {
-      const unsigned kdx=k*size;
-      for (unsigned i=rank; i<size-1; i+=stride) {
-        const double FF=2.*FF_value[k][i];
-        Vector dsum;
-        for (unsigned j=i+1; j<size ; j++) {
-          const Vector c_distances = c_dist[i*size+j];
-          const double m_distances = m_dist[i*size+j];
-          const double qdist       = q_list[k]*m_distances;
-          const double FFF = FF*FF_value[k][j];
-          const double tsq = FFF*sin(qdist)/qdist;
-          const double tcq = FFF*cos(qdist);
-          const double tmp = (tcq-tsq)/(m_distances*m_distances);
-          const Vector dd  = c_distances*tmp;
-          dsum         += dd;
-          deriv[kdx+j] += dd;
-          sum[k]       += tsq;
+    if(!interface){
+      #pragma omp parallel for num_threads(OpenMP::getNumThreads())
+      for (unsigned i=rank; i<size; i+=stride) {
+        const Vector posi=getPosition(i);
+        for (unsigned j=rank; j<size ; j++) {
+          c_dist[i*size+j] = getDeltaPeriodic(posi,getPosition(j));
+          //cout << "i: " << i << " j: " << j << " cdist: ";
+          //cout << c_dist[i*size+j] << endl;
+          //c_dist[i*size+j] = delta(posi,getPosition(j));
+          m_dist[i*size+j] = c_dist[i*size+j].modulo();
         }
-        deriv[kdx+i] -= dsum;
+      }
+   
+      #pragma omp parallel for num_threads(OpenMP::getNumThreads())
+      for (unsigned k=(algorithm+1); k<numq; k++) {
+        const unsigned kdx=k*size;
+        for (unsigned i=rank; i<size; i+=stride) {
+        //for (unsigned i=rank; i<size-1; i+=stride) {
+          const double FF=FF_value[k][i];
+          //const double FF=2.*FF_value[k][i];
+          Vector dsum;
+          for (unsigned j=rank; j<size ; j++) {
+            const Vector c_distances = c_dist[i*size+j];
+            const double m_distances = m_dist[i*size+j];
+            const double qdist       = dotProduct(q_vec[k],c_distances);
+            //cout << "k: " << k << " i: " << i << " j: " << j << endl;
+            //const double FFF = 1.0;
+            const double FFF = FF*FF_value[k][j];
+            //const double tsq = FFF*sin(qdist)/qdist;
+            const double tsq = FFF*sin(qdist);
+            //cout << " tsq: " << tsq << endl;
+            const double tcq = FFF*cos(qdist);
+            //cout << " tcq: " << tcq << endl;
+            const Vector tmp = -1*q_vec[k]*tsq;
+            //cout << " tmp: " << tmp << endl;
+            //const double tmp = (tcq-tsq)/(m_distances*m_distances);
+            //const Vector dd  = c_distances*tmp;
+            const Vector dd  = tmp;
+            dsum         += dd;
+            deriv[kdx+j] += dd;
+            sum[k]       += tcq;
+          }
+          deriv[kdx+i] -= dsum;
+          //cout << "i: " << i << " deriv[k+i]: " << deriv[kdx+i] << endl;
+        }
+      //cout << "k: " << k << " sum[k]: " << sum[k] << endl;
+      }
+    } else {
+      vector<Vector> sorted_posi;
+      vector<vector<double> > FF_value_sorted;
+      vector<int> sorted_atom;
+
+      unsigned natom = getNumberOfAtoms();
+      double z0 = 0.8;
+      double BF = 0.05;
+      double const SF = 0.001;
+      double zmax = BF*std::log(1/SF-1)+z0;
+ 
+      FF_value_sorted.resize(numq);
+
+      sort_coordinates(sorted_posi,FF_value_sorted,sorted_atom,zmax);
+      size=sorted_atom.size();
+      cout << "size: " << size << endl;
+      //vector<Vector> posi(size);
+      #pragma omp parallel for num_threads(OpenMP::getNumThreads())
+      for (unsigned i=rank; i<size; i+=stride) {
+        const Vector posi=sorted_posi[i];
+        for (unsigned j=rank; j<size ; j++) {
+          c_dist[i*size+j] = getDeltaPeriodic(posi,sorted_posi[j]);
+          //m_dist[i*size+j] = sqrt(c_dist[i*size+j][0]*c_dist[i*size+j][0] + c_dist[i*size+j][1]*c_dist[i*size+j][1]);
+          m_dist[i*size+j] = c_dist[i*size+j].modulo();
+        }
+      }
+         
+      #pragma omp parallel for num_threads(OpenMP::getNumThreads())
+      for (unsigned k=(algorithm+1); k<numq; k++) {
+        const unsigned kdx=k*natom;
+        //const unsigned kdx=k*size;
+        for (unsigned i=rank; i<size; i+=stride) {
+          const double FF=FF_value_sorted[k][i];
+          const double zi_coord = sorted_posi[i][2];
+          const double fdfactori = exp((zi_coord-z0)/BF); //fermi-dirac factor
+          int iatom = sorted_atom[i];
+          Vector dsum;
+	  Vector dfdsum;
+          for (unsigned j=rank; j<size ; j++) {
+            int jatom = sorted_atom[j];
+            const Vector c_distances = c_dist[i*size+j];
+            const double m_distances = m_dist[i*size+j];
+            const double zj_coord = sorted_posi[j][2];
+            const double fdfactorj = exp((zj_coord-z0)/BF);
+            const double qdist    = dotProduct(q_vec[k],c_distances);
+            //cout << "k: " << k << " i: " << i << " j: " << j << endl;
+            //const double qdist2 = q_list[k]*m_distances;
+            //cout << "mdist: " << m_distances << " qdist: " << qdist2 << endl;
+            const double FFF = FF*FF_value_sorted[k][j];
+            cout << "FFF: " << FFF << endl;
+            const double tsq = FFF*sin(qdist);
+            const double fdtsq = tsq/(fdfactori+1.0)/(fdfactorj+1.0);
+            const double tcq = FFF*cos(qdist);
+            const double fdtcq = tcq/(fdfactori+1.0)/(fdfactorj+1.0);
+            const Vector tmp = -1.*q_vec[k]*fdtsq;     
+            const Vector tmp_z = Vector(0,0, -1.*fdtcq/BF); 
+            //const Vector tmp_z = Vector(0,0, -1*fdtcq*fdfactorj/BF/(fdfactorj+1)); 
+            const Vector dd  = tmp;
+            const Vector fd_dd  = tmp_z;
+            dsum         += dd;
+            dfdsum += fd_dd;
+            deriv[kdx+jatom] += dd;
+            //deriv[kdx+j] += dd + fd_dd;
+            sum[k]       += fdtcq;
+          }
+          deriv[kdx+iatom] -= dsum;
+          deriv[kdx+iatom] += 2.*dfdsum*fdfactori/(fdfactori+1.0);
+        }
       }
     }
   }
+
 
   if(!serial) {
     comm.Sum(&deriv[0][0], 3*deriv.size());
@@ -561,10 +1157,14 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
 
   if(direct) {
     for (unsigned k=algorithm+1; k<numq; k++) {
-      sum[k]+=FF_rank[k];
+      //sum[k]+=FF_rank[k];
+      cout << "k: " << k << " sum[k]: " << sum[k] << endl;
       string num; Tools::convert(k,num);
       Value* val=getPntrToComponent("q_"+num);
       val->set(sum[k]);
+      //for (unsigned i=0; i<size; i++) {
+        //cout << "k: " << k << " i: " << i << " deriv: " << deriv[k*size+i] << endl;
+      //}
       if(getDoScore()) setCalcData(k, sum[k]);
     }
   }
@@ -572,7 +1172,7 @@ void SAXS::calculate_cpu(vector<Vector> &deriv)
 
 void SAXS::calculate()
 {
-  if(pbc) makeWhole();
+  //if(pbc) makeWhole();
 
   const unsigned size = getNumberOfAtoms();
   const unsigned numq = q_list.size();
@@ -1955,7 +2555,7 @@ void SAXS::getMartiniSFparam(const vector<AtomNumber> &atoms, vector<vector<long
 
 double SAXS::calculateASF(const vector<AtomNumber> &atoms, vector<vector<long double> > &FF_tmp, const double rho)
 {
-  enum { H, C, N, O, P, S, NTT };
+  enum { H, C, N, O, P, S, B, F, NTT };
   map<string, unsigned> AA_map;
   AA_map["H"] = H;
   AA_map["C"] = C;
@@ -1963,6 +2563,8 @@ double SAXS::calculateASF(const vector<AtomNumber> &atoms, vector<vector<long do
   AA_map["O"] = O;
   AA_map["P"] = P;
   AA_map["S"] = S;
+  AA_map["B"] = B;
+  AA_map["F"] = F;
 
   vector<vector<double> > param_a;
   vector<vector<double> > param_b;
@@ -2010,6 +2612,18 @@ double SAXS::calculateASF(const vector<AtomNumber> &atoms, vector<vector<long do
   param_a[S][3] = 1.58630; param_b[S][3] = 56.1720;
   param_a[S][4] = 0.0;     param_b[S][4] = 1.0;
 
+  param_a[B][0] = 2.05450; param_b[B][0] = 23.2185; param_c[B] = -0.19320;
+  param_a[B][1] = 1.33260; param_b[B][1] = 1.02100; param_v[B] = 38.19;
+  param_a[B][2] = 1.09790; param_b[B][2] = 60.3498;
+  param_a[B][3] = 0.70680; param_b[B][3] = 0.14030;
+  param_a[B][4] = 0.0;     param_b[B][4] = 1.0;
+ 
+  param_a[F][0] = 3.53920; param_b[F][0] = 10.2825; param_c[F] = 0.277600;
+  param_a[F][1] = 2.64120; param_b[F][1] = 4.29440; param_v[F] = 17.69;
+  param_a[F][2] = 1.51700; param_b[F][2] = 0.26150;
+  param_a[F][3] = 1.02430; param_b[F][3] = 26.1476;
+  param_a[F][4] = 0.0;     param_b[F][4] = 1.0;
+
   vector<SetupMolInfo*> moldat=plumed.getActionSet().select<SetupMolInfo*>();
 
   double Iq0=0.;
@@ -2017,7 +2631,10 @@ double SAXS::calculateASF(const vector<AtomNumber> &atoms, vector<vector<long do
     log<<"  MOLINFO DATA found, using proper atom names\n";
     for(unsigned i=0; i<atoms.size(); ++i) {
       // get atom name
+      //cout << "getting Atom Name: " << i << endl;
       string name = moldat[0]->getAtomName(atoms[i]);
+      name.resize(1);
+      //cout << "name: " << name << endl;
       char type;
       // get atom type
       char first = name.at(0);
@@ -2055,6 +2672,111 @@ double SAXS::calculateASF(const vector<AtomNumber> &atoms, vector<vector<long do
 
   return Iq0;
 }
+
+Vector SAXS::getDeltaPeriodic(const Vector &atom_coord1,const Vector &atom_coord2)
+{
+  Tensor Box = getPbc().getBox();
+
+  Vector diff = atom_coord2 - atom_coord1;
+  //cout << "diff: " << diff << endl;
+  Vector Box2 = Vector(Box[2][0],Box[2][1],Box[2][2]); 
+  Vector Box1 = Vector(Box[1][0],Box[1][1],Box[1][2]); 
+  Vector Box0 = Vector(Box[0][0],Box[0][1],Box[0][2]);
+  //cout << "floor_x : " << Box0*floor(diff[0]/Box[0][0]+0.5) << endl;
+  //cout << "floor_y : " << Box1*floor(diff[1]/Box[1][1]+0.5) << endl;
+  //cout << "floor_z : " << Box2*floor(diff[2]/Box[2][2]+0.5) << endl; 
+  //cout << "diff -= x : " << diff-Box0*floor(diff[0]/Box[0][0]+0.5) << endl;
+  //cout << "diff -= y : " << diff-Box1*floor(diff[1]/Box[1][1]+0.5) << endl;
+  //cout << "diff -= z : " << diff-Box2*floor(diff[2]/Box[2][2]+0.5) << endl;
+  diff = diff - Box2*floor(diff[2]/Box[2][2]+0.5);  
+  diff = diff - Box1*floor(diff[1]/Box[1][1]+0.5);  
+  diff = diff - Box0*floor(diff[0]/Box[0][0]+0.5); 
+
+  //cout << "diff2: " << diff[0] << ", " << diff[1];
+  //cout << ", " << diff[2] << endl;
+
+  //for(unsigned i=0; i<3; i++) {
+  //  diff[i] = sqrt(diff[i]*diff[i]);
+  //}
+
+  return diff;
+}
+
+void SAXS::getqvector1(vector<Vector> &q_vec)
+{
+  Tensor Box = getPbc().getBox();
+
+  Vector Box2 = Vector(Box[2][0],Box[2][1],Box[2][2]);
+  Vector Box1 = Vector(Box[1][0],Box[1][1],Box[1][2]);
+  Vector Box0 = Vector(Box[0][0],Box[0][1],Box[0][2]);
+
+  double vol = determinant(Box);
+
+  Vector k1 = crossProduct(Box1,Box2)/vol;
+  Vector k2 = crossProduct(Box2,Box0)/vol;
+  Vector k3 = crossProduct(Box0,Box1)/vol;
+
+  int qnum=q_vec.size();
+
+  for (unsigned i=0; i<qnum; i++) {
+    q_vec[i] = 2*M_PI*(q_vec[i][0]*k1+q_vec[i][1]*k2+q_vec[i][2]*k3);
+  }
+
+}
+
+//void SAXS::getqvector2(vector<Vector> &q_vec, const double lc)
+void SAXS::getqvector2(vector<Vector> &q_vec)
+{
+  int qnum=q_vec.size();
+  Tensor Box = getPbc().getBox();
+
+  const unsigned size = getNumberOfAtoms();
+
+  int ncell = cbrt(size/4);
+  double lc = Box[2][2]/ncell;
+  //cout << "lc: " << lc << endl;
+
+  for (unsigned i=0; i<qnum; i++) {
+    q_vec[i]=2*M_PI/lc*q_vec[i];
+  }
+
+}
+
+void SAXS::sort_coordinates(vector<Vector> &sorted_posi, vector<vector<double> > &FF_value_sorted, vector<int> &sorted_atom, double z_max)
+{
+  const unsigned size = getNumberOfAtoms();
+  const unsigned numq = q_list.size();
+
+  int j=0;
+  for (unsigned i=0; i<size; i++){
+    const Vector tmp = getPosition(i);
+    const float zcoord = static_cast<float>(tmp[2]);
+
+    if(zcoord < z_max) {
+      sorted_atom.push_back( i );
+
+      Vector pre_posi = Vector( static_cast<double>(tmp[0]),static_cast<double>(tmp[1]),static_cast<double>(tmp[2]) );
+      sorted_posi.push_back( pre_posi );
+
+      //pre_posi.push_back( static_cast<float>(tmp[0]) );
+      //pre_posi.push_back( static_cast<float>(tmp[1]) );
+      //pre_posi.push_back( static_cast<float>(tmp[2]) );
+
+      if (!gpu) {
+        for(unsigned k=0; k<numq; k++) {
+          FF_value_sorted[k].push_back(FF_value[k][i]);
+        }
+      } else {
+        for(unsigned k=0; k<numq; k++) {
+          FF_value_sorted[k].push_back(FFf_value[k][i]);
+        }
+      }
+      
+      j+=1;
+    }
+  }
+}
+
 
 }
 }
