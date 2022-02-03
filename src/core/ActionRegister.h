@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2011-2020 The plumed team
+   Copyright (c) 2011-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -69,6 +69,8 @@ public:
   std::unique_ptr<Action> create(const ActionOptions&ao);
 /// Print out the keywords for an action in html/vim ready for input into the manual
   bool printManual(const std::string& action, const bool& vimout, const bool& spellout);
+/// Retrieve a keywords object for a particular action
+  bool getKeywords( const std::string& action, Keywords& keys );
 /// Print out a template command for an action
   bool printTemplate(const std::string& action, bool include_optional);
   void remove(creator_pointer);

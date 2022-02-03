@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2011-2020 The plumed team
+   Copyright (c) 2011-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -56,7 +56,7 @@ void Units::setEnergy(const std::string &s) {
     energy=-1.0;
     energyString="";
     if(!Tools::convert(s,energy)) {
-      plumed_merror("problem with setting the energy unit, either use give an numerical value or use one of the defined units: kj/mol, kcal/mol, j/mol, eV, Ha (case senstive)");
+      plumed_merror("problem with setting the energy unit, either use give an numerical value or use one of the defined units: kj/mol, kcal/mol, j/mol, eV, Ha (case sensitive)");
     }
     plumed_massert(energy>0.0,"energy unit should be positive");
   }

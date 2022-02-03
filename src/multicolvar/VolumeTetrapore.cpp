@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2015-2020 The plumed team
+   Copyright (c) 2015-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -127,9 +127,9 @@ public:
   static void registerKeywords( Keywords& keys );
   explicit VolumeTetrapore(const ActionOptions& ao);
   ~VolumeTetrapore();
-  void setupRegions();
-  void update();
-  double calculateNumberInside( const Vector& cpos, Vector& derivatives, Tensor& vir, std::vector<Vector>& refders ) const ;
+  void setupRegions() override;
+  void update() override;
+  double calculateNumberInside( const Vector& cpos, Vector& derivatives, Tensor& vir, std::vector<Vector>& refders ) const override;
 };
 
 PLUMED_REGISTER_ACTION(VolumeTetrapore,"TETRAHEDRALPORE")

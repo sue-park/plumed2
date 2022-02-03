@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2015-2020 The plumed team
+   Copyright (c) 2015-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -78,7 +78,7 @@ replicas have the fictitious variables located properly in space.
 
 \warning
 \ref RESTART is not properly supported by this action. Indeed,
-at every start the postion of the fictitious variable is reset to the value
+at every start the position of the fictitious variable is reset to the value
 of the real variable, and its velocity is set to zero.
 This is not expected to introduce big errors, but certainly is
 introducing a small inconsistency between a single long run
@@ -127,8 +127,8 @@ class ExtendedLagrangian : public Bias {
   Random rand;
 public:
   explicit ExtendedLagrangian(const ActionOptions&);
-  void calculate();
-  void update();
+  void calculate() override;
+  void update() override;
   static void registerKeywords(Keywords& keys);
 };
 

@@ -46,11 +46,11 @@ I would like my code to appear in release __XXXXX__
 -->
 
 - [ ] I added a new regtest or modified an existing regtest to validate my changes.
-- [ ] I verified that all regtests are passed successfully on Travis-CI.
+- [ ] I verified that all regtests are passed successfully on GitHub Actions.
 
 <!--
   After your branch has been merged to the desired branch and then to plumed2/master, and after the
   plumed official manual has been updated, please check out the coverage scan at
-  http://plumed.github.io/coverage-master
+  http://www.plumed.org/coverage-master
   In case your new features are not well covered, please try to add more complete regtests.
 -->

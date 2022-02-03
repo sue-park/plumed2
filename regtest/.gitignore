@@ -6,6 +6,7 @@
 !/adjmat
 !/function
 !/analysis
+!/annfunc
 !/basic
 !/crystallization
 !/dimred
@@ -13,6 +14,7 @@
 !/drr
 !/logmfd
 !/mapping
+!/maze
 !/multicolvar
 !/python
 !/secondarystructure
@@ -23,6 +25,8 @@
 !/pamm
 !/isdb
 !/ves
+!/funnel
+!/opes
 # These files we just want to ignore completely
 tmp
 report.txt

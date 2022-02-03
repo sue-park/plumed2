@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -30,7 +30,7 @@ namespace multicolvar {
 
 /**
 \ingroup INHERIT
-This is the abstract base class to use for implementing a new way of definining a particular region of the simulation
+This is the abstract base class to use for implementing a new way of defining a particular region of the simulation
 box. You can use this to calculate the number of atoms inside that part or the average value of a quantity like the
 coordination number inside that part of the cell.
 */
@@ -52,9 +52,9 @@ public:
   static void registerKeywords( Keywords& keys );
   explicit ActionVolume(const ActionOptions&);
 /// Get the number of quantities that are calculated each time
-  virtual unsigned getNumberOfQuantities() const ;
+  unsigned getNumberOfQuantities() const override;
 /// Calculate whats in the volume
-  void calculateAllVolumes( const unsigned& curr, MultiValue& outvals ) const ;
+  void calculateAllVolumes( const unsigned& curr, MultiValue& outvals ) const override;
 /// This calculates whether or not a particular is inside the box of interest
 /// this is used for neighbour list with volumes
   bool inVolumeOfInterest( const unsigned& curr ) const ;

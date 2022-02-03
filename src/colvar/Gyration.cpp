@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -91,7 +91,7 @@ private:
 public:
   static void registerKeywords(Keywords& keys);
   explicit Gyration(const ActionOptions&);
-  virtual void calculate();
+  void calculate() override;
 };
 
 PLUMED_REGISTER_ACTION(Gyration,"GYRATION")
@@ -148,10 +148,7 @@ Gyration::Gyration(const ActionOptions&ao):
   log<<"\n";
 
   log.printf("  atoms involved : ");
-  for(unsigned i=0; i<atoms.size(); ++i) {
-    if(i%25==0) log<<"\n";
-    log.printf("%d ",atoms[i].serial());
-  }
+  for(unsigned i=0; i<atoms.size(); ++i) log.printf("%d ",atoms[i].serial());
   log.printf("\n");
 
   if(nopbc) {
@@ -266,7 +263,7 @@ void Gyration::calculate() {
   }
   //calculate determinant of transformation matrix
   double det = determinant(transf);
-  // trasformation matrix for rotation must have positive determinant, otherwise multiply one column by (-1)
+  // transformation matrix for rotation must have positive determinant, otherwise multiply one column by (-1)
   if(det<0) {
     for(unsigned j=0; j<3; j++) transf[j][2]=-transf[j][2];
     det = -det;

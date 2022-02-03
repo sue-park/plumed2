@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2013-2020 The plumed team
+   Copyright (c) 2013-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -76,11 +76,11 @@ public:
   static void registerKeywords( Keywords& keys );
   explicit NumberOfLinks(const ActionOptions&);
 /// Do the stuff with the switching functions
-  double calculateWeight( const unsigned& taskCode, const double& weight, AtomValuePack& myatoms ) const ;
+  double calculateWeight( const unsigned& taskCode, const double& weight, AtomValuePack& myatoms ) const override;
 /// Actually do the calculation
-  double compute( const unsigned& tindex, AtomValuePack& myatoms ) const ;
+  double compute( const unsigned& tindex, AtomValuePack& myatoms ) const override;
 /// Is the variable periodic
-  bool isPeriodic() { return false; }
+  bool isPeriodic() override { return false; }
 };
 
 PLUMED_REGISTER_ACTION(NumberOfLinks,"NLINKS")

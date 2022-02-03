@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2011-2020 The plumed team
+   Copyright (c) 2011-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -403,7 +403,7 @@ private:
   vector<Gaussian> hills_;
   OFile hillsOfile_;
   OFile gridfile_;
-  std::unique_ptr<Grid> BiasGrid_;
+  std::unique_ptr<GridBase> BiasGrid_;
   bool storeOldGrids_;
   int wgridstride_;
   bool grid_;
@@ -414,7 +414,7 @@ private:
   double dampfactor_;
   struct TemperingSpecs tt_specs_;
   std::string targetfilename_;
-  std::unique_ptr<Grid> TargetGrid_;
+  std::unique_ptr<GridBase> TargetGrid_;
   double kbt_;
   int stride_;
   bool welltemp_;
@@ -476,10 +476,10 @@ private:
 
 public:
   explicit MetaD(const ActionOptions&);
-  void calculate();
-  void update();
+  void calculate() override;
+  void update() override;
   static void registerKeywords(Keywords& keys);
-  bool checkNeedsGradients()const;
+  bool checkNeedsGradients()const override;
 };
 
 PLUMED_REGISTER_ACTION(MetaD,"METAD")
@@ -1114,7 +1114,7 @@ MetaD::MetaD(const ActionOptions& ao):
       error("The GRID file you want to read: " + gridreadfilename_ + ", cannot be found!");
     }
     std::string funcl=getLabel() + ".bias";
-    BiasGrid_=Grid::create(funcl, getArguments(), gridfile, gmin, gmax, gbin, sparsegrid, spline, true);
+    BiasGrid_=GridBase::create(funcl, getArguments(), gridfile, gmin, gmax, gbin, sparsegrid, spline, true);
     if(BiasGrid_->getDimension()!=getNumberOfArguments()) error("mismatch between dimensionality of input grid and number of arguments");
     for(unsigned i=0; i<getNumberOfArguments(); ++i) {
       if( getPntrToArgument(i)->isPeriodic()!=BiasGrid_->getIsPeriodic()[i] ) error("periodicity mismatch between arguments and input bias");
@@ -1204,7 +1204,7 @@ MetaD::MetaD(const ActionOptions& ao):
   if(targetfilename_.length()>0) {
     IFile gridfile; gridfile.open(targetfilename_);
     std::string funcl=getLabel() + ".target";
-    TargetGrid_=Grid::create(funcl,getArguments(),gridfile,false,false,true);
+    TargetGrid_=GridBase::create(funcl,getArguments(),gridfile,false,false,true);
     if(TargetGrid_->getDimension()!=getNumberOfArguments()) error("mismatch between dimensionality of input grid and number of arguments");
     for(unsigned i=0; i<getNumberOfArguments(); ++i) {
       if( getPntrToArgument(i)->isPeriodic()!=TargetGrid_->getIsPeriodic()[i] ) error("periodicity mismatch between arguments and input bias");
@@ -1943,24 +1943,24 @@ void MetaD::computeReweightingFactor()
   double minusBetaF=biasf_/(biasf_-1.)/kbt_;
   double minusBetaFplusV=1./(biasf_-1.)/kbt_;
   if (biasf_==-1.0) { //non well-tempered case
-    minusBetaF=1;
+    minusBetaF=1./kbt_;
     minusBetaFplusV=0;
   }
-  const double big_number=minusBetaF*BiasGrid_->getMaxValue(); //to avoid exp overflow
+  max_bias_=BiasGrid_->getMaxValue(); //to avoid exp overflow
 
   const unsigned rank=comm.Get_rank();
   const unsigned stride=comm.Get_size();
   for (Grid::index_t t=rank; t<BiasGrid_->getSize(); t+=stride) {
     const double val=BiasGrid_->getValue(t);
-    Z_0+=std::exp(minusBetaF*val-big_number);
-    Z_V+=std::exp(minusBetaFplusV*val-big_number);
+    Z_0+=std::exp(minusBetaF*(val-max_bias_));
+    Z_V+=std::exp(minusBetaFplusV*(val-max_bias_));
   }
   if (stride>1) {
     comm.Sum(Z_0);
     comm.Sum(Z_V);
   }
 
-  reweight_factor_=kbt_*std::log(Z_0/Z_V);
+  reweight_factor_=kbt_*std::log(Z_0/Z_V)+max_bias_;
   getPntrToComponent("rct")->set(reweight_factor_);
 }
 

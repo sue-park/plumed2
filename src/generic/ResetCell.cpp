@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2015-2020 The plumed team
+   Copyright (c) 2015-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -104,8 +104,8 @@ class ResetCell:
 public:
   explicit ResetCell(const ActionOptions&ao);
   static void registerKeywords( Keywords& keys );
-  void calculate();
-  void apply();
+  void calculate() override;
+  void apply() override;
 };
 
 PLUMED_REGISTER_ACTION(ResetCell,"RESET_CELL")

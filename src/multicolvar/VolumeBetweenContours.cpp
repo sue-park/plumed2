@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2017-2020 The plumed team
+   Copyright (c) 2017-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -71,8 +71,8 @@ private:
 public:
   static void registerKeywords( Keywords& keys );
   explicit VolumeInEnvelope(const ActionOptions& ao);
-  void setupRegions();
-  double calculateNumberInside( const Vector& cpos, Vector& derivatives, Tensor& vir, std::vector<Vector>& refders ) const ;
+  void setupRegions() override;
+  double calculateNumberInside( const Vector& cpos, Vector& derivatives, Tensor& vir, std::vector<Vector>& refders ) const override;
 };
 
 PLUMED_REGISTER_ACTION(VolumeInEnvelope,"INENVELOPE")

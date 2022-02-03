@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2016-2020 The plumed team
+   Copyright (c) 2016-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -115,8 +115,8 @@ private:
 public:
   static void registerKeywords( Keywords& keys );
   explicit FindSphericalContour(const ActionOptions&ao);
-  unsigned getNumberOfQuantities() const { return 2; }
-  void compute( const unsigned& current, MultiValue& myvals ) const ;
+  unsigned getNumberOfQuantities() const override { return 2; }
+  void compute( const unsigned& current, MultiValue& myvals ) const override;
 };
 
 PLUMED_REGISTER_ACTION(FindSphericalContour,"FIND_SPHERICAL_CONTOUR")

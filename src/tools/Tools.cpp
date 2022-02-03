@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2011-2020 The plumed team
+   Copyright (c) 2011-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -32,6 +32,8 @@
 #include <unistd.h>
 #endif
 
+#include <iomanip>
+
 using namespace std;
 namespace PLMD {
 
@@ -46,23 +48,65 @@ bool Tools::convertToAny(const string & str,T & t) {
 }
 
 bool Tools::convert(const string & str,int & t) {
-  return convertToAny(str,t);
+  return convertToInt(str,t);
 }
 
 bool Tools::convert(const string & str,long int & t) {
-  return convertToAny(str,t);
+  return convertToInt(str,t);
 }
 
 bool Tools::convert(const string & str,unsigned & t) {
-  return convertToAny(str,t);
+  return convertToInt(str,t);
+}
+
+bool Tools::convert(const string & str,long unsigned & t) {
+  return convertToInt(str,t);
 }
 
 bool Tools::convert(const string & str,AtomNumber &a) {
+  // Note: AtomNumber's are NOT converted as int, so as to
+  // avoid using lepton conversions.
   unsigned i;
-  bool r=convert(str,i);
+  bool r=convertToAny(str,i);
   if(r) a.setSerial(i);
   return r;
 }
+
+template<class T>
+bool Tools::convertToInt(const string & str,T & t) {
+  // First try standard conversion
+  if(convertToAny(str,t)) return true;
+  // Then use lepton
+  try {
+    double r=lepton::Parser::parse(str).evaluate(lepton::Constants());
+
+    // now sanity checks on the resulting number
+
+    // it should not overflow the requested int type:
+    // (see https://stackoverflow.com/a/526092)
+    if(r>std::nextafter(std::numeric_limits<T>::max(), 0)) return false;
+    if(r<std::nextafter(std::numeric_limits<T>::min(), 0)) return false;
+
+    // do the actual conversion
+    auto tmp=static_cast<T>(std::round(r));
+
+    // it should be *very close* to itself if converted back to double
+    double diff= r-static_cast<double>(tmp);
+    if(diff*diff > 1e-20) return false;
+    // this is to accomodate small numerical errors and allow e.g. exp(log(7)) to be integer
+
+    // it should be change if incremented or decremented by one (see https://stackoverflow.com/a/43656140)
+    if(r == static_cast<double>(tmp-1)) return false;
+    if(r == static_cast<double>(tmp+1)) return false;
+
+    // everything is fine, then store in t
+    t=tmp;
+    return true;
+  } catch(PLMD::lepton::Exception& exc) {
+  }
+  return false;
+}
+
 
 template<class T>
 bool Tools::convertToReal(const string & str,T & t) {
@@ -119,7 +163,7 @@ bool Tools::convert(const string & str,string & t) {
   return true;
 }
 
-vector<string> Tools::getWords(const string & line,const char* separators,int * parlevel,const char* parenthesis) {
+vector<string> Tools::getWords(const string & line,const char* separators,int * parlevel,const char* parenthesis, const bool& delete_parenthesis) {
   plumed_massert(strlen(parenthesis)==1,"multiple parenthesis type not available");
   plumed_massert(parenthesis[0]=='(' || parenthesis[0]=='[' || parenthesis[0]=='{',
                  "only ( [ { allowed as parenthesis");
@@ -137,7 +181,7 @@ vector<string> Tools::getWords(const string & line,const char* separators,int * 
   for(unsigned i=0; i<line.length(); i++) {
     bool found=false;
     bool onParenthesis=false;
-    if(line[i]==openpar || line[i]==closepar) onParenthesis=true;
+    if( (line[i]==openpar || line[i]==closepar) && delete_parenthesis ) onParenthesis=true;
     if(line[i]==closepar) {
       parenthesisLevel--;
       plumed_massert(parenthesisLevel>=0,"Extra closed parenthesis in '" + line + "'");
@@ -161,7 +205,7 @@ vector<string> Tools::getWords(const string & line,const char* separators,int * 
   return words;
 }
 
-bool Tools::getParsedLine(IFile& ifile,vector<string> & words) {
+bool Tools::getParsedLine(IFile& ifile,vector<string> & words, bool trimcomments) {
   string line("");
   words.clear();
   bool stat;
@@ -169,16 +213,16 @@ bool Tools::getParsedLine(IFile& ifile,vector<string> & words) {
   int parlevel=0;
   bool mergenext=false;
   while((stat=ifile.getline(line))) {
-    trimComments(line);
+    if(trimcomments) trimComments(line);
     trim(line);
     if(line.length()==0) continue;
-    vector<string> w=getWords(line,NULL,&parlevel);
+    vector<string> w=getWords(line,NULL,&parlevel,"{",trimcomments);
     if(!w.empty()) {
       if(inside && *(w.begin())=="...") {
         inside=false;
         if(w.size()==2) plumed_massert(w[1]==words[0],"second word in terminating \"...\" "+w[1]+" line, if present, should be equal to first word of directive: "+words[0]);
         plumed_massert(w.size()<=2,"terminating \"...\" lines cannot consist of more than two words");
-        w.clear();
+        w.clear(); if(!trimcomments) words.push_back("...");
       } else if(*(w.end()-1)=="...") {
         inside=true;
         w.erase(w.end()-1);
@@ -192,6 +236,8 @@ bool Tools::getParsedLine(IFile& ifile,vector<string> & words) {
     }
     mergenext=(parlevel>0);
     if(!inside)break;
+    if(!trimcomments && parlevel==0) words.push_back("@newline");
+    else if(!trimcomments) words[words.size()-1] += " @newline";
   }
   plumed_massert(parlevel==0,"non matching parenthesis");
   if(words.size()>0) return true;
@@ -225,12 +271,19 @@ void Tools::trimComments(string & s) {
   s=s.substr(0,n);
 }
 
+bool Tools::caseInSensStringCompare(const std::string & str1, const std::string &str2)
+{
+  return ((str1.size() == str2.size()) && std::equal(str1.begin(), str1.end(), str2.begin(), [](char c1, char c2) {
+    return (c1 == c2 || std::toupper(c1) == std::toupper(c2));
+  }));
+}
+
 bool Tools::getKey(vector<string>& line,const string & key,string & s,int rep) {
   s.clear();
   for(auto p=line.begin(); p!=line.end(); ++p) {
     if((*p).length()==0) continue;
     string x=(*p).substr(0,key.length());
-    if(x==key) {
+    if(caseInSensStringCompare(x,key)) {
       if((*p).length()==key.length())return false;
       string tmp=(*p).substr(key.length(),(*p).length());
       line.erase(p);
@@ -255,15 +308,15 @@ void Tools::interpretRanges(std::vector<std::string>&s) {
     size_t dash=p.find("-");
     if(dash==string::npos) continue;
     int first;
-    if(!Tools::convert(p.substr(0,dash),first)) continue;
+    if(!Tools::convertToAny(p.substr(0,dash),first)) continue;
     int stride=1;
     int second;
     size_t colon=p.substr(dash+1).find(":");
     if(colon!=string::npos) {
-      if(!Tools::convert(p.substr(dash+1).substr(0,colon),second) ||
-          !Tools::convert(p.substr(dash+1).substr(colon+1),stride)) continue;
+      if(!Tools::convertToAny(p.substr(dash+1).substr(0,colon),second) ||
+          !Tools::convertToAny(p.substr(dash+1).substr(colon+1),stride)) continue;
     } else {
-      if(!Tools::convert(p.substr(dash+1),second)) continue;
+      if(!Tools::convertToAny(p.substr(dash+1),second)) continue;
     }
     news.resize(news.size()-1);
     if(first<=second) {
@@ -294,6 +347,7 @@ void Tools::interpretLabel(vector<string>&s) {
     s[0]=s[1];
     s[1]="LABEL="+s0.substr(0,l-1);
   }
+  std::transform(s[0].begin(), s[0].end(), s[0].begin(), ::toupper);
 }
 
 vector<string> Tools::ls(const string&d) {
@@ -308,11 +362,6 @@ vector<string> Tools::ls(const string&d) {
 #if defined(__PLUMED_HAS_READDIR_R)
       readdir_r(dir,&ent,&res);
 #else
-// cppcheck complains about this:
-// (portability) Non reentrant function 'readdir' called. For threadsafe applications it is recommended to use the reentrant replacement function 'readdir_r'.
-// since we use it only if readdir_r is not available, I suppress the warning
-// GB
-// cppcheck-suppress readdirCalled
       res=readdir(dir);
 #endif
       if(!res) break;

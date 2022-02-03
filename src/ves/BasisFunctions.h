@@ -177,11 +177,11 @@ public:
   double translateArgument(const double, bool&) const;
   double checkIfArgumentInsideInterval(const double, bool&) const;
   //
-  void apply() {};
-  void calculate() {};
+  void apply() override {};
+  void calculate() override {};
   // calculate the value for the n-th basis function
   double getValue(const double, const unsigned int, double&, bool&) const;
-  // calcuate the values for all basis functions
+  // calculate the values for all basis functions
   virtual void getAllValues(const double, double&, bool&, std::vector<double>&, std::vector<double>&) const = 0;
   //virtual void get2ndDerivatives(const double, std::vector<double>&)=0;
   void printInfo() const;

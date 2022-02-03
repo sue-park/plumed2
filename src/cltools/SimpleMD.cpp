@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -77,7 +77,7 @@ plumed simplemd --help
 class SimpleMD:
   public PLMD::CLTool
 {
-  string description()const {
+  string description()const override {
     return "run lj code";
   }
 
@@ -195,8 +195,13 @@ private:
       fprintf(stderr,"ERROR: file %s not found\n",inputfile.c_str());
       exit(1);
     }
-    fscanf(fp,"%1000d",&natoms);
-    fclose(fp);
+
+// call fclose when fp goes out of scope
+    auto deleter=[](FILE* f) { fclose(f); };
+    std::unique_ptr<FILE,decltype(deleter)> fp_deleter(fp,deleter);
+
+    int ret=fscanf(fp,"%1000d",&natoms);
+    if(ret==0) plumed_error() <<"Error reading number of atoms from file "<<inputfile;
   }
 
   void read_positions(const string& inputfile,int natoms,vector<Vector>& positions,double cell[3]) {
@@ -207,15 +212,21 @@ private:
       fprintf(stderr,"ERROR: file %s not found\n",inputfile.c_str());
       exit(1);
     }
+// call fclose when fp goes out of scope
+    auto deleter=[](FILE* f) { fclose(f); };
+    std::unique_ptr<FILE,decltype(deleter)> fp_deleter(fp,deleter);
+
     char buffer[256];
     char atomname[256];
-    fgets(buffer,256,fp);
-    fscanf(fp,"%1000lf %1000lf %1000lf",&cell[0],&cell[1],&cell[2]);
+    char* cret=fgets(buffer,256,fp);
+    if(cret==nullptr) plumed_error() <<"Error reading buffer from file "<<inputfile;
+    int ret=fscanf(fp,"%1000lf %1000lf %1000lf",&cell[0],&cell[1],&cell[2]);
+    if(ret==0) plumed_error() <<"Error reading cell line from file "<<inputfile;
     for(int i=0; i<natoms; i++) {
-      fscanf(fp,"%255s %1000lf %1000lf %1000lf",atomname,&positions[i][0],&positions[i][1],&positions[i][2]);
+      ret=fscanf(fp,"%255s %1000lf %1000lf %1000lf",atomname,&positions[i][0],&positions[i][1],&positions[i][2]);
 // note: atomname is read but not used
+      if(ret==0) plumed_error() <<"Error reading atom line from file "<<inputfile;
     }
-    fclose(fp);
   }
 
   void randomize_velocities(const int natoms,const int ndim,const double temperature,const vector<double>&masses,vector<Vector>& velocities,Random&random) {
@@ -324,7 +335,7 @@ private:
 
   void thermostat(const int natoms,const int ndim,const vector<double>& masses,const double dt,const double friction,
                   const double temperature,vector<Vector>& velocities,double & engint,Random & random) {
-// Langevin thermostat, implemented as decribed in Bussi and Parrinello, Phys. Rev. E (2007)
+// Langevin thermostat, implemented as described in Bussi and Parrinello, Phys. Rev. E (2007)
 // it is a linear combination of old velocities and new, randomly chosen, velocity,
 // with proper coefficients
     double c1=exp(-friction*dt);
@@ -400,7 +411,7 @@ private:
 
 
 
-  virtual int main(FILE* in,FILE*out,PLMD::Communicator& pc) {
+  int main(FILE* in,FILE*out,PLMD::Communicator& pc) override {
     int            natoms;       // number of atoms
     vector<Vector> positions;    // atomic positions
     vector<Vector> velocities;   // velocities
@@ -577,10 +588,10 @@ private:
         for(int i=0; i<3; i++) cell9[i][i]=cell[i];
         plumed->cmd("setStep",&istepplusone);
         plumed->cmd("setMasses",&masses[0]);
-        plumed->cmd("setForces",&forces[0]);
+        plumed->cmd("setForces",&forces[0][0]);
         plumed->cmd("setEnergy",&engconf);
-        plumed->cmd("setPositions",&positions[0]);
-        plumed->cmd("setBox",cell9);
+        plumed->cmd("setPositions",&positions[0][0]);
+        plumed->cmd("setBox",&cell9[0][0]);
         plumed->cmd("setStopFlag",&plumedWantsToStop);
         plumed->cmd("calc");
         if(plumedWantsToStop) nstep=istep;

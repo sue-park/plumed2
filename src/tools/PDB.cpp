@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2011-2020 The plumed team
+   Copyright (c) 2011-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -25,7 +25,7 @@
 #include "h36.h"
 #include <cstdio>
 #include <iostream>
-#include "core/SetupMolInfo.h"
+#include "core/GenericMolInfo.h"
 #include "Tensor.h"
 
 using namespace std;
@@ -94,6 +94,11 @@ ATOM      5  C   ACE     1      21.312  -9.928  -5.946  1.00  1.00
 However notice that many extra atoms with zero weight might slow down the calculation, so
 removing lines is better than setting their weights to zero.
 In addition, weights for alignment need not to be equivalent to weights for displacement.
+Starting with PLUMED 2.7, if all the weights are set to zero they will be normalized to be equal to the
+inverse of the number of involved atoms. This means that it will be possible to use files with
+the weight columns set to zero obtaining a meaningful result. In previous PLUMED versions,
+setting all weights to zero was resulting in an error instead.
+
 
 \par Systems with more than 100k atoms
 
@@ -249,20 +254,29 @@ const Tensor & PDB::getBoxVec()const {
 
 std::string PDB::getAtomName(AtomNumber a)const {
   const auto p=number2index.find(a);
-  if(p==number2index.end()) return "";
-  else return atomsymb[p->second];
+  if(p==number2index.end()) {
+    std::string num; Tools::convert( a.serial(), num );
+    plumed_merror("Name of atom " + num + " not found" );
+    return "";
+  } else return atomsymb[p->second];
 }
 
 unsigned PDB::getResidueNumber(AtomNumber a)const {
   const auto p=number2index.find(a);
-  if(p==number2index.end()) return 0;
-  else return residue[p->second];
+  if(p==number2index.end()) {
+    std::string num; Tools::convert( a.serial(), num );
+    plumed_merror("Residue for atom " + num + " not found" );
+    return 0;
+  } else return residue[p->second];
 }
 
 std::string PDB::getResidueName(AtomNumber a) const {
   const auto p=number2index.find(a);
-  if(p==number2index.end()) return "";
-  else return residuenames[p->second];
+  if(p==number2index.end()) {
+    std::string num; Tools::convert( a.serial(), num );
+    plumed_merror("Residue for atom " + num + " not found" );
+    return "";
+  } else return residuenames[p->second];
 }
 
 unsigned PDB::size()const {
@@ -333,6 +347,7 @@ bool PDB::readFromFilepointer(FILE *fp,bool naturalUnits,double scale) {
         int result;
         auto trimmed=serial;
         Tools::trim(trimmed);
+        while(trimmed.length()<5) trimmed = std::string(" ") + trimmed;
         const char* errmsg = h36::hy36decode(5, trimmed.c_str(),trimmed.length(), &result);
         if(errmsg) {
           std::string msg(errmsg);
@@ -420,6 +435,8 @@ std::string PDB::getResidueName( const unsigned& resnum ) const {
   for(unsigned i=0; i<size(); ++i) {
     if( residue[i]==resnum ) return residuenames[i];
   }
+  std::string num; Tools::convert( resnum, num );
+  plumed_merror("residue " + num + " not found" );
   return "";
 }
 
@@ -427,6 +444,8 @@ std::string PDB::getResidueName(const unsigned& resnum,const std::string& chaini
   for(unsigned i=0; i<size(); ++i) {
     if( residue[i]==resnum && ( chainid=="*" || chain[i]==chainid) ) return residuenames[i];
   }
+  std::string num; Tools::convert( resnum, num );
+  plumed_merror("residue " + num + " not found in chain " + chainid );
   return "";
 }
 
@@ -493,6 +512,11 @@ bool PDB::checkForAtom( const std::string& name ) const {
   return false;
 }
 
+bool PDB::checkForAtom( AtomNumber a ) const {
+  const auto p=number2index.find(a);
+  return (p!=number2index.end());
+}
+
 Log& operator<<(Log& ostr, const PDB&  pdb) {
   char buffer[1000];
   for(unsigned i=0; i<pdb.positions.size(); i++) {
@@ -516,7 +540,7 @@ std::string PDB::getMtype() const {
   return mtype;
 }
 
-void PDB::print( const double& lunits, SetupMolInfo* mymoldat, OFile& ofile, const std::string& fmt ) {
+void PDB::print( const double& lunits, GenericMolInfo* mymoldat, OFile& ofile, const std::string& fmt ) {
   if( argnames.size()>0 ) {
     ofile.printf("REMARK ARG=%s", argnames[0].c_str() );
     for(unsigned i=1; i<argnames.size(); ++i) ofile.printf(",%s",argnames[i].c_str() );

@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2017-2020 The plumed team
+   Copyright (c) 2017-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -86,11 +86,11 @@ private:
 public:
   static void registerKeywords(Keywords&);
   explicit ReweightWham(const ActionOptions&ao);
-  bool buildsWeightStore() const { return true; }
-  void calculateWeights( const unsigned& nframes );
-  void clearData();
-  double getLogWeight();
-  double getWeight( const unsigned& iweight ) const ;
+  bool buildsWeightStore() const override { return true; }
+  void calculateWeights( const unsigned& nframes ) override;
+  void clearData() override;
+  double getLogWeight() override;
+  double getWeight( const unsigned& iweight ) const override;
 };
 
 PLUMED_REGISTER_ACTION(ReweightWham,"REWEIGHT_WHAM")

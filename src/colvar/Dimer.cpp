@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2017-2020 The plumed team
+   Copyright (c) 2017-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -137,7 +137,7 @@ class Dimer : public Colvar {
 public:
   static void registerKeywords( Keywords& keys);
   explicit Dimer(const ActionOptions&);
-  virtual void calculate();
+  void calculate() override;
 protected:
   bool trimer,useall;
   int myrank, nranks;

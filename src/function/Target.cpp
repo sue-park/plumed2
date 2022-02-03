@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -104,7 +104,7 @@ private:
   std::unique_ptr<PLMD::ArgumentOnlyDistance> target;
 public:
   explicit Target(const ActionOptions&);
-  virtual void calculate();
+  void calculate() override;
   static void registerKeywords(Keywords& keys );
 };
 

@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -114,12 +114,12 @@ the order of arguments in the header of the grid file.
 class External : public Bias {
 
 private:
-  std::unique_ptr<Grid> BiasGrid_;
+  std::unique_ptr<GridBase> BiasGrid_;
   double scale_;
 
 public:
   explicit External(const ActionOptions&);
-  void calculate();
+  void calculate() override;
   static void registerKeywords(Keywords& keys);
 };
 
@@ -157,7 +157,7 @@ External::External(const ActionOptions& ao):
 // read grid
   IFile gridfile; gridfile.open(filename);
   std::string funcl=getLabel() + ".bias";
-  BiasGrid_=Grid::create(funcl,getArguments(),gridfile,sparsegrid,spline,true);
+  BiasGrid_=GridBase::create(funcl,getArguments(),gridfile,sparsegrid,spline,true);
   if(BiasGrid_->getDimension()!=getNumberOfArguments()) error("mismatch between dimensionality of input grid and number of arguments");
   for(unsigned i=0; i<getNumberOfArguments(); ++i) {
     if( getPntrToArgument(i)->isPeriodic()!=BiasGrid_->getIsPeriodic()[i] ) error("periodicity mismatch between arguments and input bias");

@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2014-2020 The plumed team
+   Copyright (c) 2014-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -28,7 +28,7 @@
 #include "core/Atoms.h"
 #include "core/PlumedMain.h"
 #include "core/ActionSet.h"
-#include "core/SetupMolInfo.h"
+#include "core/GenericMolInfo.h"
 
 #include <vector>
 #include <string>
@@ -158,8 +158,8 @@ class WrapAround:
 public:
   explicit WrapAround(const ActionOptions&ao);
   static void registerKeywords( Keywords& keys );
-  void calculate();
-  void apply() {}
+  void calculate() override;
+  void apply() override {}
 };
 
 PLUMED_REGISTER_ACTION(WrapAround,"WRAPAROUND")

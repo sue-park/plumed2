@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2011-2020 The plumed team
+   Copyright (c) 2011-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -32,7 +32,7 @@
 
 namespace PLMD {
 
-class SetupMolInfo;
+class GenericMolInfo;
 class OFile;
 class Log;
 
@@ -99,6 +99,8 @@ public:
   bool checkForResidue( const std::string& name ) const ;
 /// Check if any of the atoms are named atom
   bool checkForAtom( const std::string& name ) const ;
+/// Check if specific atom exists
+  bool checkForAtom( AtomNumber a ) const ;
 /// Return the atom named aname from residue number resnum
   AtomNumber getNamedAtomFromResidue( const std::string& aname, const unsigned& resnum ) const;
 /// Return the atom named aname from residue number resnum and chain.
@@ -131,7 +133,7 @@ public:
 /// Access to the position array
   Vector getPosition(AtomNumber a)const;
 /// Print out a PDB object
-  void print( const double& lunits, SetupMolInfo* mymoldat, OFile& ofile, const std::string& fmt );
+  void print( const double& lunits, GenericMolInfo* mymoldat, OFile& ofile, const std::string& fmt );
 /// Does the PDB have this flag
   bool hasFlag( const std::string& fname ) const ;
 /// Get the metric type

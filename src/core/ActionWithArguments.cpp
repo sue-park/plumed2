@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2011-2020 The plumed team
+   Copyright (c) 2011-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -74,7 +74,7 @@ void ActionWithArguments::interpretArgumentList(const std::vector<std::string>& 
 #ifdef __PLUMED_HAS_CREGEX
         // take the string enclosed in quotes and put in round brackets
         std::string myregex=c[i];
-        log<<"  Evaluating regexp for this action: "<<myregex<<"\n";
+        //log<<"  Evaluating regexp for this action: "<<myregex<<"\n";
 
         regex_t reg; // regular expression
 
@@ -96,6 +96,7 @@ void ActionWithArguments::interpretArgumentList(const std::vector<std::string>& 
         // select all the actions that have a value
         std::vector<ActionWithValue*> all=plumed.getActionSet().select<ActionWithValue*>();
         if( all.empty() ) error("your input file is not telling plumed to calculate anything");
+        bool found_something=false;
         for(unsigned j=0; j<all.size(); j++) {
           std::vector<std::string> ss=all[j]->getComponentsVector();
           for(unsigned  k=0; k<ss.size(); ++k) {
@@ -104,26 +105,28 @@ void ActionWithArguments::interpretArgumentList(const std::vector<std::string>& 
             strcpy(&str[0],ss[k].c_str());
             const char *ppstr=&str[0];
             if(!regexec(&reg, ppstr, reg.re_nsub, &match, 0)) {
-              log.printf("  Something matched with \"%s\" : ",ss[k].c_str());
+              //log.printf("  Something matched with \"%s\" : ",ss[k].c_str());
               do {
                 if (match.rm_so != -1) {	/* The regex is matching part of a string */
                   size_t matchlen = match.rm_eo - match.rm_so;
                   std::vector<char> submatch(matchlen+1);
                   strncpy(submatch.data(), ppstr+match.rm_so, matchlen+1);
                   submatch[matchlen]='\0';
-                  log.printf("  subpattern %s\n", submatch.data());
+                  //log.printf("  subpattern %s\n", submatch.data());
                   // this is the match: try to see if it is a valid action
                   std::string putativeVal(submatch.data());
                   if( all[j]->exists(putativeVal) ) {
                     arg.push_back(all[j]->copyOutput(putativeVal));
-                    log.printf("  Action %s added! \n",putativeVal.c_str());
+                    found_something=true;
+                    //log.printf("  Action %s added! \n",putativeVal.c_str());
                   }
-                };
+                }
                 ppstr += match.rm_eo;	/* Restart from last match */
               } while(!regexec(&reg,ppstr,reg.re_nsub,&match,0));
             }
           }
         }
+        if(!found_something) plumed_error()<<"There isn't any action matching your regex " << myregex;
 #else
         plumed_merror("Regexp support not compiled!");
 #endif

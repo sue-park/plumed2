@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2011-2020 The plumed team
+   Copyright (c) 2011-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -62,11 +62,11 @@ class DumpDerivatives :
   string fmt;
   OFile of;
 public:
-  void calculate() {}
+  void calculate() override {}
   explicit DumpDerivatives(const ActionOptions&);
   static void registerKeywords(Keywords& keys);
-  void apply() {}
-  void update();
+  void apply() override {}
+  void update() override;
   ~DumpDerivatives();
 };
 

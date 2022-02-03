@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -195,7 +195,7 @@ class FuncSumHills :
   std::unique_ptr<BiasRepresentation> historep;
 public:
   explicit FuncSumHills(const ActionOptions&);
-  void calculate(); // this probably is not needed
+  void calculate() override; // this probably is not needed
   bool checkFilesAreExisting(const vector<string> & hills );
   static void registerKeywords(Keywords& keys);
 };
@@ -596,7 +596,7 @@ FuncSumHills::FuncSumHills(const ActionOptions&ao):
           log<<"  Writing full grid on file "<<myout<<" \n";
           gridfile.open(myout);
 
-          // also this is usefull only for free energy
+          // also this is useful only for free energy
           if(minTOzero) histoGrid.setMinToZero();
           histoGrid.setOutputFmt(fmt);
           histoGrid.writeToFile(gridfile);

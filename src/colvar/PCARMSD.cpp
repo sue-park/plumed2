@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2014-2020 The plumed team
+   Copyright (c) 2014-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -43,7 +43,7 @@ class PCARMSD : public Colvar {
   std::vector<string> pca_names;
 public:
   explicit PCARMSD(const ActionOptions&);
-  virtual void calculate();
+  void calculate() override;
   static void registerKeywords(Keywords& keys);
 };
 
@@ -110,11 +110,9 @@ void PCARMSD::registerKeywords(Keywords& keys) {
   Colvar::registerKeywords(keys);
   keys.add("compulsory","AVERAGE","a file in pdb format containing the reference structure and the atoms involved in the CV.");
   keys.add("compulsory","EIGENVECTORS","a file in pdb format containing the reference structure and the atoms involved in the CV.");
-  //useCustomisableComponents(keys);
   keys.addOutputComponent("eig","default","the projections on each eigenvalue are stored on values labeled eig-1, eig-2, ...");
   keys.addOutputComponent("residual","default","the distance of the present configuration from the configuration supplied as AVERAGE in terms of mean squared displacement after optimal alignment ");
-  keys.addFlag("SQUARED-ROOT",false," This should be set if you want RMSD instead of mean squared displacement ");
-  keys.addFlag("SQUARED_ROOT",false," Same as SQUARED-ROOT");
+  keys.addFlag("SQUARED_ROOT",false," This should be set if you want RMSD instead of mean squared displacement ");
 }
 
 PCARMSD::PCARMSD(const ActionOptions&ao):
@@ -128,8 +126,7 @@ PCARMSD::PCARMSD(const ActionOptions&ao):
   type.assign("OPTIMAL");
   string f_eigenvectors;
   parse("EIGENVECTORS",f_eigenvectors);
-  bool sq;  parseFlag("SQUARED-ROOT",sq);
-  if(!sq) parseFlag("SQUARED_ROOT",sq);
+  bool sq;  parseFlag("SQUARED_ROOT",sq);
   if (sq) { squared=false; }
   parseFlag("NOPBC",nopbc);
   checkRead();
@@ -177,6 +174,7 @@ PCARMSD::PCARMSD(const ActionOptions&ao):
   {
     log<<"  Opening the eigenvectors file "<<f_eigenvectors.c_str()<<"\n";
     bool do_read=true;
+    unsigned nat=0;
     while (do_read) {
       PDB mypdb;
       // check the units for reading this file: how can they make sense?
@@ -184,7 +182,7 @@ PCARMSD::PCARMSD(const ActionOptions&ao):
       if(do_read) {
         neigenvects++;
         if(mypdb.getAtomNumbers().size()==0) error("number of atoms in a frame should be more than zero");
-        unsigned nat=mypdb.getAtomNumbers().size();
+        if(nat==0) nat=mypdb.getAtomNumbers().size();
         if(nat!=mypdb.getAtomNumbers().size()) error("frames should have the same number of atoms");
         if(aaa.empty()) aaa=mypdb.getAtomNumbers();
         if(aaa!=mypdb.getAtomNumbers()) error("frames should contain same atoms in same order");

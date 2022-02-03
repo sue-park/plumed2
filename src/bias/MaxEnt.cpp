@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2016-2020 The plumed team
+   Copyright (c) 2016-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -163,8 +163,8 @@ class MaxEnt : public Bias {
   int myrep,nrep;
 public:
   explicit MaxEnt(const ActionOptions&);
-  void calculate();
-  void update();
+  void calculate() override;
+  void update() override;
   void update_lambda();
   static void registerKeywords(Keywords& keys);
   void ReadLagrangians(IFile &ifile);

@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2011-2020 The plumed team
+   Copyright (c) 2011-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -108,9 +108,10 @@
 \endverbatim
 
   As of PLUMED 2.5, you can also initialize a plumed object using the following functions,
-  that load a specific kernel:
+  that load a specific kernel. The function plumed_create_dlopen2 allows to specify options
+  for dlopen. The C++ version accepts an optional argument to this aim.
 \verbatim
-  (C)        plumed_create_dlopen
+  (C)        plumed_create_dlopen or plumed_create_dlopen2
   (C++)      PLMD::Plumed::dlopen
   (FORTRAN)  PLUMED_F_CREATE_DLOPEN
 \endverbatim
@@ -191,7 +192,7 @@
   since, when compiling with debug options, it will check if the void pointer actually points to a plumed object.
 
   As of PLUMED 2.5, we added a reference count. It is in practice possible
-  to create multiple `plumed` object that refer to the same environment.
+  to create multiple `plumed` objects that refer to the same environment.
   This is done using the following functions
 \verbatim
   (C)        plumed_create_reference     (from a C object)
@@ -265,7 +266,7 @@
 
   First of all, notice that access to PLUMED goes through three functions:
   - plumed_create: this, as of PLUMED 2.5, is guaranteed not to throw any exception. If there is a problem, it will
-    just return a NULL pointer
+    just return a plumed object containing a NULL pointer
   - plumed_cmd: this function might throw exceptions.
   - plumed_finalize: this is a destructor and is guaranteed not to throw any exception.
 
@@ -519,13 +520,15 @@
 #define __PLUMED_WRAPPER_STD
 #endif
 
-/* Allow using noexcept and explicit with C++11 compilers */
+/* Allow using noexcept, explicit, and override with C++11 compilers */
 #if __cplusplus > 199711L
 #define __PLUMED_WRAPPER_CXX_NOEXCEPT noexcept
 #define __PLUMED_WRAPPER_CXX_EXPLICIT explicit
+#define __PLUMED_WRAPPER_CXX_OVERRIDE override
 #else
 #define __PLUMED_WRAPPER_CXX_NOEXCEPT throw()
 #define __PLUMED_WRAPPER_CXX_EXPLICIT
+#define __PLUMED_WRAPPER_CXX_OVERRIDE
 #endif
 
 /* Macros for anonymous namespace */
@@ -1018,6 +1021,18 @@ __PLUMED_WRAPPER_EXTERN_C_END /*}*/
 /* C++ interface is hidden in PLMD namespace (same as plumed library) */
 namespace PLMD {
 
+/**
+  Retrieve PLUMED_EXCEPTIONS_DEBUG (internal utility).
+
+  This function should not be used by external programs. It is defined
+  as inline static so that it can store a static variable (for quicker access)
+  without adding a unique global symbol to a library including this header file.
+*/
+inline static bool PlumedGetenvExceptionsDebug() __PLUMED_WRAPPER_CXX_NOEXCEPT {
+  static const char* res=__PLUMED_WRAPPER_STD getenv("PLUMED_EXCEPTIONS_DEBUG");
+  return res;
+}
+
 /* Optionally, it is further hidden in an anonymous namespace */
 
 __PLUMED_WRAPPER_ANONYMOUS_BEGIN /*{*/
@@ -1085,9 +1100,7 @@ class Plumed {
         options+=2;
       }
 
-    static const char* debug=__PLUMED_WRAPPER_STD getenv("PLUMED_EXCEPTIONS_DEBUG");
-
-    if(debug) {
+    if(PlumedGetenvExceptionsDebug()) {
       __PLUMED_WRAPPER_STD fprintf(stderr,"+++ PLUMED_EXCEPTIONS_DEBUG\n");
       __PLUMED_WRAPPER_STD fprintf(stderr,"+++ code: %d error_code: %d message:\n%s\n",h->code,h->error_code,what);
       if(__PLUMED_WRAPPER_STD strlen(what) > __PLUMED_WRAPPER_CXX_EXCEPTION_BUFFER-1) __PLUMED_WRAPPER_STD fprintf(stderr,"+++ WARNING: message will be truncated\n");
@@ -1127,10 +1140,10 @@ class Plumed {
       if(h.code>=10230 && h.code<10240) {
 #if __cplusplus > 199711L && __PLUMED_WRAPPER_LIBCXX11
 // These cases are probably useless as it looks like this should always be std::iostream_category
-        if(h.code==10230) throw ::std::ios_base::failure(msg,std::error_code(h.error_code,::std::generic_category()));
-        if(h.code==10231) throw ::std::ios_base::failure(msg,std::error_code(h.error_code,::std::system_category()));
-        if(h.code==10232) throw ::std::ios_base::failure(msg,std::error_code(h.error_code,::std::iostream_category()));
-        if(h.code==10233) throw ::std::ios_base::failure(msg,std::error_code(h.error_code,::std::future_category()));
+        if(h.code==10230) throw ::std::ios_base::failure(msg,::std::error_code(h.error_code,::std::generic_category()));
+        if(h.code==10231) throw ::std::ios_base::failure(msg,::std::error_code(h.error_code,::std::system_category()));
+        if(h.code==10232) throw ::std::ios_base::failure(msg,::std::error_code(h.error_code,::std::iostream_category()));
+        if(h.code==10233) throw ::std::ios_base::failure(msg,::std::error_code(h.error_code,::std::future_category()));
 #endif
         throw ::std::ios_base::failure(msg);
       }
@@ -1244,9 +1257,12 @@ public:
     ::std::string msg;
   public:
     __PLUMED_WRAPPER_CXX_EXPLICIT Exception(const char* msg): msg(msg) {}
-    Exception(const Exception & other): msg(other.what()) {}
-    const char* what() const __PLUMED_WRAPPER_CXX_NOEXCEPT {return msg.c_str();}
-    ~Exception() __PLUMED_WRAPPER_CXX_NOEXCEPT {}
+    const char* what() const __PLUMED_WRAPPER_CXX_NOEXCEPT __PLUMED_WRAPPER_CXX_OVERRIDE {return msg.c_str();}
+#if ! (__cplusplus > 199711L)
+    /* Destructor should be declared in order to have the correct throw() before C++11 */
+    /* see https://stackoverflow.com/questions/50025862/why-is-the-stdexception-destructor-not-noexcept */
+    ~Exception() throw() {}
+#endif
   };
 
   /**
@@ -1257,8 +1273,11 @@ public:
     public Exception {
   public:
     __PLUMED_WRAPPER_CXX_EXPLICIT ExceptionError(const char* msg): Exception(msg) {}
-    ExceptionError(const ExceptionError & other) : Exception(other.what()) {}
-    ~ExceptionError() __PLUMED_WRAPPER_CXX_NOEXCEPT {}
+#if ! (__cplusplus > 199711L)
+    /* Destructor should be declared in order to have the correct throw() before C++11 */
+    /* see https://stackoverflow.com/questions/50025862/why-is-the-stdexception-destructor-not-noexcept */
+    ~ExceptionError() throw() {}
+#endif
   };
 
   /**
@@ -1269,8 +1288,11 @@ public:
     public Exception {
   public:
     __PLUMED_WRAPPER_CXX_EXPLICIT ExceptionDebug(const char* msg): Exception(msg) {}
-    ExceptionDebug(const ExceptionDebug & other) : Exception(other.what()) {}
-    ~ExceptionDebug() __PLUMED_WRAPPER_CXX_NOEXCEPT {}
+#if ! (__cplusplus > 199711L)
+    /* Destructor should be declared in order to have the correct throw() before C++11 */
+    /* see https://stackoverflow.com/questions/50025862/why-is-the-stdexception-destructor-not-noexcept */
+    ~ExceptionDebug() throw() {}
+#endif
   };
 
   /**
@@ -1281,8 +1303,11 @@ public:
     public Exception {
   public:
     __PLUMED_WRAPPER_CXX_EXPLICIT Invalid(const char* msg): Exception(msg) {}
-    Invalid(const Invalid & other) : Exception(other.what()) {}
-    ~Invalid() __PLUMED_WRAPPER_CXX_NOEXCEPT {}
+#if ! (__cplusplus > 199711L)
+    /* Destructor should be declared in order to have the correct throw() before C++11 */
+    /* see https://stackoverflow.com/questions/50025862/why-is-the-stdexception-destructor-not-noexcept */
+    ~Invalid() throw() {}
+#endif
   };
 
   /**
@@ -1295,9 +1320,12 @@ public:
     ::std::string msg;
   public:
     __PLUMED_WRAPPER_CXX_EXPLICIT LeptonException(const char* msg): msg(msg) {}
-    LeptonException(const LeptonException & other): msg(other.what()) {}
-    const char* what() const __PLUMED_WRAPPER_CXX_NOEXCEPT {return msg.c_str();}
-    ~LeptonException() __PLUMED_WRAPPER_CXX_NOEXCEPT {}
+    const char* what() const __PLUMED_WRAPPER_CXX_NOEXCEPT __PLUMED_WRAPPER_CXX_OVERRIDE {return msg.c_str();}
+#if ! (__cplusplus > 199711L)
+    /* Destructor should be declared in order to have the correct throw() before C++11 */
+    /* see https://stackoverflow.com/questions/50025862/why-is-the-stdexception-destructor-not-noexcept */
+    ~LeptonException() throw() {}
+#endif
   };
 
 private:
@@ -1318,8 +1346,7 @@ private:
     __PLUMED_WRAPPER_CXX_EXPLICIT std_ ## name(const char * msg) __PLUMED_WRAPPER_CXX_NOEXCEPT { \
       this->msg[0]='\0'; \
       __PLUMED_WRAPPER_STD strncat(this->msg,msg,__PLUMED_WRAPPER_CXX_EXCEPTION_BUFFER-1); \
-      static const char* debug=__PLUMED_WRAPPER_STD getenv("PLUMED_EXCEPTIONS_DEBUG"); \
-      if(debug && __PLUMED_WRAPPER_STD strlen(msg) > __PLUMED_WRAPPER_CXX_EXCEPTION_BUFFER-1) __PLUMED_WRAPPER_STD fprintf(stderr,"+++ WARNING: message will be truncated\n"); \
+      if(PlumedGetenvExceptionsDebug() && __PLUMED_WRAPPER_STD strlen(msg) > __PLUMED_WRAPPER_CXX_EXCEPTION_BUFFER-1) __PLUMED_WRAPPER_STD fprintf(stderr,"+++ WARNING: message will be truncated\n"); \
     } \
     std_ ## name(const std_ ## name & other) __PLUMED_WRAPPER_CXX_NOEXCEPT { \
       msg[0]='\0'; \
@@ -1331,8 +1358,8 @@ private:
       __PLUMED_WRAPPER_STD strncat(msg,other.msg,__PLUMED_WRAPPER_CXX_EXCEPTION_BUFFER-1); \
       return *this; \
     } \
-    const char* what() const __PLUMED_WRAPPER_CXX_NOEXCEPT {return msg;} \
-    ~std_ ## name() __PLUMED_WRAPPER_CXX_NOEXCEPT {} \
+    const char* what() const __PLUMED_WRAPPER_CXX_NOEXCEPT __PLUMED_WRAPPER_CXX_OVERRIDE {return msg;} \
+    ~std_ ## name() __PLUMED_WRAPPER_CXX_NOEXCEPT __PLUMED_WRAPPER_CXX_OVERRIDE {} \
   };
 
   __PLUMED_WRAPPER_NOSTRING_EXCEPTION(bad_typeid)
@@ -1890,7 +1917,7 @@ __PLUMED_WRAPPER_ANONYMOUS_END /*}*/
 #endif
 
 /*
-  With internal interface, it does not make sence to emit kernel register or fortran interfaces
+  With internal interface, it does not make sense to emit kernel register or fortran interfaces
 */
 
 #if ! __PLUMED_WRAPPER_EXTERN /*{*/
@@ -2665,6 +2692,11 @@ plumed plumed_f2c(const char*c) {
   assert(sizeof(p.p)<=16);
 
   assert(c);
+
+  /*
+     needed to avoid cppcheck warning on uninitialized p
+  */
+  p.p=NULL;
   cc=(unsigned char*)&p.p;
   for(i=0; i<sizeof(p.p); i++) {
     assert(c[2*i]>=48 && c[2*i]<48+64);

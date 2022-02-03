@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2015-2020 The plumed team
+   Copyright (c) 2015-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -237,7 +237,7 @@ private:
   vector< vector<Gaussian> > hills_;
   vector<std::unique_ptr<OFile>> hillsOfiles_;
   vector<std::unique_ptr<OFile>> gridfiles_;
-  vector<std::unique_ptr<Grid>> BiasGrids_;
+  vector<std::unique_ptr<GridBase>> BiasGrids_;
   bool    grid_;
   double  height0_;
   double  biasf_;
@@ -278,10 +278,10 @@ private:
 
 public:
   explicit PBMetaD(const ActionOptions&);
-  void calculate();
-  void update();
+  void calculate() override;
+  void update() override;
   static void registerKeywords(Keywords& keys);
-  bool checkNeedsGradients()const;
+  bool checkNeedsGradients()const override;
 };
 
 PLUMED_REGISTER_ACTION(PBMetaD,"PBMETAD")
@@ -473,10 +473,10 @@ PBMetaD::PBMetaD(const ActionOptions& ao):
   if(gmin.size()!=0) {
     if(gbin.size()==0 && gspacing.size()==0) {
       if(adaptive_==FlexibleBin::none) {
-        log<<"  Binsize not specified, 1/10 of sigma will be be used\n";
+        log<<"  Binsize not specified, 1/5 of sigma will be be used\n";
         plumed_assert(sigma0_.size()==getNumberOfArguments());
         gspacing.resize(getNumberOfArguments());
-        for(unsigned i=0; i<gspacing.size(); i++) gspacing[i]=0.1*sigma0_[i];
+        for(unsigned i=0; i<gspacing.size(); i++) gspacing[i]=0.2*sigma0_[i];
       } else {
         // with adaptive hills and grid a sigma min must be specified
         for(unsigned i=0; i<sigma0min_.size(); i++) if(sigma0min_[i]<=0) error("When using Adaptive Gaussians on a grid SIGMA_MIN must be specified");
@@ -630,7 +630,7 @@ PBMetaD::PBMetaD(const ActionOptions& ao):
       gmin_t[0] = gmin[i];
       gmax_t[0] = gmax[i];
       gbin_t[0] = gbin[i];
-      std::unique_ptr<Grid> BiasGrid_;
+      std::unique_ptr<GridBase> BiasGrid_;
       // Read grid from file
       if(gridreadfilenames_.size()>0) {
         IFile gridfile;
@@ -641,7 +641,7 @@ PBMetaD::PBMetaD(const ActionOptions& ao):
           error("The GRID file you want to read: " + gridreadfilenames_[i] + ", cannot be found!");
         }
         string funcl = getLabel() + ".bias";
-        BiasGrid_=Grid::create(funcl, args, gridfile, gmin_t, gmax_t, gbin_t, sparsegrid, spline, true);
+        BiasGrid_=GridBase::create(funcl, args, gridfile, gmin_t, gmax_t, gbin_t, sparsegrid, spline, true);
         if(BiasGrid_->getDimension() != args.size()) {
           error("mismatch between dimensionality of input grid and number of arguments");
         }

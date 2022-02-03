@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2015-2020 The plumed team
+   Copyright (c) 2015-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -43,8 +43,8 @@ private:
 public:
   static void registerKeywords( Keywords& keys );
   explicit PrintDissimilarityMatrix( const ActionOptions& ao );
-  void performAnalysis();
-  void performTask( const unsigned&, const unsigned&, MultiValue& ) const { plumed_error(); }
+  void performAnalysis() override;
+  void performTask( const unsigned&, const unsigned&, MultiValue& ) const override { plumed_error(); }
 };
 
 PLUMED_REGISTER_ACTION(PrintDissimilarityMatrix,"PRINT_DISSIMILARITY_MATRIX")

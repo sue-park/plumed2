@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2013-2020 The plumed team
+   Copyright (c) 2013-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -55,10 +55,10 @@ private:
 public:
   static void registerKeywords( Keywords& keys );
   explicit MoleculeOrientation( const ActionOptions& ao );
-  AtomNumber getAbsoluteIndexOfCentralAtom( const unsigned& iatom ) const ;
-  void calculateVector( multicolvar::AtomValuePack& myatoms ) const;
-  void normalizeVector( std::vector<double>& vals ) const ;
-  void normalizeVectorDerivatives( MultiValue& myvals ) const ;
+  AtomNumber getAbsoluteIndexOfCentralAtom( const unsigned& iatom ) const override;
+  void calculateVector( multicolvar::AtomValuePack& myatoms ) const override;
+  void normalizeVector( std::vector<double>& vals ) const override;
+  void normalizeVectorDerivatives( MultiValue& myvals ) const override;
 };
 
 PLUMED_REGISTER_ACTION(MoleculeOrientation,"MOLECULES")

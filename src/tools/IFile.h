@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -67,13 +67,19 @@ public:
 /// Destructor
   ~IFile();
 /// Opens the file
-  IFile& open(const std::string&name);
+  IFile& open(const std::string&name) override;
 /// Gets the list of all fields
   IFile& scanFieldList(std::vector<std::string>&);
 /// Read a double field
   IFile& scanField(const std::string&,double&);
 /// Read a int field
   IFile& scanField(const std::string&,int&);
+/// Read a long int field
+  IFile& scanField(const std::string&,long int&);
+/// Read a unsigned field
+  IFile& scanField(const std::string&,unsigned&);
+/// Read a long unsigned field
+  IFile& scanField(const std::string&,long unsigned&);
 /// Read a string field
   IFile& scanField(const std::string&,std::string&);
   /**

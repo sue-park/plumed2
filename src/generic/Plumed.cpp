@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2018-2020 The plumed team
+   Copyright (c) 2018-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -101,6 +101,7 @@ PRINT ARG=p.bias FILE=COLVAR
 \endplumedfile
 `plumed2.dat` can be an arbitrary plumed input file, for instance
 \plumedfile
+#SETTINGS FILENAME=plumed2.dat
 # plumed2.dat
 d: DISTANCE ATOMS=1,10
 RESTRAINT ARG=d KAPPA=10 AT=2
@@ -319,7 +320,7 @@ void Plumed::prepare() {
   if(ene) plumed_error()<<"It is not currently possible to use ENERGY in a guest PLUMED";
   int n=0;
   if(root) p.cmd("createFullList",&n);
-  int *pointer=nullptr;
+  const int *pointer=nullptr;
   if(root) p.cmd("getFullList",&pointer);
   bool redo=(index.size()!=n);
   if(first) redo=true;

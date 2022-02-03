@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -79,7 +79,7 @@ PRINT ARG=t,cos,sin,d.x,d.y,d.z,mycos,mysin,cc.vv1_bias STRIDE=1 FILE=colvar FMT
 class BiasValue : public Bias {
 public:
   explicit BiasValue(const ActionOptions&);
-  void calculate();
+  void calculate() override;
   static void registerKeywords(Keywords& keys);
 };
 

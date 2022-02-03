@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2011-2020 The plumed team
+   Copyright (c) 2011-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -238,7 +238,7 @@ public:
    and an MD engine, this is the right place
    Notice that this interface should always keep retro-compatibility
   */
-  void cmd(const std::string&key,void*val=NULL);
+  void cmd(const std::string&key,void*val=NULL) override;
   ~PlumedMain();
   /**
     Read an input file.
@@ -257,6 +257,15 @@ public:
     At variance with readInputWords(), this is splitting the string into words
   */
   void readInputLine(const std::string & str);
+
+  /**
+    Read an input buffer.
+    \param str name of the string
+    Same as readInputFile, but first write str on a temporary file and then read
+    that files. At variance with readInputLine, it can take care of comments and
+    continuation lines.
+  */
+  void readInputLines(const std::string & str);
 
   /**
     Initialize the object.

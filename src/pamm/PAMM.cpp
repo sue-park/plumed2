@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2015-2020 The plumed team
+   Copyright (c) 2015-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -117,16 +117,16 @@ public:
   static void registerKeywords( Keywords& keys );
   explicit PAMM(const ActionOptions&);
 /// We have to overwrite this here
-  unsigned getNumberOfQuantities() const ;
+  unsigned getNumberOfQuantities() const override;
 /// Calculate the weight of this object ( average of input weights )
   using PLMD::multicolvar::MultiColvarBase::calculateWeight;
   void calculateWeight( multicolvar::AtomValuePack& myatoms );
 /// Actually do the calculation
-  double compute( const unsigned& tindex, multicolvar::AtomValuePack& myatoms ) const ;
+  double compute( const unsigned& tindex, multicolvar::AtomValuePack& myatoms ) const override;
 /// This returns the position of the central atom
   Vector getCentralAtom();
 /// Is the variable periodic
-  bool isPeriodic() { return false; }
+  bool isPeriodic() override { return false; }
 };
 
 PLUMED_REGISTER_ACTION(PAMM,"PAMM")

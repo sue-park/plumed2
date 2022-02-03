@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2015-2020 The plumed team
+   Copyright (c) 2015-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -92,7 +92,7 @@ class FixedAtom:
   bool scaled_components;
 public:
   explicit FixedAtom(const ActionOptions&ao);
-  void calculate();
+  void calculate() override;
   static void registerKeywords( Keywords& keys );
 };
 

@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -54,7 +54,7 @@ std::ostream& Stopwatch::log(std::ostream&os)const {
   char buffer[1000];
   buffer[0]=0;
   for(unsigned i=0; i<40; i++) os<<" ";
-  os<<"      Cycles        Total      Average      Minumum      Maximum\n";
+  os<<"      Cycles        Total      Average      Minimum      Maximum\n";
 
   std::vector<std::string> names;
   for(const auto & it : watches) names.push_back(it.first);

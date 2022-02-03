@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -95,14 +95,14 @@ private:
 public:
   static void registerKeywords( Keywords& keys );
   explicit Read(const ActionOptions&);
-  void prepare();
-  void apply() {}
-  void calculate();
-  void update();
+  void prepare() override;
+  void apply() override {}
+  void calculate() override;
+  void update() override;
   std::string getFilename() const;
   IFile* getFile();
-  unsigned getNumberOfDerivatives();
-  void turnOnDerivatives();
+  unsigned getNumberOfDerivatives() override;
+  void turnOnDerivatives() override;
 };
 
 PLUMED_REGISTER_ACTION(Read,"READ")
@@ -161,6 +161,8 @@ Read::Read(const ActionOptions&ao):
   else log.printf("  reading data from file %s\n",filename.c_str() );
   // Find out what we are reading
   std::vector<std::string> valread; parseVector("VALUES",valread);
+
+  if(nlinesPerStep>1 && cloned_file) error("Opening a file multiple times and using EVERY is not allowed");
 
   std::size_t dot=valread[0].find_first_of('.');
   if( valread[0].find(".")!=std::string::npos ) {
@@ -245,7 +247,7 @@ void Read::update() {
   if( !cloned_file ) {
     for(unsigned i=0; i<nlinesPerStep; ++i) {
       ifile->scanField(); double du_time;
-      if( plumed.getAtoms().getNatoms()==0 && !ifile->scanField("time",du_time) ) plumed.stop();
+      if( !ifile->scanField("time",du_time) && plumed.getAtoms().getNatoms()==0 ) plumed.stop();
     }
   }
 }

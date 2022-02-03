@@ -24,7 +24,7 @@ all:
 else
 
 all:
-	@echo Python support was not configure
+	@echo Python support was not configured
 
 endif
 
@@ -45,8 +45,5 @@ pypi:
 	cp -r test pypi/
 	cp ../src/wrapper/Plumed.h pypi/include/
 	cp README.rst MANIFEST.in cplumed.pxd plumed.pyx setup.py ../VERSION pypi/
-	cd pypi ; plumed_language_level=2 $(python_bin) setup.py sdist
+	cd pypi ; $(python_bin) setup.py sdist
 	echo "now use: $(python_bin) -m twine upload dist/plumed-$(VERSION).tar.gz"
-
-clean:
-	rm -fr *.so plumed.cpp build Plumed.h VERSION pypi test/logfile test/bck* pypi include

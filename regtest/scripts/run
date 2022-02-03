@@ -4,6 +4,12 @@ if test -n "$PLUMED_PREPEND_PATH" ; then
   PATH="$PLUMED_PREPEND_PATH:$PATH"
 fi
 
+if test -n "$PLUMED_MAKE" ; then
+  make="$PLUMED_MAKE"
+else
+  make=make
+fi
+
 export valgrind=env
 
 for opt in ${*}
@@ -79,7 +85,7 @@ mpi="$mpi -np $mpiprocs"
 
 if ! $plumed config -q has mpi
 then
-    if [ "$TRAVIS" = true ]; then
+    if [ "$TRAVIS" = true ] || [ "$GITHUB_ACTIONS" = true ] ; then
       if [ -z "$PLUMED_ALLOW_SKIP_ON_TRAVIS" ] ; then
         echo "NOT_APPLICABLE (MPI NOT INSTALLED)"
       else
@@ -99,7 +105,7 @@ fi
 
 if ((mpiprocs>0)) && [[ "$valgrind" != "env" ]]
 then
-    if [ "$TRAVIS" = true ]; then
+    if [ "$TRAVIS" = true ] || [ "$GITHUB_ACTIONS" = true ] ; then
       if [ -z "$PLUMED_ALLOW_SKIP_ON_TRAVIS" ] ; then
         echo "NOT_APPLICABLE (MPI cannot be used with valgrind)"
       else
@@ -116,7 +122,7 @@ do
   echo "Checking for $need"
   if ! $plumed config -q has $need
   then
-    if [ "$TRAVIS" = true ]; then
+    if [ "$TRAVIS" = true ] || [ "$GITHUB_ACTIONS" = true ] ; then
       if [ -z "$PLUMED_ALLOW_SKIP_ON_TRAVIS" ] ; then
         echo "NOT_APPLICABLE ($need NOT ENABLED)"
       else
@@ -134,7 +140,7 @@ do
   echo "Checking for $module"
   if ! $plumed config -q module $module
   then
-    if [ "$TRAVIS" = true ]; then
+    if [ "$TRAVIS" = true ] || [ "$GITHUB_ACTIONS" = true ] ; then
       if [ -z "$PLUMED_ALLOW_SKIP_ON_TRAVIS" ] ; then
         echo "NOT_APPLICABLE ($module MODULE NOT INSTALLED)"
       else
@@ -149,7 +155,7 @@ done
 
 if type -t plumed_custom_skip 1>/dev/null ; then
   if plumed_custom_skip ; then
-    if [ "$TRAVIS" = true ]; then
+    if [ "$TRAVIS" = true ] || [ "$GITHUB_ACTIONS" = true ] ; then
       if [ -z "$PLUMED_ALLOW_SKIP_ON_TRAVIS" ] ; then
         echo "NOT_APPLIABLE (plumed_custom_skip)"
       else
@@ -189,7 +195,7 @@ case "$type" in
   else
     export PLUMED_KERNEL="$root/src/lib/libplumedKernel.$($plumed info --soext)"
   fi
-  make exe 1>out 2> err
+  "$make" exe 1>out 2> err
   $mpi $valgrind ./exe $arg >> out 2>> err
  ;;
 (plumed)
@@ -227,7 +233,7 @@ for file in *.reference ; do
 # (files are thought to be binary for some reason)
 # In this way, at least PLUMED native files (with fields) will be assumed to be
 # ASCII and diff will be shown in the log
-    test "$(cat "$file" | head -c 10)" = "#! FIELDS " && DIFFOPT="-a"
+    test "$(head -c 10 "$file")" = "#! FIELDS " && DIFFOPT="-a"
     out="$(diff $DIFFOPT "$file" "$new.zfix")"
     test -n "$out" && {
       echo FAILURE

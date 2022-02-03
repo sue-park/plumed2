@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -47,7 +47,7 @@ size_t OFile::llwrite(const char*ptr,size_t s) {
   size_t r;
   if(linked) return linked->llwrite(ptr,s);
   if(! (comm && comm->Get_rank()>0)) {
-    if(!fp) plumed_merror("writing on uninitilized File");
+    if(!fp) plumed_merror("writing on uninitialized File");
     if(gzfp) {
 #ifdef __PLUMED_HAS_ZLIB
       r=gzwrite(gzFile(gzfp),ptr,s);
@@ -175,6 +175,24 @@ OFile& OFile::printField(const std::string&name,double v) {
 
 OFile& OFile::printField(const std::string&name,int v) {
   sprintf(buffer_string.get()," %d",v);
+  printField(name,buffer_string.get());
+  return *this;
+}
+
+OFile& OFile::printField(const std::string&name,long int v) {
+  sprintf(buffer_string.get()," %ld",v);
+  printField(name,buffer_string.get());
+  return *this;
+}
+
+OFile& OFile::printField(const std::string&name,unsigned v) {
+  sprintf(buffer_string.get()," %u",v);
+  printField(name,buffer_string.get());
+  return *this;
+}
+
+OFile& OFile::printField(const std::string&name,long unsigned v) {
+  sprintf(buffer_string.get()," %lu",v);
   printField(name,buffer_string.get());
   return *this;
 }
@@ -333,6 +351,7 @@ OFile& OFile::rewind() {
     gzclose((gzFile)gzfp);
 #endif
   } else fclose(fp);
+
   if(!comm || comm->Get_rank()==0) {
     std::string fname=this->path;
     size_t found=fname.find_last_of("/\\");

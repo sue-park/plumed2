@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2016-2020 The plumed team
+   Copyright (c) 2016-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -41,7 +41,7 @@ private:
 public:
   static void registerKeywords( Keywords& keys );
   explicit SketchMapConjGrad( const ActionOptions& ao );
-  void minimise( Matrix<double>& );
+  void minimise( Matrix<double>& ) override;
 };
 
 PLUMED_REGISTER_ACTION(SketchMapConjGrad,"SKETCHMAP_CONJGRAD")

@@ -101,9 +101,9 @@ endif
 # check if bindir and libdir are consistent.
 # notice that this is not required yet but if we later we want
 # to use $ORIGIN based rpaths this would be needed
-ifneq ($(dir $(bindir)),$(dir $(libdir)))
-  $(error bindir and libdir are not consistent, please set them as subdirectories of the same directory)
-endif
+#ifneq ($(dir $(bindir)),$(dir $(libdir)))
+#  $(error bindir $(bindir) and libdir $(libdir) are not consistent, please set them as subdirectories of the same directory)
+#endif
 
 .PHONY: all links $(DIRS) $(DIRSLINKS) all-static $(PLUMED_LIBDIR)Plumed.cmake $(PLUMED_LIBDIR)Plumed.inc install $(PLUMED_SCRIPTS_EXE) install-html
 all:
@@ -384,7 +384,7 @@ ifeq ($(program_can_run),no)
 	@echo "WARNING: This is normal if you are cross compiling."
 	@echo "WARNING: - to patch an MD code use '$(program_name)-patch'"
 	@echo "WARNING: - to verify configuration use '$(program_name)-config'"
-	@echo "WARNING: - a few other command line tools are avalable as $(libdir)/$(program_name)/plumed-*"
+	@echo "WARNING: - a few other command line tools are available as $(libdir)/$(program_name)/plumed-*"
 else ifeq ($(program_can_run_mpi),no)
 	@echo "WARNING: $(program_name) executable will not run on this machine"
 	@echo "WARNING: unless you invoke it as '$(program_name) --no-mpi'"
@@ -444,6 +444,7 @@ ifeq ($(PLUMED_INSTALL),Install)
 	@echo "export PLUMED_INCLUDEDIR=\"\$${PLUMED_INCLUDEDIR-$(includedir)}\"" >> $@
 	@echo "export PLUMED_HTMLDIR=\"\$${PLUMED_HTMLDIR=$(htmldir)}\"" >> $@
 	@echo "export PLUMED_PROGRAM_NAME=\"\$${PLUMED_PROGRAM_NAME-$(program_name)}\"" >> $@
+	@echo "export PLUMED_VERSION=$(VERSION)" >> $@
 	@echo "source \"\$$PLUMED_ROOT\"/scripts/$(subst plumed-,,$(@F)).sh" >> $@
 else
 	@echo "export PLUMED_IS_INSTALLED=no" >> $@
@@ -451,6 +452,7 @@ else
 	@echo "export PLUMED_INCLUDEDIR=\"\$${PLUMED_ROOT}/src/include\"" >> $@
 	@echo "export PLUMED_HTMLDIR=\"\$${PLUMED_ROOT}\"" >> $@
 	@echo "export PLUMED_PROGRAM_NAME=plumed" >> $@
+	@echo "export PLUMED_VERSION=$(VERSION)" >> $@
 	@echo "source \"\$$PLUMED_ROOT\"/scripts/$(subst plumed-,,$(@F)).sh" >> $@
 endif
 	chmod a+x $@

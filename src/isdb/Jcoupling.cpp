@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2016-2020 The plumed team
+   Copyright (c) 2016-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -45,7 +45,7 @@ on the type of J-coupling.
 
 This collective variable computes the J-couplings for a set of atoms defining a dihedral angle. You can specify
 the atoms involved using the \ref MOLINFO notation. You can also specify the experimental couplings using the
-ADDCOUPLINGS flag and COUPLING keywords. These will be included in the output. You must choose the type of
+ COUPLING keywords. These will be included in the output. You must choose the type of
 coupling using the type keyword, you can also supply custom Karplus parameters using TYPE=CUSTOM and the A, B, C
 and SHIFT keywords. You will need to make sure you are using the correct dihedral angle:
 
@@ -69,7 +69,6 @@ MOLINFO MOLTYPE=protein STRUCTURE=peptide.pdb
 WHOLEMOLECULES ENTITY0=1-111
 
 JCOUPLING ...
-    ADDCOUPLINGS
     TYPE=HAN
     ATOMS1=@psi-2 COUPLING1=-0.49
     ATOMS2=@psi-4 COUPLING2=-0.54
@@ -79,7 +78,7 @@ JCOUPLING ...
     LABEL=jhan
 ... JCOUPLING
 
-jhanst: STATS ARG=(jhan\.j_.*) PARARG=(jhan\.exp_.*)
+jhanst: STATS ARG=(jhan\.j-.*) PARARG=(jhan\.exp-.*)
 
 PRINT ARG=jhanst.*,jhan.* FILE=COLVAR STRIDE=100
 \endplumedfile
@@ -102,22 +101,20 @@ private:
 public:
   static void registerKeywords(Keywords& keys);
   explicit JCoupling(const ActionOptions&);
-  void calculate();
-  void update();
+  void calculate() override;
+  void update() override;
 };
 
 PLUMED_REGISTER_ACTION(JCoupling, "JCOUPLING")
 
 void JCoupling::registerKeywords(Keywords& keys) {
   componentsAreNotOptional(keys);
-  useCustomisableComponents(keys);
   MetainferenceBase::registerKeywords(keys);
   keys.addFlag("NOPBC",false,"ignore the periodic boundary conditions when calculating distances");
   keys.add("numbered", "ATOMS", "the 4 atoms involved in each of the bonds for which you wish to calculate the J-coupling. "
            "Keywords like ATOMS1, ATOMS2, ATOMS3,... should be listed and one J-coupling will be "
            "calculated for each ATOMS keyword you specify.");
   keys.reset_style("ATOMS", "atoms");
-  keys.addFlag("ADDCOUPLINGS", false, "Set this flag if you want to have fixed components with the experimental values.");
   keys.add("compulsory", "TYPE", "Type of J-coupling to compute (HAN,HAHN,CCG,NCG,CUSTOM)");
   keys.add("optional", "A", "Karplus parameter A");
   keys.add("optional", "B", "Karplus parameter B");
@@ -125,7 +122,7 @@ void JCoupling::registerKeywords(Keywords& keys) {
   keys.add("optional", "SHIFT", "Angle shift in radians");
   keys.add("numbered", "COUPLING", "Add an experimental value for each coupling");
   keys.addOutputComponent("j", "default", "the calculated J-coupling");
-  keys.addOutputComponent("exp", "ADDCOUPLINGS", "the experimental J-coupling");
+  keys.addOutputComponent("exp", "COUPLING", "the experimental J-coupling");
 }
 
 JCoupling::JCoupling(const ActionOptions&ao):
@@ -183,21 +180,16 @@ JCoupling::JCoupling(const ActionOptions&ao):
 
   // Optionally add an experimental value (like with RDCs)
   vector<double> coupl;
-  bool addcoupling = false;
-  parseFlag("ADDCOUPLINGS", addcoupling);
-  if (addcoupling||getDoScore()) {
-    coupl.resize(ncoupl_);
-    unsigned ntarget = 0;
-    for (unsigned i = 0; i < ncoupl_; ++i) {
-      if (!parseNumbered("COUPLING", i+1, coupl[i])) {
-        break;
-      }
-      ntarget++;
-    }
-    if (ntarget != ncoupl_) {
-      error("found wrong number of COUPLING values");
-    }
+  coupl.resize( ncoupl_ );
+  unsigned ntarget=0;
+  for(unsigned i=0; i<ncoupl_; ++i) {
+    if( !parseNumbered( "COUPLING", i+1, coupl[i] ) ) break;
+    ntarget++;
   }
+  bool addcoupling=false;
+  if(ntarget!=ncoupl_ && ntarget!=0) error("found wrong number of COUPLING values");
+  if(ntarget==ncoupl_) addcoupling=true;
+  if(getDoScore()&&!addcoupling) error("with DOSCORE you need to set the COUPLING values");
 
   // For custom types we allow use of custom Karplus parameters
   if (jtype_ == CUSTOM) {
@@ -208,6 +200,7 @@ JCoupling::JCoupling(const ActionOptions&ao):
   }
 
   log << "  Bibliography ";
+  log<<plumed.cite("Bonomi, Camilloni, Bioinformatics, 33, 3999 (2017)");
 
   // Set Karplus parameters
   switch (jtype_) {
@@ -216,43 +209,46 @@ JCoupling::JCoupling(const ActionOptions&ao):
     kb_ = -0.61;
     kc_ = -0.27;
     kshift_ = pi / 3.0;
-    log.printf("J-coupling type is HAN, with A: %f, B: %f, C: %f, angle shift: %f\n", ka_, kb_, kc_, kshift_);
     log << plumed.cite("Wang A C, Bax A, J. Am. Chem. Soc. 117, 1810 (1995)");
+    log<<"\n";
+    log.printf("  J-coupling type is HAN, with A: %f, B: %f, C: %f, angle shift: %f\n", ka_, kb_, kc_, kshift_);
     break;
   case HAHN:
     ka_ = 7.09;
     kb_ = -1.42;
     kc_ = 1.55;
     kshift_ = -pi / 3.0;
-    log.printf("J-coupling type is HAHN, with A: %f, B: %f, C: %f, angle shift: %f\n", ka_, kb_, kc_, kshift_);
     log << plumed.cite("Hu J-S, Bax A, J. Am. Chem. Soc. 119, 6360 (1997)");
+    log<<"\n";
+    log.printf("  J-coupling type is HAHN, with A: %f, B: %f, C: %f, angle shift: %f\n", ka_, kb_, kc_, kshift_);
     break;
   case CCG:
     ka_ = 2.31;
     kb_ = -0.87;
     kc_ = 0.55;
     kshift_ = (2.0 * pi) / 3.0;
-    log.printf("J-coupling type is CCG, with A: %f, B: %f, C: %f, angle shift: %f\n", ka_, kb_, kc_, kshift_);
     log << plumed.cite("Perez C, Löhr F, Rüterjans H, Schmidt J, J. Am. Chem. Soc. 123, 7081 (2001)");
+    log<<"\n";
+    log.printf("  J-coupling type is CCG, with A: %f, B: %f, C: %f, angle shift: %f\n", ka_, kb_, kc_, kshift_);
     break;
   case NCG:
     ka_ = 1.29;
     kb_ = -0.49;
     kc_ = 0.37;
     kshift_ = 0.0;
-    log.printf("J-coupling type is NCG, with A: %f, B: %f, C: %f, angle shift: %f\n", ka_, kb_, kc_, kshift_);
     log << plumed.cite("Perez C, Löhr F, Rüterjans H, Schmidt J, J. Am. Chem. Soc. 123, 7081 (2001)");
+    log<<"\n";
+    log.printf("  J-coupling type is NCG, with A: %f, B: %f, C: %f, angle shift: %f\n", ka_, kb_, kc_, kshift_);
     break;
   case CUSTOM:
-    log.printf("J-coupling type is custom, with A: %f, B: %f, C: %f, angle shift: %f\n", ka_, kb_, kc_, kshift_);
+    log<<"\n";
+    log.printf("  J-coupling type is custom, with A: %f, B: %f, C: %f, angle shift: %f\n", ka_, kb_, kc_, kshift_);
     break;
   }
-  log<<plumed.cite("Bonomi, Camilloni, Bioinformatics, 33, 3999 (2017)");
-  log<<"\n";
 
   for (unsigned i = 0; i < ncoupl_; ++i) {
     log.printf("  The %uth J-Coupling is calculated from atoms : %d %d %d %d.",
-               i+1, atoms[2*i].serial(), atoms[2*i+1].serial(), atoms[2*i+2].serial(), atoms[2*i+3].serial());
+               i+1, atoms[6*i].serial(), atoms[6*i+1].serial(), atoms[6*i+3].serial(), atoms[6*i+5].serial());
     if (addcoupling) {
       log.printf(" Experimental J-Coupling is %f.", coupl[i]);
     }
@@ -268,23 +264,23 @@ JCoupling::JCoupling(const ActionOptions&ao):
   if(!getDoScore()) {
     for (unsigned i = 0; i < ncoupl_; i++) {
       std::string num; Tools::convert(i, num);
-      addComponentWithDerivatives("j_" + num);
-      componentIsNotPeriodic("j_" + num);
+      addComponentWithDerivatives("j-" + num);
+      componentIsNotPeriodic("j-" + num);
     }
   } else {
     for (unsigned i = 0; i < ncoupl_; i++) {
       std::string num; Tools::convert(i, num);
-      addComponent("j_" + num);
-      componentIsNotPeriodic("j_" + num);
+      addComponent("j-" + num);
+      componentIsNotPeriodic("j-" + num);
     }
   }
 
   if (addcoupling||getDoScore()) {
     for (unsigned i = 0; i < ncoupl_; i++) {
       std::string num; Tools::convert(i, num);
-      addComponent("exp_" + num);
-      componentIsNotPeriodic("exp_" + num);
-      Value* comp = getPntrToComponent("exp_" + num);
+      addComponent("exp-" + num);
+      componentIsNotPeriodic("exp-" + num);
+      Value* comp = getPntrToComponent("exp-" + num);
       comp->set(coupl[i]);
     }
   }
@@ -371,7 +367,7 @@ void JCoupling::calculate()
     for (unsigned r=0; r<ncoupl_; r++) {
       const unsigned a0 = 6*r;
       string num; Tools::convert(r,num);
-      Value* val=getPntrToComponent("j_"+num);
+      Value* val=getPntrToComponent("j-"+num);
       val->set(j[r]);
       setAtomsDerivatives(val, a0, deriv[a0]);
       setAtomsDerivatives(val, a0+1, deriv[a0+1]);

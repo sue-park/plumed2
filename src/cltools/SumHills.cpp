@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -190,8 +190,8 @@ class CLToolSumHills : public CLTool {
 public:
   static void registerKeywords( Keywords& keys );
   explicit CLToolSumHills(const CLToolOptions& co );
-  int main(FILE* in,FILE*out,Communicator& pc);
-  string description()const;
+  int main(FILE* in,FILE*out,Communicator& pc) override;
+  string description()const override;
 /// find a list of variables present, if they are periodic and which is the period
 /// return false if the file does not exist
   static bool findCvsAndPeriodic(std::string filename, std::vector< std::vector <std::string> > &cvs,std::vector<std::string> &pmin,std::vector<std::string> &pmax, bool &multivariate, string &lowI_, string &uppI_);
@@ -408,7 +408,7 @@ int CLToolSumHills::main(FILE* in,FILE*out,Communicator& pc) {
       if(!found)plumed_merror("variable "+idw[i]+" is not found in the bunch of cvs: revise your --idw option" );
     }
     plumed_massert( idw.size()<=cvs.size(),"the number of variables to be integrated should be at most equal to the total number of cvs  ");
-    // in this case you neeed a beta factor!
+    // in this case you need a beta factor!
   }
 
   std::string kt; kt=std::string("1.");// assign an arbitrary value just in case that idw.size()==cvs.size()

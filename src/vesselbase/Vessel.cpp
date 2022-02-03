@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2012-2020 The plumed team
+   Copyright (c) 2012-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -58,7 +58,7 @@ void Vessel::registerKeywords( Keywords& keys ) {
 std::string Vessel::transformName( const std::string& name ) {
   std::string tlabel=name;
   // Convert to lower case
-  std::transform( tlabel.begin(), tlabel.end(), tlabel.begin(), tolower );
+  std::transform( tlabel.begin(), tlabel.end(), tlabel.begin(), [](unsigned char c) { return std::tolower(c); } );
   // Remove any underscore characters (as these are reserved)
   for(unsigned i=0;; ++i) {
     std::size_t num=tlabel.find_first_of("_");

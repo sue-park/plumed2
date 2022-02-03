@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2015-2020 The plumed team
+   Copyright (c) 2015-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -53,8 +53,8 @@ private:
 public:
   static void registerKeywords( Keywords& keys );
   explicit OutputColvarFile( const ActionOptions& );
-  void performTask( const unsigned&, const unsigned&, MultiValue& ) const { plumed_error(); }
-  void performAnalysis();
+  void performTask( const unsigned&, const unsigned&, MultiValue& ) const override { plumed_error(); }
+  void performAnalysis() override;
 };
 
 PLUMED_REGISTER_ACTION(OutputColvarFile,"OUTPUT_ANALYSIS_DATA_TO_COLVAR")
@@ -89,15 +89,13 @@ OutputColvarFile::OutputColvarFile( const ActionOptions& ao ):
     for(unsigned i=1; i<req_vals.size(); ++i) log.printf(",", req_vals[i].c_str() );
     log.printf("\n");
   }
-  std::vector<std::string> rep_data; parseVector("REPLICA",rep_data);
-  if( rep_data.size()==1 ) {
-    if( rep_data[0]=="all" ) output_for_all_replicas=true;
-    else {
-      preps.resize(1); Tools::convert( rep_data[0], preps[0] );
-    }
-  } else {
-    preps.resize( rep_data.size() );
-    for(unsigned i=0; i<rep_data.size(); ++i) Tools::convert( rep_data[i], preps[i] );
+  std::string rep_data; parse("REPLICA",rep_data);
+  if( rep_data=="all" ) output_for_all_replicas=true;
+  else { preps.resize(1); Tools::convert( rep_data, preps[0] ); }
+  if( output_for_all_replicas ) log.printf("  outputting files for all replicas \n");
+  else {
+    log.printf("  outputting data for replicas ");
+    for(unsigned i=0; i<preps.size(); ++i) log.printf("%d ", preps[i] );
   }
 }
 

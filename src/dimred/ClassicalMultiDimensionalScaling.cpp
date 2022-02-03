@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2015-2020 The plumed team
+   Copyright (c) 2015-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -163,7 +163,7 @@ class ClassicalMultiDimensionalScaling : public DimensionalityReductionBase {
 public:
   static void registerKeywords( Keywords& keys );
   explicit ClassicalMultiDimensionalScaling( const ActionOptions& ao );
-  void calculateProjections( const Matrix<double>&, Matrix<double>& );
+  void calculateProjections( const Matrix<double>&, Matrix<double>& ) override;
 };
 
 PLUMED_REGISTER_ACTION(ClassicalMultiDimensionalScaling,"CLASSICAL_MDS")

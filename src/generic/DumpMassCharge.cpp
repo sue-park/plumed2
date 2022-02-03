@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2015-2020 The plumed team
+   Copyright (c) 2015-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -102,10 +102,10 @@ public:
   explicit DumpMassCharge(const ActionOptions&);
   ~DumpMassCharge();
   static void registerKeywords( Keywords& keys );
-  void prepare();
-  void calculate() {}
-  void apply() {}
-  void update();
+  void prepare() override;
+  void calculate() override {}
+  void apply() override {}
+  void update() override;
 };
 
 PLUMED_REGISTER_ACTION(DumpMassCharge,"DUMPMASSCHARGE")

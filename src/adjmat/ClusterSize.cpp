@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2015-2020 The plumed team
+   Copyright (c) 2015-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -69,11 +69,11 @@ public:
 /// Constructor
   explicit ClusterSize(const ActionOptions&);
 ///
-  void calculate();
+  void calculate() override;
 ///
-  void performTask( const unsigned& task_index, const unsigned& current, MultiValue& myvals ) const { plumed_error(); }
+  void performTask( const unsigned& task_index, const unsigned& current, MultiValue& myvals ) const override { plumed_error(); }
 ///
-  void turnOnDerivatives();
+  void turnOnDerivatives() override;
 };
 
 PLUMED_REGISTER_ACTION(ClusterSize,"CLUSTER_NATOMS")

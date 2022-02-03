@@ -1,5 +1,5 @@
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   Copyright (c) 2016-2020 The plumed team
+   Copyright (c) 2016-2021 The plumed team
    (see the PEOPLE file at the root of the distribution for a list of names)
 
    See http://www.plumed.org for more information.
@@ -143,7 +143,7 @@ class DumpGrid : public GridPrintingBase {
 public:
   static void registerKeywords( Keywords& keys );
   explicit DumpGrid(const ActionOptions&ao);
-  void printGrid( OFile& ofile ) const ;
+  void printGrid( OFile& ofile ) const override;
 };
 
 PLUMED_REGISTER_ACTION(DumpGrid,"DUMPGRID")
