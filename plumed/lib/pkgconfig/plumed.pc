@@ -1,0 +1,13 @@
+prefix=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
+exec_prefix=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
+includedir=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/include
+libdir=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib
+
+Name: plumed
+Description: Plumed library 
+URL: http://www.plumed.org
+Version: 2.7.3
+Cflags: -I${includedir} 
+Libs: -L${libdir} -lplumed 
+Libs.private: -ldl  -lstdc++  -lafcuda -lafcuda -lfftw3 -lz -ldl  -L/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64 -rdynamic -Wl,-Bsymbolic -fopenmp
+Conflicts: 

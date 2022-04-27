@@ -1,0 +1,13 @@
+prefix=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
+exec_prefix=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
+includedir=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/include
+libdir=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib
+
+Name: plumed
+Description: Plumed library  (full version, including internals)
+URL: http://www.plumed.org
+Version: 2.7.3
+Cflags: -I${includedir}  -I/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/include -D__PLUMED_LIBCXX11=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -D__PLUMED_HAS_MOLFILE_PLUGINS=1 -D__PLUMED_HAS_MPI=1 -D__PLUMED_HAS_CREGEX=1 -D__PLUMED_HAS_DLOPEN=1 -D__PLUMED_HAS_RTLD_DEFAULT=1 -D__PLUMED_HAS_CHDIR=1 -D__PLUMED_HAS_SUBPROCESS=1 -D__PLUMED_HAS_GETCWD=1 -D__PLUMED_HAS_EXECINFO=1 -D__PLUMED_HAS_ZLIB=1 -D__PLUMED_HAS_FFTW=1 -D__PLUMED_HAS_PYTHON=1 -D__PLUMED_HAS_ARRAYFIRE=1 -D__PLUMED_HAS_ARRAYFIRE=1 -DNDEBUG=1 -D_REENTRANT=1
+Libs: -L${libdir} -lplumed 
+Libs.private: -ldl  -lstdc++  -lafcuda -lafcuda -lfftw3 -lz -ldl  -L/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64 -rdynamic -Wl,-Bsymbolic -fopenmp
+Conflicts: 

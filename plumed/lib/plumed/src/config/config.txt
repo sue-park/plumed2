@@ -1,0 +1,150 @@
+# version strings
+# syntax: version short/long/git number
+version short 2.7
+version long 2.7.3
+version git f3834ff18-dirty
+
+# python executable
+# syntax: python_bin executable
+# empty string means that python has not been configured
+python_bin python
+
+# command to lauch mpi processes
+# syntax: mpiexec command
+# empty string means that mpiexec was not chosen at configure time
+mpiexec 
+
+# list of 'has' options
+# syntax: has name on/of
+# if option xx is on then plumed has beeen compiled with -D__PLUMED_HAS_XX
+has arrayfire on
+has asmjit off
+has boost_graph off
+has boost_serialization off
+has chdir on
+has cregex on
+has dlopen on
+has execinfo on
+has external_blas off
+has external_lapack off
+has external_molfile_plugins off
+has fftw on
+has getcwd on
+has gsl off
+has molfile_plugins on
+has mpi on
+has python on
+has readdir_r off
+has rtld_default on
+has subprocess on
+has xdrfile off
+has zlib on
+
+# other defines
+# syntax: define name=value
+define HAVE_INTTYPES_H=1
+define HAVE_MEMORY_H=1
+define HAVE_STDINT_H=1
+define HAVE_STDLIB_H=1
+define HAVE_STRING_H=1
+define HAVE_STRINGS_H=1
+define HAVE_SYS_STAT_H=1
+define HAVE_SYS_TYPES_H=1
+define HAVE_UNISTD_H=1
+define NDEBUG=1
+define PACKAGE_BUGREPORT=""
+define PACKAGE_NAME="PLUMED"
+define PACKAGE_STRING="PLUMED 2"
+define PACKAGE_TARNAME="plumed"
+define PACKAGE_URL=""
+define PACKAGE_VERSION="2"
+define __PLUMED_LIBCXX11=1
+define _REENTRANT=1
+define STDC_HEADERS=1
+
+# list of modules
+# syntax: module name on/off (default-on/default-off/always)
+module adjmat off (default-off)
+module analysis on (default-on)
+module annfunc off (default-off)
+module asmjit on (always)
+module bias on (default-on)
+module blas on (always)
+module cltools on (default-on)
+module colvar on (default-on)
+module core on (always)
+module crystallization off (default-off)
+module dimred off (default-off)
+module drr off (default-off)
+module eds off (default-off)
+module fisst off (default-off)
+module function on (default-on)
+module funnel off (default-off)
+module generic on (default-on)
+module gridtools on (always)
+module isdb on (default-on)
+module lapack on (always)
+module lepton on (always)
+module logmfd off (default-off)
+module manyrestraints off (default-off)
+module mapping on (default-on)
+module maze off (default-off)
+module molfile on (default-on)
+module multicolvar on (default-on)
+module opes off (default-off)
+module pamm off (default-off)
+module piv off (default-off)
+module reference on (always)
+module secondarystructure on (default-on)
+module setup on (default-on)
+module tools on (always)
+module vatom on (default-on)
+module ves off (default-off)
+module vesselbase on (always)
+
+# Makefile.conf file
+# syntax: makefile_conf followed by a single space followed by a line from makefile_conf
+makefile_conf CC=mpicc
+makefile_conf FC=mpifort
+makefile_conf LDF90=mpifort
+makefile_conf CFLAGS=-I/usr/local/pace-apps/manual/packages/cuda/11.1/include -fPIC
+makefile_conf CXX=mpicxx
+makefile_conf CXXFLAGS=-O3 -fPIC -Wall -pedantic -std=c++11 -fopenmp
+makefile_conf CXXFLAGS_NOOPENMP=-O3 -fPIC -Wall -pedantic -std=c++11
+makefile_conf CPPFLAGS=-I/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/include -DPACKAGE_NAME=\"PLUMED\" -DPACKAGE_TARNAME=\"plumed\" -DPACKAGE_VERSION=\"2\" -DPACKAGE_STRING=\"PLUMED\ 2\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -D__PLUMED_LIBCXX11=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -D__PLUMED_HAS_MOLFILE_PLUGINS=1 -D__PLUMED_HAS_MPI=1 -D__PLUMED_HAS_CREGEX=1 -D__PLUMED_HAS_DLOPEN=1 -D__PLUMED_HAS_RTLD_DEFAULT=1 -D__PLUMED_HAS_CHDIR=1 -D__PLUMED_HAS_SUBPROCESS=1 -D__PLUMED_HAS_GETCWD=1 -D__PLUMED_HAS_EXECINFO=1 -D__PLUMED_HAS_ZLIB=1 -D__PLUMED_HAS_FFTW=1 -D__PLUMED_HAS_PYTHON=1 -D__PLUMED_HAS_ARRAYFIRE=1 -D__PLUMED_HAS_ARRAYFIRE=1 -DNDEBUG=1 -D_REENTRANT=1
+makefile_conf LDFLAGS=
+makefile_conf DYNAMIC_LIBS=-lstdc++  -lafcuda -lafcuda -lfftw3 -lz -ldl  -L/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64 -rdynamic -Wl,-Bsymbolic -fopenmp
+makefile_conf LIBS=-ldl 
+makefile_conf SOEXT=so
+makefile_conf # LD is used only to link the plumed executable, so should be equivalent to the C++ compiler
+makefile_conf LD=mpicxx -O3 -fPIC -Wall -pedantic -std=c++11
+makefile_conf LDSHARED=mpicxx -shared -Wl,-R -Wl,"/usr/local/pace-apps/spack/packages/0.12/linux-rhel7-x86_64/gcc-4.8.5/gcc-8.3.0-opnwtdjumg2hxo4ljvnx77ugb6afmvj3/lib64:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-cascadelake/intel-19.0.5/fftw-3.3.8-hgj3xlqabfoyb4t6dg6ognfgv2sfnqyj/lib:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-cascadelake/intel-19.0.5/mvapich2-2.3.2-hpgbkqoytbjh35qn2t63rdorepxcezek/lib:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-cascadelake/intel-19.0.5/openblas-0.3.13-wievo5njws7v5potdwgepuc3izh6hupf/lib:/usr/local/pace-apps/spack/packages/0.12/linux-rhel7-x86_64/gcc-4.8.5/boost-1.70.0-dtpdbnaup47qfxc47ya5hj3wu3plh5hk/lib:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/clck/2019.5/lib/intel64:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/mpi/intel64/libfabric/lib:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/ipp/lib/intel64:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/compiler/lib/intel64_lin:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/mkl/lib/intel64_lin:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/tbb/lib/intel64/gcc4.7:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/daal/lib/intel64_lin:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/daal/../tbb/lib/intel64_lin/gcc4.4:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/lib"
+makefile_conf GCCDEP=mpicxx
+makefile_conf disable_dependency_tracking=no
+makefile_conf prefix=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
+makefile_conf # use this variable to double check that prefix is not changed after configure
+makefile_conf # (new in v2.5)
+makefile_conf prefix_double_check=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
+makefile_conf program_name=plumed
+makefile_conf program_transform_name=s,x,x,
+makefile_conf program_can_run_mpi=yes
+makefile_conf program_can_run=yes
+makefile_conf make_pdfdoc=no
+makefile_conf make_doc=yes
+makefile_conf PACKAGE_TARNAME=plumed
+makefile_conf LD_RO=/usr/local/pace-apps/manual/packages/xalt/2.8.4/bin/ld -r -o
+makefile_conf AR_CR=ar cr
+makefile_conf exec_prefix=${prefix}
+makefile_conf bindir=${exec_prefix}/bin
+makefile_conf libdir=${exec_prefix}/lib
+makefile_conf includedir=${prefix}/include
+makefile_conf datarootdir=${prefix}/share
+makefile_conf datadir=${datarootdir}
+makefile_conf docdir=${datarootdir}/doc/${PACKAGE_TARNAME}
+makefile_conf htmldir=${docdir}
+makefile_conf python_bin=python
+makefile_conf mpiexec=
+makefile_conf make_static_archive=yes
+makefile_conf use_absolute_soname=no
+makefile_conf use_loader_path=no
+makefile_conf BASH_COMPLETION_DIR=

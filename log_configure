@@ -1,0 +1,162 @@
+configure: Optional modules are disabled by default
+checking whether the C++ compiler works... yes
+checking for C++ compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C++ compiler... yes
+checking whether mpicxx accepts -g... yes
+checking whether we are using the GNU C compiler... yes
+checking whether mpicc accepts -g... yes
+checking for mpicc option to accept ISO C89... none needed
+checking whether we are using the GNU Fortran compiler... no
+checking whether mpifort accepts -g... yes
+configure: Initial CXX:         mpicxx
+configure: Initial CXXFLAGS:    -O3
+configure: Initial CPPFLAGS:    -I/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/include
+configure: Initial CFLAGS:      -I/usr/local/pace-apps/manual/packages/cuda/11.1/include
+configure: Initial LDFLAGS:     -L/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64
+configure: Initial LIBS:        
+configure: Initial STATIC_LIBS: 
+configure: Initial LD:          
+configure: Initial LDSHARED:    mpicxx
+configure: Initial SOEXT:       
+checking whether mpicxx accepts -fPIC... yes
+checking whether mpicc accepts -fPIC... yes
+checking whether mpicxx accepts -Wall... yes
+checking whether mpicxx accepts -pedantic... yes
+checking whether mpicxx accepts -std=c++11... yes
+checking whether mpicxx declares c++11 support... yes
+checking whether C++ library supports C++11 exceptions... yes
+checking whether mpicxx can generate dependency file with -MM -MF... yes
+configure: dependency tracking enabled
+configure: Now we will check compulsory headers and libraries
+checking how to run the C++ preprocessor... mpicxx -E
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking dirent.h usability... yes
+checking dirent.h presence... yes
+checking for dirent.h... yes
+checking for readdir... yes
+checking whether dgemv can be linked with no library... no
+checking whether dgemv_ can be linked with no library... no
+checking for library containing dgemv... no
+checking for library containing dgemv_... no
+configure: WARNING: using internal lapack and blas, could be inefficient
+configure: Now we will check for optional headers and libraries
+checking libmolfile_plugin.h usability... no
+checking libmolfile_plugin.h presence... no
+checking for libmolfile_plugin.h... no
+configure: WARNING: cannot enable __PLUMED_HAS_EXTERNAL_MOLFILE_PLUGINS
+configure: WARNING: using internal molfile_plugins, which only support dcd/xtc/trr/trj/crd files
+checking for dlopen in -ldl... yes
+checking mpi.h usability... yes
+checking mpi.h presence... yes
+checking for mpi.h... yes
+checking for library containing MPI_Init... none required
+checking for mpicxx option to support OpenMP... -fopenmp
+checking regex.h usability... yes
+checking regex.h presence... yes
+checking for regex.h... yes
+checking for library containing regcomp... none required
+checking dlfcn.h usability... yes
+checking dlfcn.h presence... yes
+checking for dlfcn.h... yes
+checking for library containing dlopen... none required
+checking RTLD_DEFAULT without extra libs... yes
+checking for unistd.h... (cached) yes
+checking for library containing chdir... none required
+checking subprocess without extra libs... yes
+checking for unistd.h... (cached) yes
+checking for library containing getcwd... none required
+checking execinfo.h usability... yes
+checking execinfo.h presence... yes
+checking for execinfo.h... yes
+checking for library containing backtrace... none required
+checking zlib.h usability... yes
+checking zlib.h presence... yes
+checking for zlib.h... yes
+checking for library containing gzopen... -lz
+checking for library containing cblas_dgemv... no
+configure: WARNING: cannot enable __PLUMED_HAS_GSL
+checking xdrfile/xdrfile_xtc.h usability... no
+checking xdrfile/xdrfile_xtc.h presence... no
+checking for xdrfile/xdrfile_xtc.h... no
+configure: WARNING: cannot enable __PLUMED_HAS_XDRFILE
+checking fftw3.h usability... yes
+checking fftw3.h presence... yes
+checking for fftw3.h... yes
+checking for library containing fftw_execute... -lfftw3
+checking for python... python
+configure: Python executable is python
+checking support for required python modules (python3, setuptools, cython, subprocess, os, shutil)... yes
+checking arrayfire.h usability... yes
+checking arrayfire.h presence... yes
+checking for arrayfire.h... yes
+checking for library containing af_is_double... -lafcuda
+checking for arrayfire.h... (cached) yes
+checking for library containing af_is_double... (cached) -lafcuda
+configure: Release mode, adding -DNDEBUG
+configure: *** Special settings for dynamic libraries on Linux ***
+configure: Dynamic library extension is 'so'
+configure: LDSHARED and LDFLAGS need special flags
+checking whether LDFLAGS can contain -rdynamic... yes
+checking whether LDFLAGS can contain -Wl,-Bsymbolic... yes
+configure: Using LDSHARED='mpicxx -shared'
+configure: Using LDFLAGS='-L/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64 -rdynamic -Wl,-Bsymbolic'
+checking whether LDSHARED can create dynamic libraries... yes
+checking for readelf... found
+checking for doxygen... found
+configure: Doxygen version is fine
+checking for dot... no
+configure: WARNING: You will not be able to see diagrams in the manual
+configure: Manuals will be generated
+configure: A PDF version of the manual will not be generated
+checking for xxd... found
+checking whether a program can be run on this machine... yes
+checking whether a program compiled with mpi can be run on this machine... yes
+configure: Regtest suite will use env var PLUMED_MPIRUN to run MPI tests (default: mpirun)
+configure: PLUMED seems to be configured properly!
+configure: **************************
+checking whether C++ objects can be grouped with /usr/local/pace-apps/manual/packages/xalt/2.8.4/bin/ld -r -o... yes
+checking whether static libraries can be created with ar cr... yes
+checking whether static-object constructors can be linked from a static archive... yes
+configure: I will now check if C++ objects can be linked by C/Fortran compilers
+configure: This is relevant if you want to use plumed patch --static on a non-C++ code
+checking whether C can link a C++ object... yes
+checking whether FORTRAN can link a C++ object... no
+checking whether FORTRAN can link a C++ object with library -lstdc++... yes
+checking for pkg-config... /bin/pkg-config
+configure: bash-completion is not installed or it is installed on a different prefix
+configure: bash completion for plumed will not be installed
+configure: **** PLUMED will be installed using the following paths:
+configure: **** prefix: /storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
+configure: **** exec_prefix: ${prefix}
+configure: **** bindir: ${exec_prefix}/bin
+configure: **** libdir: ${exec_prefix}/lib
+configure: **** includedir: ${prefix}/include
+configure: **** datarootdir: ${prefix}/share
+configure: **** datadir: ${datarootdir}
+configure: **** docdir: ${prefix}/share/doc/plumed
+configure: **** htmldir: ${docdir}
+configure: **** Executable will be named plumed
+configure: **** As of PLUMED 2.5, you cannot change paths anymore during "make install"
+configure: **** Please configure and make clean to change the prefix
+configure: WARNING: **** Bash completion for plumed will not be installed, please add the following two lines to your bashrc
+configure: WARNING: **** _plumed() { eval "$(plumed --no-mpi completion 2>/dev/null)";}
+configure: WARNING: **** complete -F _plumed -o default plumed
+configure: **** PLUMED will be compiled using MPI
+configure: creating ./config.status
+config.status: creating Makefile.conf
+config.status: creating sourceme.sh
+config.status: creating stamp-h

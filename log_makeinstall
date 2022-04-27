@@ -1,0 +1,459 @@
+make -C src install
+make[1]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src'
+make -C lib install
+make[2]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+cd ../config ; make
+make[3]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+make PLUMED_FORCE=yes ConfigInstall.inc Config.inc version.h config.txt
+make[4]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+Updating ConfigInstall.inc
+Updating Config.inc
+Updating version.h
+Updating config.txt file
+cmp -s ConfigInstall.inc~ ConfigInstall.inc || cp ConfigInstall.inc~ ConfigInstall.inc
+cmp -s Config.inc~ Config.inc || cp Config.inc~ Config.inc
+rm ConfigInstall.inc~
+rm Config.inc~
+make[4]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+make Config.o ConfigInstall.o compile_options.sh
+make[4]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+cat ../../Makefile.conf | xxd -i > Makefile.conf.xxd
+Building compile_options.sh, a sourceable bash script with some compilation options
+compiling  Config.cpp
+compiling  ConfigInstall.cpp
+
+
+make[4]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+make[3]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+# make uninstall
+mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/bin"
+mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib"
+mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/pkgconfig"
+mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/include/plumed"
+mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/obj"
+mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/src/lib"
+mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/src/config"
+mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/src/colvar"
+make install-build
+make[3]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+mkdir -p install/
+make PLUMED_INSTALL=Install all
+make[4]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+make dirslinks
+make[5]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+*** Updating links to used modules in all directories ***
+make ../analysis.links ../asmjit.links ../bias.links ../blas.links ../cltools.links ../colvar.links ../config.links ../core.links ../function.links ../generic.links ../gridtools.links ../isdb.links ../lapack.links ../lepton.links ../main.links ../mapping.links ../molfile.links ../multicolvar.links ../reference.links ../secondarystructure.links ../setup.links ../tools.links ../vatom.links ../vesselbase.links ../wrapper.links
+make[6]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+make -C ../analysis links
+make -C ../asmjit links
+make -C ../bias links
+make -C ../blas links
+make -C ../cltools links
+make -C ../colvar links
+make -C ../config links
+make -C ../core links
+make -C ../function links
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+make -C ../generic links
+make -C ../gridtools links
+make -C ../isdb links
+make -C ../lapack links
+make -C ../lepton links
+Nothing to do in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/blas'
+make -C ../main links
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/blas
+make -C ../mapping links
+make -C ../molfile links
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/blas'
+make -C ../multicolvar links
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/main'
+make -C ../reference links
+make -C ../secondarystructure links
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/main
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lapack'
+make -C ../setup links
+make -C ../tools links
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lapack
+make -C ../vatom links
+make -C ../vesselbase links
+make -C ../wrapper links
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/molfile'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lepton'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/secondarystructure'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/wrapper'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/cltools'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/setup'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/vatom'
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lepton
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/secondarystructure
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/molfile
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/vatom
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/function'
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/cltools
+Nothing to do in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/wrapper
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/wrapper'
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/setup
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/molfile'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/mapping'
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/function
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/main'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/bias'
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/mapping
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/isdb'
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/bias
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/isdb
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/core'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/analysis'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/reference'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/generic'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/asmjit'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/gridtools'
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/core
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/analysis
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/reference
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/generic
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/gridtools
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/asmjit
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/colvar'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lapack'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/asmjit'
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/colvar
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/vesselbase'
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/vesselbase
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/multicolvar'
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/multicolvar
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/tools'
+Verify modules and create links in /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/tools
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lepton'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/core'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/bias'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/tools'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/setup'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/reference'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/vatom'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/generic'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/gridtools'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/colvar'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/cltools'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/function'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/secondarystructure'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/vesselbase'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/mapping'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/multicolvar'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/isdb'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/analysis'
+make[6]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+make[5]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+make dirs
+make[5]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+*** Compiling all directories ***
+make ../analysis ../asmjit ../bias ../blas ../cltools ../colvar ../config ../core ../function ../generic ../gridtools ../isdb ../lapack ../lepton ../main ../mapping ../molfile ../multicolvar ../reference ../secondarystructure ../setup ../tools ../vatom ../vesselbase ../wrapper
+make[6]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+make -C ../analysis obj
+make -C ../asmjit obj
+make -C ../bias obj
+make -C ../blas obj
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/asmjit'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/asmjit'
+make -C ../cltools obj
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/blas'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/blas'
+make -C ../colvar obj
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/analysis'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/analysis'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/bias'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/bias'
+make -C ../config obj
+make -C ../core obj
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/cltools'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/cltools'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+make PLUMED_FORCE=yes ConfigInstall.inc Config.inc version.h config.txt
+make -C ../function obj
+make[8]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+make -C ../generic obj
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/colvar'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/colvar'
+make -C ../gridtools obj
+Updating ConfigInstall.inc
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/core'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/core'
+make -C ../isdb obj
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/function'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/function'
+Updating Config.inc
+make -C ../lapack obj
+make -C ../lepton obj
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/generic'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/generic'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/gridtools'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/gridtools'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lapack'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lapack'
+make -C ../main obj
+make[8]: `config.txt' is up to date.
+cmp -s ConfigInstall.inc~ ConfigInstall.inc || cp ConfigInstall.inc~ ConfigInstall.inc
+Updating version.h
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/isdb'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/isdb'
+make -C ../mapping obj
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lepton'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lepton'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/main'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/main'
+make -C ../molfile obj
+cmp -s Config.inc~ Config.inc || cp Config.inc~ Config.inc
+make -C ../multicolvar obj
+rm ConfigInstall.inc~
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/molfile'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/molfile'
+make -C ../reference obj
+make -C ../secondarystructure obj
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/mapping'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/mapping'
+make -C ../setup obj
+rm Config.inc~
+make -C ../tools obj
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/reference'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/reference'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/secondarystructure'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/secondarystructure'
+make -C ../vatom obj
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/multicolvar'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/multicolvar'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/setup'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/setup'
+make -C ../vesselbase obj
+make -C ../wrapper obj
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/vatom'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/vatom'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/wrapper'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/wrapper'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/tools'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/tools'
+make[7]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/vesselbase'
+make[7]: Nothing to be done for `obj'.
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/vesselbase'
+make[8]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+make Config.o ConfigInstall.o compile_options.sh
+make[8]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+make[8]: `Config.o' is up to date.
+make[8]: `ConfigInstall.o' is up to date.
+make[8]: `compile_options.sh' is up to date.
+make[8]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+make[7]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/config'
+make[6]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+make[5]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+make lib
+make[5]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+mpicxx -O3 -fPIC -Wall -pedantic -std=c++11  ../main/main.o ../analysis/AnalysisBase.o ../analysis/Average.o ../analysis/AverageVessel.o ../analysis/Committor.o ../analysis/DataCollectionObject.o ../analysis/EuclideanDissimilarityMatrix.o ../analysis/FarthestPointSampling.o ../analysis/Histogram.o ../analysis/LandmarkSelectionBase.o ../analysis/LandmarkStaged.o ../analysis/OutputColvarFile.o ../analysis/OutputPDBFile.o ../analysis/PrintDissimilarityMatrix.o ../analysis/ReadAnalysisFrames.o ../analysis/ReadDissimilarityMatrix.o ../analysis/ReselectLandmarks.o ../analysis/SelectRandomFrames.o ../analysis/SelectWithStride.o ../analysis/WhamHistogram.o ../analysis/WhamWeights.o ../asmjit/arch.o ../asmjit/assembler.o ../asmjit/codebuilder.o ../asmjit/codecompiler.o ../asmjit/codeemitter.o ../asmjit/codeholder.o ../asmjit/constpool.o ../asmjit/cpuinfo.o ../asmjit/func.o ../asmjit/globals.o ../asmjit/inst.o ../asmjit/logging.o ../asmjit/operand.o ../asmjit/osutils.o ../asmjit/regalloc.o ../asmjit/runtime.o ../asmjit/string.o ../asmjit/utils.o ../asmjit/vmem.o ../asmjit/x86assembler.o ../asmjit/x86builder.o ../asmjit/x86compiler.o ../asmjit/x86inst.o ../asmjit/x86instimpl.o ../asmjit/x86internal.o ../asmjit/x86logging.o ../asmjit/x86operand.o ../asmjit/x86operand_regs.o ../asmjit/x86regalloc.o ../asmjit/zone.o ../bias/ABMD.o ../bias/Bias.o ../bias/BiasValue.o ../bias/ExtendedLagrangian.o ../bias/External.o ../bias/LWalls.o ../bias/MaxEnt.o ../bias/MetaD.o ../bias/MovingRestraint.o ../bias/PBMetaD.o ../bias/Restraint.o ../bias/ReweightBase.o ../bias/ReweightBias.o ../bias/ReweightMetad.o ../bias/ReweightTemperaturePressure.o ../bias/ReweightWham.o ../bias/UWalls.o ../blas/blas.o ../cltools/CLTool.o ../cltools/Completion.o ../cltools/Driver.o ../cltools/DriverDouble.o ../cltools/DriverFloat.o ../cltools/GenExample.o ../cltools/GenTemplate.o ../cltools/Info.o ../cltools/kT.o ../cltools/Manual.o ../cltools/PdbRenumber.o ../cltools/pesmd.o ../cltools/SimpleMD.o ../cltools/SumHills.o ../colvar/Angle.o ../colvar/Cell.o ../colvar/Colvar.o ../colvar/Constant.o ../colvar/ContactMap.o ../colvar/CoordinationBase.o ../colvar/Coordination.o ../colvar/DHEnergy.o ../colvar/Dimer.o ../colvar/Dipole.o ../colvar/Distance.o ../colvar/DRMSD.o ../colvar/EEFSolv.o ../colvar/Energy.o ../colvar/ERMSD.o ../colvar/ExtraCV.o ../colvar/Fake.o ../colvar/Gyration.o ../colvar/MultiRMSD.o ../colvar/PathMSDBase.o ../colvar/PathMSD.o ../colvar/PCARMSD.o ../colvar/Position.o ../colvar/ProjectionOnAxis.o ../colvar/PropertyMap.o ../colvar/Puckering.o ../colvar/RMSD.o ../colvar/Template.o ../colvar/Torsion.o ../colvar/Volume.o ../core/ActionAnyorder.o ../core/ActionAtomistic.o ../core/Action.o ../core/ActionPilot.o ../core/ActionRegister.o ../core/ActionSet.o ../core/ActionSetup.o ../core/ActionShortcut.o ../core/ActionWithArguments.o ../core/ActionWithValue.o ../core/ActionWithVirtualAtom.o ../core/Atoms.o ../core/CLTool.o ../core/CLToolMain.o ../core/CLToolRegister.o ../core/Colvar.o ../core/DataFetchingObject.o ../core/ExchangePatterns.o ../core/FlexibleBin.o ../core/GenericMolInfo.o ../core/GREX.o ../core/MDAtoms.o ../core/PlumedMain.o ../core/PlumedMainInitializer.o ../core/TargetDist.o ../core/Value.o ../core/WithCmd.o ../function/Combine.o ../function/Custom.o ../function/Ensemble.o ../function/FuncPathGeneral.o ../function/FuncPathMSD.o ../function/FuncSumHills.o ../function/Function.o ../function/LocalEnsemble.o ../function/Piecewise.o ../function/Sort.o ../function/Stats.o ../function/Target.o ../generic/Debug.o ../generic/DumpAtoms.o ../generic/DumpDerivatives.o ../generic/DumpForces.o ../generic/DumpMassCharge.o ../generic/DumpProjections.o ../generic/EffectiveEnergyDrift.o ../generic/EndPlumed.o ../generic/FitToTemplate.o ../generic/Flush.o ../generic/Group.o ../generic/Include.o ../generic/MolInfo.o ../generic/Plumed.o ../generic/Print.o ../generic/RandomExchanges.o ../generic/Read.o ../generic/ResetCell.o ../generic/Time.o ../generic/UpdateIf.o ../generic/WholeMolecules.o ../generic/WrapAround.o ../gridtools/ActionWithGrid.o ../gridtools/ActionWithInputGrid.o ../gridtools/ActionWithIntegral.o ../gridtools/AverageOnGrid.o ../gridtools/ContourFindingBase.o ../gridtools/ConvertToFES.o ../gridtools/DumpCube.o ../gridtools/DumpGrid.o ../gridtools/FindContour.o ../gridtools/FindContourSurface.o ../gridtools/FindSphericalContour.o ../gridtools/FourierTransform.o ../gridtools/GridPrintingBase.o ../gridtools/GridSearch.o ../gridtools/GridToXYZ.o ../gridtools/GridVessel.o ../gridtools/HistogramOnGrid.o ../gridtools/IntegrateGrid.o ../gridtools/InterpolateGrid.o ../isdb/Caliber.o ../isdb/CS2Backbone.o ../isdb/EMMI.o ../isdb/FretEfficiency.o ../isdb/Jcoupling.o ../isdb/MetainferenceBase.o ../isdb/Metainference.o ../isdb/NOE.o ../isdb/PRE.o ../isdb/RDC.o ../isdb/Rescale.o ../isdb/SAXS.o ../isdb/Select.o ../isdb/Selector.o ../lapack/lapack.o ../lepton/CompiledExpression.o ../lepton/ExpressionProgram.o ../lepton/ExpressionTreeNode.o ../lepton/Operation.o ../lepton/ParsedExpression.o ../lepton/Parser.o ../mapping/AdaptivePath.o ../mapping/Mapping.o ../mapping/PathBase.o ../mapping/Path.o ../mapping/PathReparameterization.o ../mapping/PathTools.o ../mapping/PCAVars.o ../mapping/PropertyMap.o ../mapping/SpathVessel.o ../mapping/TrigonometricPathVessel.o ../mapping/ZpathVessel.o ../molfile/crdplugin.o ../molfile/dcdplugin.o ../molfile/gromacsplugin.o ../molfile/pdbplugin.o ../multicolvar/ActionVolume.o ../multicolvar/AlphaBeta.o ../multicolvar/Angles.o ../multicolvar/AtomValuePack.o ../multicolvar/Bridge.o ../multicolvar/BridgedMultiColvarFunction.o ../multicolvar/CatomPack.o ../multicolvar/CenterOfMultiColvar.o ../multicolvar/CoordinationNumbers.o ../multicolvar/Density.o ../multicolvar/DihedralCorrelation.o ../multicolvar/DistanceFromContour.o ../multicolvar/Distances.o ../multicolvar/DumpMultiColvar.o ../multicolvar/FilterBetween.o ../multicolvar/FilterLessThan.o ../multicolvar/FilterMoreThan.o ../multicolvar/InPlaneDistances.o ../multicolvar/LocalAverage.o ../multicolvar/MultiColvarBase.o ../multicolvar/MultiColvarCombine.o ../multicolvar/MultiColvarDensity.o ../multicolvar/MultiColvarFilter.o ../multicolvar/MultiColvarProduct.o ../multicolvar/NumberOfLinks.o ../multicolvar/Torsions.o ../multicolvar/VolumeAround.o ../multicolvar/VolumeBetweenContours.o ../multicolvar/VolumeCavity.o ../multicolvar/VolumeGradientBase.o ../multicolvar/VolumeInCylinder.o ../multicolvar/VolumeInSphere.o ../multicolvar/VolumeTetrapore.o ../multicolvar/XAngle.o ../multicolvar/XDistances.o ../multicolvar/XYDistances.o ../multicolvar/XYTorsion.o ../reference/ArgumentOnlyDistance.o ../reference/Direction.o ../reference/DotProductDistance.o ../reference/DRMSD.o ../reference/EuclideanDistance.o ../reference/FakeFrame.o ../reference/IntermolecularDRMSD.o ../reference/IntramolecularDRMSD.o ../reference/MahalanobisDistance.o ../reference/MetricRegister.o ../reference/MultiDomainRMSD.o ../reference/NormalizedEuclideanDistance.o ../reference/OptimalRMSD.o ../reference/ReferenceArguments.o ../reference/ReferenceAtoms.o ../reference/ReferenceConfiguration.o ../reference/ReferenceValuePack.o ../reference/RMSDBase.o ../reference/SimpleRMSD.o ../reference/SingleDomainRMSD.o ../secondarystructure/AlphaRMSD.o ../secondarystructure/AntibetaRMSD.o ../secondarystructure/ParabetaRMSD.o ../secondarystructure/SecondaryStructureRMSD.o ../setup/Load.o ../setup/Restart.o ../setup/Units.o ../tools/Angle.o ../tools/AtomNumber.o ../tools/BiasRepresentation.o ../tools/Brent1DRootSearch.o ../tools/Citations.o ../tools/Communicator.o ../tools/ConjugateGradient.o ../tools/DLLoader.o ../tools/DynamicList.o ../tools/ERMSD.o ../tools/Exception.o ../tools/FileBase.o ../tools/ForwardDecl.o ../tools/Grid.o ../tools/h36.o ../tools/HistogramBead.o ../tools/IFile.o ../tools/KernelFunctions.o ../tools/Keywords.o ../tools/LatticeReduction.o ../tools/LinkCells.o ../tools/Log.o ../tools/LoopUnroller.o ../tools/Matrix.o ../tools/MatrixSquareBracketsAccess.o ../tools/Minimise1DBrent.o ../tools/MinimiseBase.o ../tools/MolDataClass.o ../tools/MultiValue.o ../tools/NeighborList.o ../tools/OFile.o ../tools/OpenMP.o ../tools/Pbc.o ../tools/PDB.o ../tools/PlumedHandle.o ../tools/Random.o ../tools/RMSD.o ../tools/RootFindingBase.o ../tools/Stopwatch.o ../tools/Subprocess.o ../tools/SwitchingFunction.o ../tools/Tensor.o ../tools/Tools.o ../tools/Torsion.o ../tools/Units.o ../tools/Vector.o ../vatom/ActionWithVirtualAtom.o ../vatom/Center.o ../vatom/FixedAtom.o ../vatom/Ghost.o ../vesselbase/ActionWithAveraging.o ../vesselbase/ActionWithInputVessel.o ../vesselbase/ActionWithVessel.o ../vesselbase/AltMin.o ../vesselbase/AveragingVessel.o ../vesselbase/Between.o ../vesselbase/BridgeVessel.o ../vesselbase/FunctionVessel.o ../vesselbase/Highest.o ../vesselbase/Histogram.o ../vesselbase/LessThan.o ../vesselbase/Lowest.o ../vesselbase/Max.o ../vesselbase/Mean.o ../vesselbase/Min.o ../vesselbase/Moments.o ../vesselbase/MoreThan.o ../vesselbase/OrderingVessel.o ../vesselbase/ShortcutVessel.o ../vesselbase/StoreDataVessel.o ../vesselbase/Sum.o ../vesselbase/ValueVessel.o ../vesselbase/Vessel.o ../vesselbase/VesselRegister.o ../config/ConfigInstall.o ../wrapper/PlumedStatic.o -o install/plumed-static -ldl  -lstdc++  -lafcuda -lafcuda -lfftw3 -lz -ldl  -L/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64 -rdynamic -Wl,-Bsymbolic -fopenmp
+Building Plumed.inc
+chmod a+x install/plumed-config
+chmod a+x install/plumed-mklib
+chmod a+x install/plumed-newcv
+chmod a+x install/plumed-partial_tempering
+chmod a+x install/plumed-patch
+mkdir -p install
+mpicxx -shared -Wl,-R -Wl,"/usr/local/pace-apps/spack/packages/0.12/linux-rhel7-x86_64/gcc-4.8.5/gcc-8.3.0-opnwtdjumg2hxo4ljvnx77ugb6afmvj3/lib64:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-cascadelake/intel-19.0.5/fftw-3.3.8-hgj3xlqabfoyb4t6dg6ognfgv2sfnqyj/lib:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-cascadelake/intel-19.0.5/mvapich2-2.3.2-hpgbkqoytbjh35qn2t63rdorepxcezek/lib:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-cascadelake/intel-19.0.5/openblas-0.3.13-wievo5njws7v5potdwgepuc3izh6hupf/lib:/usr/local/pace-apps/spack/packages/0.12/linux-rhel7-x86_64/gcc-4.8.5/boost-1.70.0-dtpdbnaup47qfxc47ya5hj3wu3plh5hk/lib:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/clck/2019.5/lib/intel64:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/mpi/intel64/libfabric/lib:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/ipp/lib/intel64:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/compiler/lib/intel64_lin:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/mkl/lib/intel64_lin:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/tbb/lib/intel64/gcc4.7:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/daal/lib/intel64_lin:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/daal/../tbb/lib/intel64_lin/gcc4.4:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/lib" -o install/libplumedKernel.so ../analysis/AnalysisBase.o ../analysis/Average.o ../analysis/AverageVessel.o ../analysis/Committor.o ../analysis/DataCollectionObject.o ../analysis/EuclideanDissimilarityMatrix.o ../analysis/FarthestPointSampling.o ../analysis/Histogram.o ../analysis/LandmarkSelectionBase.o ../analysis/LandmarkStaged.o ../analysis/OutputColvarFile.o ../analysis/OutputPDBFile.o ../analysis/PrintDissimilarityMatrix.o ../analysis/ReadAnalysisFrames.o ../analysis/ReadDissimilarityMatrix.o ../analysis/ReselectLandmarks.o ../analysis/SelectRandomFrames.o ../analysis/SelectWithStride.o ../analysis/WhamHistogram.o ../analysis/WhamWeights.o ../asmjit/arch.o ../asmjit/assembler.o ../asmjit/codebuilder.o ../asmjit/codecompiler.o ../asmjit/codeemitter.o ../asmjit/codeholder.o ../asmjit/constpool.o ../asmjit/cpuinfo.o ../asmjit/func.o ../asmjit/globals.o ../asmjit/inst.o ../asmjit/logging.o ../asmjit/operand.o ../asmjit/osutils.o ../asmjit/regalloc.o ../asmjit/runtime.o ../asmjit/string.o ../asmjit/utils.o ../asmjit/vmem.o ../asmjit/x86assembler.o ../asmjit/x86builder.o ../asmjit/x86compiler.o ../asmjit/x86inst.o ../asmjit/x86instimpl.o ../asmjit/x86internal.o ../asmjit/x86logging.o ../asmjit/x86operand.o ../asmjit/x86operand_regs.o ../asmjit/x86regalloc.o ../asmjit/zone.o ../bias/ABMD.o ../bias/Bias.o ../bias/BiasValue.o ../bias/ExtendedLagrangian.o ../bias/External.o ../bias/LWalls.o ../bias/MaxEnt.o ../bias/MetaD.o ../bias/MovingRestraint.o ../bias/PBMetaD.o ../bias/Restraint.o ../bias/ReweightBase.o ../bias/ReweightBias.o ../bias/ReweightMetad.o ../bias/ReweightTemperaturePressure.o ../bias/ReweightWham.o ../bias/UWalls.o ../blas/blas.o ../cltools/CLTool.o ../cltools/Completion.o ../cltools/Driver.o ../cltools/DriverDouble.o ../cltools/DriverFloat.o ../cltools/GenExample.o ../cltools/GenTemplate.o ../cltools/Info.o ../cltools/kT.o ../cltools/Manual.o ../cltools/PdbRenumber.o ../cltools/pesmd.o ../cltools/SimpleMD.o ../cltools/SumHills.o ../colvar/Angle.o ../colvar/Cell.o ../colvar/Colvar.o ../colvar/Constant.o ../colvar/ContactMap.o ../colvar/CoordinationBase.o ../colvar/Coordination.o ../colvar/DHEnergy.o ../colvar/Dimer.o ../colvar/Dipole.o ../colvar/Distance.o ../colvar/DRMSD.o ../colvar/EEFSolv.o ../colvar/Energy.o ../colvar/ERMSD.o ../colvar/ExtraCV.o ../colvar/Fake.o ../colvar/Gyration.o ../colvar/MultiRMSD.o ../colvar/PathMSDBase.o ../colvar/PathMSD.o ../colvar/PCARMSD.o ../colvar/Position.o ../colvar/ProjectionOnAxis.o ../colvar/PropertyMap.o ../colvar/Puckering.o ../colvar/RMSD.o ../colvar/Template.o ../colvar/Torsion.o ../colvar/Volume.o ../core/ActionAnyorder.o ../core/ActionAtomistic.o ../core/Action.o ../core/ActionPilot.o ../core/ActionRegister.o ../core/ActionSet.o ../core/ActionSetup.o ../core/ActionShortcut.o ../core/ActionWithArguments.o ../core/ActionWithValue.o ../core/ActionWithVirtualAtom.o ../core/Atoms.o ../core/CLTool.o ../core/CLToolMain.o ../core/CLToolRegister.o ../core/Colvar.o ../core/DataFetchingObject.o ../core/ExchangePatterns.o ../core/FlexibleBin.o ../core/GenericMolInfo.o ../core/GREX.o ../core/MDAtoms.o ../core/PlumedMain.o ../core/PlumedMainInitializer.o ../core/TargetDist.o ../core/Value.o ../core/WithCmd.o ../function/Combine.o ../function/Custom.o ../function/Ensemble.o ../function/FuncPathGeneral.o ../function/FuncPathMSD.o ../function/FuncSumHills.o ../function/Function.o ../function/LocalEnsemble.o ../function/Piecewise.o ../function/Sort.o ../function/Stats.o ../function/Target.o ../generic/Debug.o ../generic/DumpAtoms.o ../generic/DumpDerivatives.o ../generic/DumpForces.o ../generic/DumpMassCharge.o ../generic/DumpProjections.o ../generic/EffectiveEnergyDrift.o ../generic/EndPlumed.o ../generic/FitToTemplate.o ../generic/Flush.o ../generic/Group.o ../generic/Include.o ../generic/MolInfo.o ../generic/Plumed.o ../generic/Print.o ../generic/RandomExchanges.o ../generic/Read.o ../generic/ResetCell.o ../generic/Time.o ../generic/UpdateIf.o ../generic/WholeMolecules.o ../generic/WrapAround.o ../gridtools/ActionWithGrid.o ../gridtools/ActionWithInputGrid.o ../gridtools/ActionWithIntegral.o ../gridtools/AverageOnGrid.o ../gridtools/ContourFindingBase.o ../gridtools/ConvertToFES.o ../gridtools/DumpCube.o ../gridtools/DumpGrid.o ../gridtools/FindContour.o ../gridtools/FindContourSurface.o ../gridtools/FindSphericalContour.o ../gridtools/FourierTransform.o ../gridtools/GridPrintingBase.o ../gridtools/GridSearch.o ../gridtools/GridToXYZ.o ../gridtools/GridVessel.o ../gridtools/HistogramOnGrid.o ../gridtools/IntegrateGrid.o ../gridtools/InterpolateGrid.o ../isdb/Caliber.o ../isdb/CS2Backbone.o ../isdb/EMMI.o ../isdb/FretEfficiency.o ../isdb/Jcoupling.o ../isdb/MetainferenceBase.o ../isdb/Metainference.o ../isdb/NOE.o ../isdb/PRE.o ../isdb/RDC.o ../isdb/Rescale.o ../isdb/SAXS.o ../isdb/Select.o ../isdb/Selector.o ../lapack/lapack.o ../lepton/CompiledExpression.o ../lepton/ExpressionProgram.o ../lepton/ExpressionTreeNode.o ../lepton/Operation.o ../lepton/ParsedExpression.o ../lepton/Parser.o ../mapping/AdaptivePath.o ../mapping/Mapping.o ../mapping/PathBase.o ../mapping/Path.o ../mapping/PathReparameterization.o ../mapping/PathTools.o ../mapping/PCAVars.o ../mapping/PropertyMap.o ../mapping/SpathVessel.o ../mapping/TrigonometricPathVessel.o ../mapping/ZpathVessel.o ../molfile/crdplugin.o ../molfile/dcdplugin.o ../molfile/gromacsplugin.o ../molfile/pdbplugin.o ../multicolvar/ActionVolume.o ../multicolvar/AlphaBeta.o ../multicolvar/Angles.o ../multicolvar/AtomValuePack.o ../multicolvar/Bridge.o ../multicolvar/BridgedMultiColvarFunction.o ../multicolvar/CatomPack.o ../multicolvar/CenterOfMultiColvar.o ../multicolvar/CoordinationNumbers.o ../multicolvar/Density.o ../multicolvar/DihedralCorrelation.o ../multicolvar/DistanceFromContour.o ../multicolvar/Distances.o ../multicolvar/DumpMultiColvar.o ../multicolvar/FilterBetween.o ../multicolvar/FilterLessThan.o ../multicolvar/FilterMoreThan.o ../multicolvar/InPlaneDistances.o ../multicolvar/LocalAverage.o ../multicolvar/MultiColvarBase.o ../multicolvar/MultiColvarCombine.o ../multicolvar/MultiColvarDensity.o ../multicolvar/MultiColvarFilter.o ../multicolvar/MultiColvarProduct.o ../multicolvar/NumberOfLinks.o ../multicolvar/Torsions.o ../multicolvar/VolumeAround.o ../multicolvar/VolumeBetweenContours.o ../multicolvar/VolumeCavity.o ../multicolvar/VolumeGradientBase.o ../multicolvar/VolumeInCylinder.o ../multicolvar/VolumeInSphere.o ../multicolvar/VolumeTetrapore.o ../multicolvar/XAngle.o ../multicolvar/XDistances.o ../multicolvar/XYDistances.o ../multicolvar/XYTorsion.o ../reference/ArgumentOnlyDistance.o ../reference/Direction.o ../reference/DotProductDistance.o ../reference/DRMSD.o ../reference/EuclideanDistance.o ../reference/FakeFrame.o ../reference/IntermolecularDRMSD.o ../reference/IntramolecularDRMSD.o ../reference/MahalanobisDistance.o ../reference/MetricRegister.o ../reference/MultiDomainRMSD.o ../reference/NormalizedEuclideanDistance.o ../reference/OptimalRMSD.o ../reference/ReferenceArguments.o ../reference/ReferenceAtoms.o ../reference/ReferenceConfiguration.o ../reference/ReferenceValuePack.o ../reference/RMSDBase.o ../reference/SimpleRMSD.o ../reference/SingleDomainRMSD.o ../secondarystructure/AlphaRMSD.o ../secondarystructure/AntibetaRMSD.o ../secondarystructure/ParabetaRMSD.o ../secondarystructure/SecondaryStructureRMSD.o ../setup/Load.o ../setup/Restart.o ../setup/Units.o ../tools/Angle.o ../tools/AtomNumber.o ../tools/BiasRepresentation.o ../tools/Brent1DRootSearch.o ../tools/Citations.o ../tools/Communicator.o ../tools/ConjugateGradient.o ../tools/DLLoader.o ../tools/DynamicList.o ../tools/ERMSD.o ../tools/Exception.o ../tools/FileBase.o ../tools/ForwardDecl.o ../tools/Grid.o ../tools/h36.o ../tools/HistogramBead.o ../tools/IFile.o ../tools/KernelFunctions.o ../tools/Keywords.o ../tools/LatticeReduction.o ../tools/LinkCells.o ../tools/Log.o ../tools/LoopUnroller.o ../tools/Matrix.o ../tools/MatrixSquareBracketsAccess.o ../tools/Minimise1DBrent.o ../tools/MinimiseBase.o ../tools/MolDataClass.o ../tools/MultiValue.o ../tools/NeighborList.o ../tools/OFile.o ../tools/OpenMP.o ../tools/Pbc.o ../tools/PDB.o ../tools/PlumedHandle.o ../tools/Random.o ../tools/RMSD.o ../tools/RootFindingBase.o ../tools/Stopwatch.o ../tools/Subprocess.o ../tools/SwitchingFunction.o ../tools/Tensor.o ../tools/Tools.o ../tools/Torsion.o ../tools/Units.o ../tools/Vector.o ../vatom/ActionWithVirtualAtom.o ../vatom/Center.o ../vatom/FixedAtom.o ../vatom/Ghost.o ../vesselbase/ActionWithAveraging.o ../vesselbase/ActionWithInputVessel.o ../vesselbase/ActionWithVessel.o ../vesselbase/AltMin.o ../vesselbase/AveragingVessel.o ../vesselbase/Between.o ../vesselbase/BridgeVessel.o ../vesselbase/FunctionVessel.o ../vesselbase/Highest.o ../vesselbase/Histogram.o ../vesselbase/LessThan.o ../vesselbase/Lowest.o ../vesselbase/Max.o ../vesselbase/Mean.o ../vesselbase/Min.o ../vesselbase/Moments.o ../vesselbase/MoreThan.o ../vesselbase/OrderingVessel.o ../vesselbase/ShortcutVessel.o ../vesselbase/StoreDataVessel.o ../vesselbase/Sum.o ../vesselbase/ValueVessel.o ../vesselbase/Vessel.o ../vesselbase/VesselRegister.o ../config/ConfigInstall.o -Wl,-soname,"libplumedKernel.so" -lstdc++  -lafcuda -lafcuda -lfftw3 -lz -ldl  -L/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64 -rdynamic -Wl,-Bsymbolic -fopenmp
+Building Plumed.inc, runtime-linking version
+chmod a+x install/plumed-selector
+chmod a+x install/plumed-vim2html
+Building Plumed.inc, shared version
+Building Plumed.inc, static version
+Building Plumed.cmake
+Building Plumed.cmake, static version
+Building Plumed.cmake, runtime-linking version
+Building Plumed.cmake, shared version
+mkdir -p install
+mpicxx -O3 -fPIC -Wall -pedantic -std=c++11  ../main/main.o ../wrapper/PlumedStatic.o install/libplumedKernel.so -o install/plumed -ldl 
+mpicxx -shared -Wl,-R -Wl,"/usr/local/pace-apps/spack/packages/0.12/linux-rhel7-x86_64/gcc-4.8.5/gcc-8.3.0-opnwtdjumg2hxo4ljvnx77ugb6afmvj3/lib64:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-cascadelake/intel-19.0.5/fftw-3.3.8-hgj3xlqabfoyb4t6dg6ognfgv2sfnqyj/lib:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-cascadelake/intel-19.0.5/mvapich2-2.3.2-hpgbkqoytbjh35qn2t63rdorepxcezek/lib:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-cascadelake/intel-19.0.5/openblas-0.3.13-wievo5njws7v5potdwgepuc3izh6hupf/lib:/usr/local/pace-apps/spack/packages/0.12/linux-rhel7-x86_64/gcc-4.8.5/boost-1.70.0-dtpdbnaup47qfxc47ya5hj3wu3plh5hk/lib:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/clck/2019.5/lib/intel64:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/mpi/intel64/libfabric/lib:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/ipp/lib/intel64:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/compiler/lib/intel64_lin:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/mkl/lib/intel64_lin:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/tbb/lib/intel64/gcc4.7:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/daal/lib/intel64_lin:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/compilers_and_libraries_2019.5.281/linux/daal/../tbb/lib/intel64_lin/gcc4.4:/usr/local/pace-apps/spack/packages/0.13/linux-rhel7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.5-rde2uvgb2mq2x6obqaklxppmycfngjgm/lib" -o install/libplumed.so ../wrapper/PlumedStatic.o install/libplumedKernel.so -Wl,-soname,"libplumed.so"
+make[5]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+make[4]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+make PLUMED_INSTALL=Install install/kernel.o
+make[4]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+/usr/local/pace-apps/manual/packages/xalt/2.8.4/bin/ld -r -o install/kernel.o ../analysis/AnalysisBase.o ../analysis/Average.o ../analysis/AverageVessel.o ../analysis/Committor.o ../analysis/DataCollectionObject.o ../analysis/EuclideanDissimilarityMatrix.o ../analysis/FarthestPointSampling.o ../analysis/Histogram.o ../analysis/LandmarkSelectionBase.o ../analysis/LandmarkStaged.o ../analysis/OutputColvarFile.o ../analysis/OutputPDBFile.o ../analysis/PrintDissimilarityMatrix.o ../analysis/ReadAnalysisFrames.o ../analysis/ReadDissimilarityMatrix.o ../analysis/ReselectLandmarks.o ../analysis/SelectRandomFrames.o ../analysis/SelectWithStride.o ../analysis/WhamHistogram.o ../analysis/WhamWeights.o ../asmjit/arch.o ../asmjit/assembler.o ../asmjit/codebuilder.o ../asmjit/codecompiler.o ../asmjit/codeemitter.o ../asmjit/codeholder.o ../asmjit/constpool.o ../asmjit/cpuinfo.o ../asmjit/func.o ../asmjit/globals.o ../asmjit/inst.o ../asmjit/logging.o ../asmjit/operand.o ../asmjit/osutils.o ../asmjit/regalloc.o ../asmjit/runtime.o ../asmjit/string.o ../asmjit/utils.o ../asmjit/vmem.o ../asmjit/x86assembler.o ../asmjit/x86builder.o ../asmjit/x86compiler.o ../asmjit/x86inst.o ../asmjit/x86instimpl.o ../asmjit/x86internal.o ../asmjit/x86logging.o ../asmjit/x86operand.o ../asmjit/x86operand_regs.o ../asmjit/x86regalloc.o ../asmjit/zone.o ../bias/ABMD.o ../bias/Bias.o ../bias/BiasValue.o ../bias/ExtendedLagrangian.o ../bias/External.o ../bias/LWalls.o ../bias/MaxEnt.o ../bias/MetaD.o ../bias/MovingRestraint.o ../bias/PBMetaD.o ../bias/Restraint.o ../bias/ReweightBase.o ../bias/ReweightBias.o ../bias/ReweightMetad.o ../bias/ReweightTemperaturePressure.o ../bias/ReweightWham.o ../bias/UWalls.o ../blas/blas.o ../cltools/CLTool.o ../cltools/Completion.o ../cltools/Driver.o ../cltools/DriverDouble.o ../cltools/DriverFloat.o ../cltools/GenExample.o ../cltools/GenTemplate.o ../cltools/Info.o ../cltools/kT.o ../cltools/Manual.o ../cltools/PdbRenumber.o ../cltools/pesmd.o ../cltools/SimpleMD.o ../cltools/SumHills.o ../colvar/Angle.o ../colvar/Cell.o ../colvar/Colvar.o ../colvar/Constant.o ../colvar/ContactMap.o ../colvar/CoordinationBase.o ../colvar/Coordination.o ../colvar/DHEnergy.o ../colvar/Dimer.o ../colvar/Dipole.o ../colvar/Distance.o ../colvar/DRMSD.o ../colvar/EEFSolv.o ../colvar/Energy.o ../colvar/ERMSD.o ../colvar/ExtraCV.o ../colvar/Fake.o ../colvar/Gyration.o ../colvar/MultiRMSD.o ../colvar/PathMSDBase.o ../colvar/PathMSD.o ../colvar/PCARMSD.o ../colvar/Position.o ../colvar/ProjectionOnAxis.o ../colvar/PropertyMap.o ../colvar/Puckering.o ../colvar/RMSD.o ../colvar/Template.o ../colvar/Torsion.o ../colvar/Volume.o ../core/ActionAnyorder.o ../core/ActionAtomistic.o ../core/Action.o ../core/ActionPilot.o ../core/ActionRegister.o ../core/ActionSet.o ../core/ActionSetup.o ../core/ActionShortcut.o ../core/ActionWithArguments.o ../core/ActionWithValue.o ../core/ActionWithVirtualAtom.o ../core/Atoms.o ../core/CLTool.o ../core/CLToolMain.o ../core/CLToolRegister.o ../core/Colvar.o ../core/DataFetchingObject.o ../core/ExchangePatterns.o ../core/FlexibleBin.o ../core/GenericMolInfo.o ../core/GREX.o ../core/MDAtoms.o ../core/PlumedMain.o ../core/PlumedMainInitializer.o ../core/TargetDist.o ../core/Value.o ../core/WithCmd.o ../function/Combine.o ../function/Custom.o ../function/Ensemble.o ../function/FuncPathGeneral.o ../function/FuncPathMSD.o ../function/FuncSumHills.o ../function/Function.o ../function/LocalEnsemble.o ../function/Piecewise.o ../function/Sort.o ../function/Stats.o ../function/Target.o ../generic/Debug.o ../generic/DumpAtoms.o ../generic/DumpDerivatives.o ../generic/DumpForces.o ../generic/DumpMassCharge.o ../generic/DumpProjections.o ../generic/EffectiveEnergyDrift.o ../generic/EndPlumed.o ../generic/FitToTemplate.o ../generic/Flush.o ../generic/Group.o ../generic/Include.o ../generic/MolInfo.o ../generic/Plumed.o ../generic/Print.o ../generic/RandomExchanges.o ../generic/Read.o ../generic/ResetCell.o ../generic/Time.o ../generic/UpdateIf.o ../generic/WholeMolecules.o ../generic/WrapAround.o ../gridtools/ActionWithGrid.o ../gridtools/ActionWithInputGrid.o ../gridtools/ActionWithIntegral.o ../gridtools/AverageOnGrid.o ../gridtools/ContourFindingBase.o ../gridtools/ConvertToFES.o ../gridtools/DumpCube.o ../gridtools/DumpGrid.o ../gridtools/FindContour.o ../gridtools/FindContourSurface.o ../gridtools/FindSphericalContour.o ../gridtools/FourierTransform.o ../gridtools/GridPrintingBase.o ../gridtools/GridSearch.o ../gridtools/GridToXYZ.o ../gridtools/GridVessel.o ../gridtools/HistogramOnGrid.o ../gridtools/IntegrateGrid.o ../gridtools/InterpolateGrid.o ../isdb/Caliber.o ../isdb/CS2Backbone.o ../isdb/EMMI.o ../isdb/FretEfficiency.o ../isdb/Jcoupling.o ../isdb/MetainferenceBase.o ../isdb/Metainference.o ../isdb/NOE.o ../isdb/PRE.o ../isdb/RDC.o ../isdb/Rescale.o ../isdb/SAXS.o ../isdb/Select.o ../isdb/Selector.o ../lapack/lapack.o ../lepton/CompiledExpression.o ../lepton/ExpressionProgram.o ../lepton/ExpressionTreeNode.o ../lepton/Operation.o ../lepton/ParsedExpression.o ../lepton/Parser.o ../mapping/AdaptivePath.o ../mapping/Mapping.o ../mapping/PathBase.o ../mapping/Path.o ../mapping/PathReparameterization.o ../mapping/PathTools.o ../mapping/PCAVars.o ../mapping/PropertyMap.o ../mapping/SpathVessel.o ../mapping/TrigonometricPathVessel.o ../mapping/ZpathVessel.o ../molfile/crdplugin.o ../molfile/dcdplugin.o ../molfile/gromacsplugin.o ../molfile/pdbplugin.o ../multicolvar/ActionVolume.o ../multicolvar/AlphaBeta.o ../multicolvar/Angles.o ../multicolvar/AtomValuePack.o ../multicolvar/Bridge.o ../multicolvar/BridgedMultiColvarFunction.o ../multicolvar/CatomPack.o ../multicolvar/CenterOfMultiColvar.o ../multicolvar/CoordinationNumbers.o ../multicolvar/Density.o ../multicolvar/DihedralCorrelation.o ../multicolvar/DistanceFromContour.o ../multicolvar/Distances.o ../multicolvar/DumpMultiColvar.o ../multicolvar/FilterBetween.o ../multicolvar/FilterLessThan.o ../multicolvar/FilterMoreThan.o ../multicolvar/InPlaneDistances.o ../multicolvar/LocalAverage.o ../multicolvar/MultiColvarBase.o ../multicolvar/MultiColvarCombine.o ../multicolvar/MultiColvarDensity.o ../multicolvar/MultiColvarFilter.o ../multicolvar/MultiColvarProduct.o ../multicolvar/NumberOfLinks.o ../multicolvar/Torsions.o ../multicolvar/VolumeAround.o ../multicolvar/VolumeBetweenContours.o ../multicolvar/VolumeCavity.o ../multicolvar/VolumeGradientBase.o ../multicolvar/VolumeInCylinder.o ../multicolvar/VolumeInSphere.o ../multicolvar/VolumeTetrapore.o ../multicolvar/XAngle.o ../multicolvar/XDistances.o ../multicolvar/XYDistances.o ../multicolvar/XYTorsion.o ../reference/ArgumentOnlyDistance.o ../reference/Direction.o ../reference/DotProductDistance.o ../reference/DRMSD.o ../reference/EuclideanDistance.o ../reference/FakeFrame.o ../reference/IntermolecularDRMSD.o ../reference/IntramolecularDRMSD.o ../reference/MahalanobisDistance.o ../reference/MetricRegister.o ../reference/MultiDomainRMSD.o ../reference/NormalizedEuclideanDistance.o ../reference/OptimalRMSD.o ../reference/ReferenceArguments.o ../reference/ReferenceAtoms.o ../reference/ReferenceConfiguration.o ../reference/ReferenceValuePack.o ../reference/RMSDBase.o ../reference/SimpleRMSD.o ../reference/SingleDomainRMSD.o ../secondarystructure/AlphaRMSD.o ../secondarystructure/AntibetaRMSD.o ../secondarystructure/ParabetaRMSD.o ../secondarystructure/SecondaryStructureRMSD.o ../setup/Load.o ../setup/Restart.o ../setup/Units.o ../tools/Angle.o ../tools/AtomNumber.o ../tools/BiasRepresentation.o ../tools/Brent1DRootSearch.o ../tools/Citations.o ../tools/Communicator.o ../tools/ConjugateGradient.o ../tools/DLLoader.o ../tools/DynamicList.o ../tools/ERMSD.o ../tools/Exception.o ../tools/FileBase.o ../tools/ForwardDecl.o ../tools/Grid.o ../tools/h36.o ../tools/HistogramBead.o ../tools/IFile.o ../tools/KernelFunctions.o ../tools/Keywords.o ../tools/LatticeReduction.o ../tools/LinkCells.o ../tools/Log.o ../tools/LoopUnroller.o ../tools/Matrix.o ../tools/MatrixSquareBracketsAccess.o ../tools/Minimise1DBrent.o ../tools/MinimiseBase.o ../tools/MolDataClass.o ../tools/MultiValue.o ../tools/NeighborList.o ../tools/OFile.o ../tools/OpenMP.o ../tools/Pbc.o ../tools/PDB.o ../tools/PlumedHandle.o ../tools/Random.o ../tools/RMSD.o ../tools/RootFindingBase.o ../tools/Stopwatch.o ../tools/Subprocess.o ../tools/SwitchingFunction.o ../tools/Tensor.o ../tools/Tools.o ../tools/Torsion.o ../tools/Units.o ../tools/Vector.o ../vatom/ActionWithVirtualAtom.o ../vatom/Center.o ../vatom/FixedAtom.o ../vatom/Ghost.o ../vesselbase/ActionWithAveraging.o ../vesselbase/ActionWithInputVessel.o ../vesselbase/ActionWithVessel.o ../vesselbase/AltMin.o ../vesselbase/AveragingVessel.o ../vesselbase/Between.o ../vesselbase/BridgeVessel.o ../vesselbase/FunctionVessel.o ../vesselbase/Highest.o ../vesselbase/Histogram.o ../vesselbase/LessThan.o ../vesselbase/Lowest.o ../vesselbase/Max.o ../vesselbase/Mean.o ../vesselbase/Min.o ../vesselbase/Moments.o ../vesselbase/MoreThan.o ../vesselbase/OrderingVessel.o ../vesselbase/ShortcutVessel.o ../vesselbase/StoreDataVessel.o ../vesselbase/Sum.o ../vesselbase/ValueVessel.o ../vesselbase/Vessel.o ../vesselbase/VesselRegister.o ../config/ConfigInstall.o
+make[4]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+make PLUMED_INSTALL=Install install/libplumed.a
+make[4]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+rm -f install/libplumed.a
+ar cr install/libplumed.a install/kernel.o ../wrapper/PlumedStatic.o
+make[4]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+make[3]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+make install-html
+make[3]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+if test -d ../../user-doc/html ; then mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/share/doc/plumed" && cd ../../ && tar cf - user-doc/html | tar xf - -C "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/share/doc/plumed/" ; fi
+if test -d ../../developer-doc/html ; then mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/share/doc/plumed" && cd ../../ && tar cf - developer-doc/html | tar xf - -C "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/share/doc/plumed/" ; fi
+if test -d ../../developer-doc/coverage ; then mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/share/doc/plumed" && cd ../../ && tar cf - developer-doc/coverage | tar xf - -C "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/share/doc/plumed/" ; fi
+if test -f ../../user-doc/manual.pdf ; then mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/share/doc/plumed/user-doc" && cp ../../user-doc/manual.pdf "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/share/doc/plumed/user-doc/" ; fi
+make[3]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+cd ../../ ; tar cf - patches scripts | tar xf - -C "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/"
+cp ../colvar/Template.cpp "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/src/colvar/"
+grep -v "^link_uninstalled=" ../config/compile_options.sh > "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/src/config/compile_options.sh"
+cp ../config/config.txt "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/src/config/config.txt"
+cp install/libplumed.a "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/"
+make install-headers
+make[3]: Entering directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+bash ../maketools/install.headers "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/include/plumed/" analysis asmjit bias blas cltools colvar config core function generic gridtools isdb lapack lepton main mapping molfile multicolvar reference secondarystructure setup tools vatom vesselbase wrapper
+make[3]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+cp install/"plumed" "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/bin/"
+cp install/plumed-patch "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/bin/plumed-patch"
+cp install/plumed-config "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/bin/plumed-config"
+cp install/Plumed.cmake* "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/src/lib/"
+cp install/Plumed.inc* "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/src/lib/"
+for file in config mklib newcv partial_tempering patch selector vim2html ; do cp install/plumed-$file "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/plumed-$file" ; done
+cp install/lib"plumed".so "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/"
+cp install/lib"plumed"Kernel.so "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/"
+if test -e install/"plumed"-runtime ; then cp install/"plumed"-runtime "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/plumed-runtime" ; fi
+cp install/libplumedWrapper.a "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/"
+cp install/modulefile "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/modulefile"
+cp install/pkgconfig "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/pkgconfig/plumed.pc"
+cp install/pkgconfigWrapper "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/pkgconfig/plumedWrapper.pc"
+cp install/pkgconfigInternals "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/pkgconfig/plumedInternals.pc"
+if test -d ../../vim/syntax ; then mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed" && cd ../../ && tar cf - vim/syntax | tar xf - -C "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/" ; fi
+if test -d ../../vim/help ; then mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed" && cd ../../ && tar cf - vim/help | tar xf - -C "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/" ; fi
+if test -f ../../vim/scripts.vim ; then mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/vim" && cp ../../vim/scripts.vim  "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/vim/" ; fi
+cp -pr ../../python install 
+cd install/python && rm -fr *.so plumed.cpp build && \
+          unset CXX && unset CC && unset CFLAGS && unset CXXFLAGS && unset LDSHARED && \
+          plumed_program_name=plumed \
+          plumed_force_cython=yes \
+          plumed_version=2.7.3 \
+          plumed_include_dir=../../../wrapper \
+          plumed_default_kernel="/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/libplumedKernel.so" \
+          python setup.py build_ext -i
+Module name plumed
+Version number 2.7.3
+Hardcoded PLUMED_KERNEL /storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/libplumedKernel.so
+plumed_force_cython=yes
+importing cython
+Compiling plumed.pyx because it changed.
+[1/1] Cythonizing plumed.pyx
+running build_ext
+building 'plumed' extension
+cc1plus: warning: command line option ‘-Wstrict-prototypes’ is valid for C/ObjC but not for C++
+plumed.cpp:33022:20: warning: ‘__pyx_mdef___pyx_memoryviewslice_3__setstate_cython__’ defined but not used [-Wunused-variable]
+ static PyMethodDef __pyx_mdef___pyx_memoryviewslice_3__setstate_cython__ = {"__setstate_cython__", (PyCFunction)__pyx_pw___pyx_memoryviewslice_3__setstate_cython__, METH_O, 0};
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plumed.cpp:32964:20: warning: ‘__pyx_mdef___pyx_memoryviewslice_1__reduce_cython__’ defined but not used [-Wunused-variable]
+ static PyMethodDef __pyx_mdef___pyx_memoryviewslice_1__reduce_cython__ = {"__reduce_cython__", (PyCFunction)__pyx_pw___pyx_memoryviewslice_1__reduce_cython__, METH_NOARGS, 0};
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plumed.cpp:30119:20: warning: ‘__pyx_mdef___pyx_memoryview_3__setstate_cython__’ defined but not used [-Wunused-variable]
+ static PyMethodDef __pyx_mdef___pyx_memoryview_3__setstate_cython__ = {"__setstate_cython__", (PyCFunction)__pyx_pw___pyx_memoryview_3__setstate_cython__, METH_O, 0};
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plumed.cpp:30061:20: warning: ‘__pyx_mdef___pyx_memoryview_1__reduce_cython__’ defined but not used [-Wunused-variable]
+ static PyMethodDef __pyx_mdef___pyx_memoryview_1__reduce_cython__ = {"__reduce_cython__", (PyCFunction)__pyx_pw___pyx_memoryview_1__reduce_cython__, METH_NOARGS, 0};
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plumed.cpp:29967:20: warning: ‘__pyx_mdef_15View_dot_MemoryView_10memoryview_23copy_fortran’ defined but not used [-Wunused-variable]
+ static PyMethodDef __pyx_mdef_15View_dot_MemoryView_10memoryview_23copy_fortran = {"copy_fortran", (PyCFunction)__pyx_memoryview_copy_fortran, METH_NOARGS, 0};
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plumed.cpp:29872:20: warning: ‘__pyx_mdef_15View_dot_MemoryView_10memoryview_21copy’ defined but not used [-Wunused-variable]
+ static PyMethodDef __pyx_mdef_15View_dot_MemoryView_10memoryview_21copy = {"copy", (PyCFunction)__pyx_memoryview_copy, METH_NOARGS, 0};
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plumed.cpp:29795:20: warning: ‘__pyx_mdef_15View_dot_MemoryView_10memoryview_19is_f_contig’ defined but not used [-Wunused-variable]
+ static PyMethodDef __pyx_mdef_15View_dot_MemoryView_10memoryview_19is_f_contig = {"is_f_contig", (PyCFunction)__pyx_memoryview_is_f_contig, METH_NOARGS, 0};
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plumed.cpp:29718:20: warning: ‘__pyx_mdef_15View_dot_MemoryView_10memoryview_17is_c_contig’ defined but not used [-Wunused-variable]
+ static PyMethodDef __pyx_mdef_15View_dot_MemoryView_10memoryview_17is_c_contig = {"is_c_contig", (PyCFunction)__pyx_memoryview_is_c_contig, METH_NOARGS, 0};
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plumed.cpp:25845:20: warning: ‘__pyx_mdef___pyx_MemviewEnum_3__setstate_cython__’ defined but not used [-Wunused-variable]
+ static PyMethodDef __pyx_mdef___pyx_MemviewEnum_3__setstate_cython__ = {"__setstate_cython__", (PyCFunction)__pyx_pw___pyx_MemviewEnum_3__setstate_cython__, METH_O, 0};
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plumed.cpp:25609:20: warning: ‘__pyx_mdef___pyx_MemviewEnum_1__reduce_cython__’ defined but not used [-Wunused-variable]
+ static PyMethodDef __pyx_mdef___pyx_MemviewEnum_1__reduce_cython__ = {"__reduce_cython__", (PyCFunction)__pyx_pw___pyx_MemviewEnum_1__reduce_cython__, METH_NOARGS, 0};
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plumed.cpp:25231:20: warning: ‘__pyx_mdef___pyx_array_3__setstate_cython__’ defined but not used [-Wunused-variable]
+ static PyMethodDef __pyx_mdef___pyx_array_3__setstate_cython__ = {"__setstate_cython__", (PyCFunction)__pyx_pw___pyx_array_3__setstate_cython__, METH_O, 0};
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+plumed.cpp:25173:20: warning: ‘__pyx_mdef___pyx_array_1__reduce_cython__’ defined but not used [-Wunused-variable]
+ static PyMethodDef __pyx_mdef___pyx_array_1__reduce_cython__ = {"__reduce_cython__", (PyCFunction)__pyx_pw___pyx_array_1__reduce_cython__, METH_NOARGS, 0};
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from plumed.cpp:654:
+In function ‘void* plumed_attempt_dlopen(const char*, int)’,
+    inlined from ‘plumed plumed_create_dlopen2(const char*, int)’ at ../../../wrapper/Plumed.h:2446:49,
+    inlined from ‘plumed plumed_create_dlopen(const char*)’ at ../../../wrapper/Plumed.h:2433:47,
+    inlined from ‘static PLMD::Plumed PLMD::Plumed::dlopen(const char*)’ at ../../../wrapper/Plumed.h:1600:12,
+    inlined from ‘int __pyx_pf_6plumed_6Plumed___cinit__(__pyx_obj_6plumed_Plumed*, PyObject*)’ at plumed.cpp:3683:39,
+    inlined from ‘int __pyx_pw_6plumed_6Plumed_1__cinit__(PyObject*, PyObject*, PyObject*)’ at plumed.cpp:3532:47,
+    inlined from ‘PyObject* __pyx_tp_new_6plumed_Plumed(PyTypeObject*, PyObject*, PyObject*)’ at plumed.cpp:36628:7:
+../../../wrapper/Plumed.h:2085:33: warning: ‘char* strncpy(char*, const char*, size_t)’ specified bound depends on the length of the source argument [-Wstringop-overflow=]
+     __PLUMED_WRAPPER_STD strncpy(pathcopy,path,strlenpath+1);
+                                 ^
+../../../wrapper/Plumed.h: In function ‘PyObject* __pyx_tp_new_6plumed_Plumed(PyTypeObject*, PyObject*, PyObject*)’:
+../../../wrapper/Plumed.h:2083:43: note: length computed here
+     strlenpath=__PLUMED_WRAPPER_STD strlen(path);
+                                           ^
+In function ‘void* plumed_attempt_dlopen(const char*, int)’,
+    inlined from ‘void plumed_retrieve_functions(plumed_plumedmain_function_holder*, plumed_symbol_table_type**, void**)’ at ../../../wrapper/Plumed.h:2312:28,
+    inlined from ‘plumed plumed_create()’ at ../../../wrapper/Plumed.h:2394:28,
+    inlined from ‘static PLMD::Plumed PLMD::Plumed::makeValid()’ at ../../../wrapper/Plumed.h:1653:12,
+    inlined from ‘int __pyx_pf_6plumed_6Plumed___cinit__(__pyx_obj_6plumed_Plumed*, PyObject*)’ at plumed.cpp:3577:42,
+    inlined from ‘int __pyx_pw_6plumed_6Plumed_1__cinit__(PyObject*, PyObject*, PyObject*)’ at plumed.cpp:3532:47,
+    inlined from ‘PyObject* __pyx_tp_new_6plumed_Plumed(PyTypeObject*, PyObject*, PyObject*)’ at plumed.cpp:36628:7:
+../../../wrapper/Plumed.h:2085:33: warning: ‘char* strncpy(char*, const char*, size_t)’ specified bound depends on the length of the source argument [-Wstringop-overflow=]
+     __PLUMED_WRAPPER_STD strncpy(pathcopy,path,strlenpath+1);
+                                 ^
+../../../wrapper/Plumed.h: In function ‘PyObject* __pyx_tp_new_6plumed_Plumed(PyTypeObject*, PyObject*, PyObject*)’:
+../../../wrapper/Plumed.h:2083:43: note: length computed here
+     strlenpath=__PLUMED_WRAPPER_STD strlen(path);
+                                           ^
+copying build/lib.linux-x86_64-3.8/plumed.cpython-38-x86_64-linux-gnu.so -> 
+mkdir -p "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/python"
+cp install/python/*.so "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/python/" 
+chmod -R go+rX,go-w "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed"
+chmod -R go+rX,go-w "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/include/plumed"
+chmod -R go+rX,go-w "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/bin/plumed"
+chmod -R go+rX,go-w "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/bin/plumed-patch"
+
+*** PLUMED has been installed ***
+
+Install prefix : /storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
+Full name      : plumed
+
+Setup your environment
+- Ensure this is in your execution path         : /storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/bin
+- Ensure this is in your include path           : /storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/include
+- Ensure this is in your library path           : /storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib
+- Ensure this is in your PKG_CONFIG_PATH path   : /storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/pkgconfig
+For runtime binding:
+- Set this environment variable                 : PLUMED_KERNEL=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/libplumedKernel.so
+
+To create a tcl module that sets all the variables above, use this one as a starting point:
+/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed/modulefile
+
+To uninstall, remove the following files and directories:
+/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed
+/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/share/doc/plumed
+/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/include/plumed
+/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/bin/plumed
+/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/bin/plumed-patch
+/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/bin/plumed-config
+/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/pkgconfig/plumed.pc
+/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/libplumed.so
+/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/libplumedKernel.so
+make[2]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src/lib'
+make[1]: Leaving directory `/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/src'

@@ -1,0 +1,3 @@
+# PLUMED: static installation
+set(PLUMED_LOAD  "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/libplumed.a" -ldl  -lstdc++  -lafcuda -lafcuda -lfftw3 -lz -ldl  -L/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64 -rdynamic -Wl,-Bsymbolic -fopenmp )
+set(PLUMED_DEPENDENCIES  "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/libplumed.a")

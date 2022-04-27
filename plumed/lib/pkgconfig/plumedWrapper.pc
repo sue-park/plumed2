@@ -1,0 +1,13 @@
+prefix=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
+exec_prefix=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
+includedir=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/include
+libdir=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib
+
+Name: plumedWrapper
+Description: Plumed library  (wrapper-only version, set PLUMED_KERNEL at runtime) 
+URL: http://www.plumed.org
+Version: 2.7.3
+Cflags: -I${includedir} 
+Libs: -L${libdir} -lplumedWrapper -ldl 
+Libs.private: 
+Conflicts: 
