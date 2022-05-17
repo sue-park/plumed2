@@ -3,11 +3,11 @@
 # Manually add here dependencies and conflicts
 
 # this is the path for libraries
-set libdir "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib"
+set libdir "/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu6/plumed_2.7.3/plumed/lib"
 # this is the path for binaries
-set bindir "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/bin"
+set bindir "/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu6/plumed_2.7.3/plumed/bin"
 # this is the path for include files
-set includedir "/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/include"
+set includedir "/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu6/plumed_2.7.3/plumed/include"
 # this is the extension for dynamic libraries
 # if set to empty, switches off plumed library
 set soext  "so"

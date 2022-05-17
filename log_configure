@@ -87,8 +87,11 @@ checking zlib.h usability... yes
 checking zlib.h presence... yes
 checking for zlib.h... yes
 checking for library containing gzopen... -lz
-checking for library containing cblas_dgemv... no
-configure: WARNING: cannot enable __PLUMED_HAS_GSL
+checking for library containing cblas_dgemv... -lgslcblas
+checking gsl/gsl_vector.h usability... yes
+checking gsl/gsl_vector.h presence... yes
+checking for gsl/gsl_vector.h... yes
+checking for library containing gsl_vector_alloc... -lgsl
 checking xdrfile/xdrfile_xtc.h usability... no
 checking xdrfile/xdrfile_xtc.h presence... no
 checking for xdrfile/xdrfile_xtc.h... no
@@ -140,7 +143,7 @@ checking for pkg-config... /bin/pkg-config
 configure: bash-completion is not installed or it is installed on a different prefix
 configure: bash completion for plumed will not be installed
 configure: **** PLUMED will be installed using the following paths:
-configure: **** prefix: /storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
+configure: **** prefix: /storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu6/plumed_2.7.3/plumed
 configure: **** exec_prefix: ${prefix}
 configure: **** bindir: ${exec_prefix}/bin
 configure: **** libdir: ${exec_prefix}/lib

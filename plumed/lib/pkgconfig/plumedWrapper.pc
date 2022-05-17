@@ -1,7 +1,7 @@
-prefix=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
-exec_prefix=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
-includedir=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/include
-libdir=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib
+prefix=/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu6/plumed_2.7.3/plumed
+exec_prefix=/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu6/plumed_2.7.3/plumed
+includedir=/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu6/plumed_2.7.3/plumed/include
+libdir=/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu6/plumed_2.7.3/plumed/lib
 
 Name: plumedWrapper
 Description: Plumed library  (wrapper-only version, set PLUMED_KERNEL at runtime) 

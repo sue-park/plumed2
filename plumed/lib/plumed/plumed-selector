@@ -1,9 +1,9 @@
 #! /bin/bash
 echo 'NOTE: shell only version, useful when plumed is cross compiled' >&2
 export PLUMED_IS_INSTALLED=yes
-export PLUMED_ROOT="${PLUMED_ROOT-/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/lib/plumed}"
-export PLUMED_INCLUDEDIR="${PLUMED_INCLUDEDIR-/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/include}"
-export PLUMED_HTMLDIR="${PLUMED_HTMLDIR=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed/share/doc/plumed}"
+export PLUMED_ROOT="${PLUMED_ROOT-/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu6/plumed_2.7.3/plumed/lib/plumed}"
+export PLUMED_INCLUDEDIR="${PLUMED_INCLUDEDIR-/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu6/plumed_2.7.3/plumed/include}"
+export PLUMED_HTMLDIR="${PLUMED_HTMLDIR=/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu6/plumed_2.7.3/plumed/share/doc/plumed}"
 export PLUMED_PROGRAM_NAME="${PLUMED_PROGRAM_NAME-plumed}"
 export PLUMED_VERSION=2.7.3
 source "$PLUMED_ROOT"/scripts/selector.sh
