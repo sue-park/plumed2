@@ -15,8 +15,8 @@ configure: Initial CXX:         mpicxx
 configure: Initial CXXFLAGS:    -O3
 configure: Initial CPPFLAGS:    -I/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/include
 configure: Initial CFLAGS:      -I/usr/local/pace-apps/manual/packages/cuda/11.1/include
-configure: Initial LDFLAGS:     -L/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64
-configure: Initial LIBS:        
+configure: Initial LDFLAGS:     -L//storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64
+configure: Initial LIBS:        -lopenblas -lafcpu -lafcuda -laf
 configure: Initial STATIC_LIBS: 
 configure: Initial LD:          
 configure: Initial LDSHARED:    mpicxx
@@ -49,10 +49,9 @@ checking dirent.h presence... yes
 checking for dirent.h... yes
 checking for readdir... yes
 checking whether dgemv can be linked with no library... no
-checking whether dgemv_ can be linked with no library... no
-checking for library containing dgemv... no
-checking for library containing dgemv_... no
-configure: WARNING: using internal lapack and blas, could be inefficient
+checking whether dgemv_ can be linked with no library... yes
+checking for library containing dsyevr_... none required
+checking whether sdot returns float... yes
 configure: Now we will check for optional headers and libraries
 checking libmolfile_plugin.h usability... no
 checking libmolfile_plugin.h presence... no
@@ -87,7 +86,10 @@ checking zlib.h usability... yes
 checking zlib.h presence... yes
 checking for zlib.h... yes
 checking for library containing gzopen... -lz
-checking for library containing cblas_dgemv... no
+checking for library containing cblas_dgemv... none required
+checking gsl/gsl_vector.h usability... no
+checking gsl/gsl_vector.h presence... no
+checking for gsl/gsl_vector.h... no
 configure: WARNING: cannot enable __PLUMED_HAS_GSL
 checking xdrfile/xdrfile_xtc.h usability... no
 checking xdrfile/xdrfile_xtc.h presence... no
@@ -99,13 +101,14 @@ checking for fftw3.h... yes
 checking for library containing fftw_execute... -lfftw3
 checking for python... python
 configure: Python executable is python
-checking support for required python modules (python3, setuptools, cython, subprocess, os, shutil)... yes
+checking support for required python modules (python3, setuptools, cython, subprocess, os, shutil)... no
+configure: WARNING: cannot enable python interface
 checking arrayfire.h usability... yes
 checking arrayfire.h presence... yes
 checking for arrayfire.h... yes
-checking for library containing af_is_double... -lafcuda
+checking for library containing af_is_double... none required
 checking for arrayfire.h... (cached) yes
-checking for library containing af_is_double... (cached) -lafcuda
+checking for library containing af_is_double... (cached) none required
 configure: Release mode, adding -DNDEBUG
 configure: *** Special settings for dynamic libraries on Linux ***
 configure: Dynamic library extension is 'so'
@@ -113,7 +116,7 @@ configure: LDSHARED and LDFLAGS need special flags
 checking whether LDFLAGS can contain -rdynamic... yes
 checking whether LDFLAGS can contain -Wl,-Bsymbolic... yes
 configure: Using LDSHARED='mpicxx -shared'
-configure: Using LDFLAGS='-L/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64 -rdynamic -Wl,-Bsymbolic'
+configure: Using LDFLAGS='-L//storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64 -rdynamic -Wl,-Bsymbolic'
 checking whether LDSHARED can create dynamic libraries... yes
 checking for readelf... found
 checking for doxygen... found
@@ -140,7 +143,7 @@ checking for pkg-config... /bin/pkg-config
 configure: bash-completion is not installed or it is installed on a different prefix
 configure: bash completion for plumed will not be installed
 configure: **** PLUMED will be installed using the following paths:
-configure: **** prefix: /storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed
+configure: **** prefix: /storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu6/plumed_2.7.3/plumed
 configure: **** exec_prefix: ${prefix}
 configure: **** bindir: ${exec_prefix}/bin
 configure: **** libdir: ${exec_prefix}/lib

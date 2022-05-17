@@ -5,6 +5,6 @@ conda activate openmmplumed5
 
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64"
 
-./configure --prefix=/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu5/plumed2_2.7.3/plumed --enable-af_cuda --enable-af_cpu --enable-rpath CC=mpicc CXX=mpicxx FC=mpifort CPPFLAGS="-I/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/include" LDFLAGS="-L/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64" &>log_configure &
+./configure --prefix=/storage/coda1/p-jmcdaniel43/0/spark698/rich_project_chem-mcdaniel/bin/Programs_plumedgpu6/plumed_2.7.3/plumed --enable-af_cuda --enable-af_cpu --enable-rpath --enable-gsl CC=mpicc CXX=mpicxx FC=mpifort CPPFLAGS="-I/storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/include" LDFLAGS="-L//storage/home/hcoda1/8/spark698/p-jmcdaniel43-0/rich_project_chem-mcdaniel/bin/Programs_plumedgpu4/arrayfire_3.8.0/arrayfire/lib64" LIBS="-lopenblas -lafcpu -lafcuda -laf" &>log_configure
 
 make -j install

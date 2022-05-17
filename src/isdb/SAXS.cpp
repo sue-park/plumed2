@@ -574,8 +574,10 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
 
     if(comm.Get_rank()==0) {
 
-      double z0 = 1.5;
-      double BF = 0.1;
+      double z0 = 0.6;
+      //double z0 = 1.5;
+      double BF = 0.04;
+      //double BF = 0.1;
       double const SF = 0.001;
       double zmax = BF*std::log(1/SF-1)+z0;
       //log << "zmax: " << zmax << "\n";
@@ -598,16 +600,16 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
       //  }
       //}
 
-      //if(size>57){
-      //  log << "coord: " << "\n";
-      //  unsigned natoms = getNumberOfAtoms();
-      //  for (unsigned i=0; i<natoms; i++) {
-      //  const Vector tmp = getPosition(i);
-      //  log << "size is bigger than 57" << "\n";
-      //  log << "ATOM   ";
-      //  log << i << "  " << tmp[0] << " " << tmp[1] << " " << tmp[2] << "\n";
-      //  }
-      //}
+      if(size>57){
+        log << "coord: " << "\n";
+        unsigned natoms = getNumberOfAtoms();
+        for (unsigned i=0; i<natoms; i++) {
+        const Vector tmp = getPosition(i);
+        log << "size is bigger than 57" << "\n";
+        log << "ATOM   ";
+        log << i << "  " << tmp[0] << " " << tmp[1] << " " << tmp[2] << "\n";
+        }
+      }
 
       if(size==0){
         log << "coord: " << "\n";
@@ -747,7 +749,7 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
       // size,size,1,1
       af::array dist_sqrt = af::sqrt(square);
       // replace the zero of square with one to avoid nan in the derivatives (the number does not matter because this are multiplied by zero)
-      af::replace(square,!(af::iszero(square)),1.);
+      //af::replace(square,!(af::iszero(square)),1.);
       // size,size,3,1
       //xyz_dist = xyz_dist / af::tile(square, 1, 1, 3);
       // numq,1,1,1
@@ -758,7 +760,7 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
       for (unsigned k=0; k<numq; k++) {
         // calculate FF matrix
         // size,1,1,1
-        af::array AFF_value(size, &FFf_value[k].front());
+        af::array AFF_value(size, &FFf_value_sorted[k].front());
         // size,size,1,1
         af::array FFdist_mod = af::tile(AFF_value(af::span), 1, size)*af::transpose(af::tile(AFF_value(af::span), 1, size));
 
@@ -770,7 +772,7 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
         af::array dist_q = qvalue*dist_sqrt;
         af::array dist_q_deriv = qvalue*dist_sqrt;
         //size,size,1,1
-        af::replace(dist_q,dist_q>0.25,0.51258242);
+        //af::replace(dist_q,dist_q>0.25,0.51258242);
 
         //size,size,1,1
         af::array sqrt_dist = sqrt(2/M_PI)/af::sqrt(dist_q);
@@ -784,6 +786,8 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
         //size,size,1,1
         af::array bessel_0 = cos_term+sin_term/8/dist_q;
         //size,size,1,1
+        af::replace(bessel_0,dist_q>0.4833485279,-0.2346869848*dist_q+1.120840621);
+        //size,size,1,1
         af::array fd_bessel = bessel_0/(fdfactor_a+1.)/(fdfactor_b+1.);
 
         // 1,1,1,1
@@ -796,7 +800,8 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
         //size,size,1,1
         af::array bessel_deriv = -deriv_cos-deriv_sin;
         //size,size,1,1
-        af::replace(bessel_deriv,bessel_deriv<1.1978,0);
+        //af::replace(bessel_deriv,bessel_deriv<1.1978,0);
+        af::replace(bessel_deriv,dist_q>0.4833485279,-0.2346869848);
         //size,size,1,1
         af::array fd_xy = FFdist_mod*bessel_deriv/(fdfactor_a+1.)/(fdfactor_b+1.);
         //size,size,3,1
@@ -816,7 +821,7 @@ void SAXS::calculate_gpu(vector<Vector> &deriv)
         //1,size,3,1
         tmp_z = af::tile(tmp_z,1,1,3);
         //1,size,3,1
-        tmp_z = -1*tmp_z*zvec;
+        tmp_z = -1.*tmp_z*zvec;
 
         // it should become 1,size,3,1
         deriv_device(k, af::span, af::span) = af::sum(tmp_xy,0) + tmp_z;
@@ -2616,11 +2621,11 @@ void SAXS::sort_coordinates(vector<Vector> &sorted_posi, vector<vector<double> >
 
       if (!gpu) {
         for(unsigned k=0; k<numq; k++) {
-          FF_value_sorted[k].push_back(FF_value[k][atoi[i]]);
+          FF_value_sorted[k].push_back(FF_value[atoi[i]][k]);
         }
       } else {
         for(unsigned k=0; k<numq; k++) {
-          FF_value_sorted[k].push_back(FFf_value[k][i]);
+          FF_value_sorted[k].push_back(FFf_value[k][atoi[i]]);
         }
       }
 
